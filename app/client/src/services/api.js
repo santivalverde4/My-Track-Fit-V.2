@@ -172,8 +172,25 @@ export const routineService = {
   // Obtener todas las rutinas
   getRoutines: async () => {
     try {
-      const response = await api.get('/api/routines');
-      return response;
+      // Mock data simple - solo nombres de rutinas
+      const mockRoutines = {
+        success: true,
+        routines: [
+          {
+            id: 1,
+            name: "Rutina 1"
+          },
+          {
+            id: 2,
+            name: "Rutina 2"
+          }
+        ]
+      };
+
+      // Simular delay de red
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      return mockRoutines;
     } catch (error) {
       throw error;
     }
@@ -253,6 +270,66 @@ export const routineService = {
   markAsUsed: async (routineId) => {
     try {
       const response = await api.post(`/api/routines/${routineId}/use`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+// Servicios de entrenamientos
+export const workoutService = {
+  // Obtener entrenamientos de una rutina específica
+  getWorkoutsByRoutine: async (routineId) => {
+    try {
+      // Mock data - entrenamientos por rutina
+      const mockWorkouts = {
+        success: true,
+        routineId: routineId,
+        routineName: routineId === 1 ? "Rutina 1" : "Rutina 2",
+        workouts: [
+          {
+            id: 1,
+            name: "Entrenamiento 1"
+          },
+          {
+            id: 2,
+            name: "Entrenamiento 2"
+          },
+          {
+            id: 3,
+            name: "Entrenamiento 3"
+          },
+          {
+            id: 4,
+            name: "Entrenamiento 4"
+          }
+        ]
+      };
+
+      // Simular delay de red
+      await new Promise(resolve => setTimeout(resolve, 400));
+      
+      return mockWorkouts;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Crear nuevo entrenamiento
+  createWorkout: async (routineId, workoutData) => {
+    try {
+      const response = await api.post(`/api/routines/${routineId}/workouts`, workoutData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Eliminar entrenamiento
+  deleteWorkout: async (routineId, workoutId) => {
+    try {
+      const response = await api.delete(`/api/routines/${routineId}/workouts/${workoutId}`);
       return response;
     } catch (error) {
       throw error;

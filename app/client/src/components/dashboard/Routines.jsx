@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { routineService } from '../../services/api';
+import Workouts from './Workouts';
 import '../../styles/Routines.css';
 
 const Routines = () => {
@@ -10,6 +11,10 @@ const Routines = () => {
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  
+  // Estado para navegación a entrenamientos
+  const [currentView, setCurrentView] = useState('routines'); // 'routines' | 'workouts'
+  const [selectedRoutineForWorkouts, setSelectedRoutineForWorkouts] = useState(null);
 
   // Estados para nuevo rutina (simplificado - solo nombre)
   const [newRoutine, setNewRoutine] = useState({
@@ -208,6 +213,28 @@ const Routines = () => {
     }
   };
 
+  // Funciones de navegación
+  const handleRoutineClick = (routine) => {
+    setSelectedRoutineForWorkouts(routine);
+    setCurrentView('workouts');
+  };
+
+  const handleBackToRoutines = () => {
+    setCurrentView('routines');
+    setSelectedRoutineForWorkouts(null);
+  };
+
+  // Renderizado condicional según la vista actual
+  if (currentView === 'workouts' && selectedRoutineForWorkouts) {
+    return (
+      <Workouts 
+        routineId={selectedRoutineForWorkouts.id}
+        routineName={selectedRoutineForWorkouts.name}
+        onBack={handleBackToRoutines}
+      />
+    );
+  }
+
   return (
     <div className="routines-container">
       {/* Header con título y botón agregar */}
@@ -268,90 +295,12 @@ const Routines = () => {
           </div>
         ) : (
           routines.map(routine => (
-            <div key={routine.id} className="routine-card">
-              <div className="routine-header">
-                <div className="routine-title-section">
-                  <div className="routine-category">
-                    {getCategoryIcon(routine.category)}
-                    <span className="category-text">{routine.category}</span>
-                  </div>
-                  <h3 className="routine-name">{routine.name}</h3>
-                  <p className="routine-description">{routine.description}</p>
-                </div>
-                <div className="routine-metadata">
-                  <div className="metadata-item">
-                    <span className="metadata-label">Dificultad:</span>
-                    <span 
-                      className="difficulty-badge"
-                      style={{ color: getDifficultyColor(routine.difficulty) }}
-                    >
-                      {routine.difficulty}
-                    </span>
-                  </div>
-                  <div className="metadata-item">
-                    <span className="metadata-label">Duración:</span>
-                    <span className="metadata-value">{formatTime(routine.estimatedTime)}</span>
-                  </div>
-                  <div className="metadata-item">
-                    <span className="metadata-label">Ejercicios:</span>
-                    <span className="metadata-value">{routine.exercises.length}</span>
-                  </div>
-                </div>
-              </div>
-
-              {routine.exercises.length > 0 && (
-                <div className="exercises-preview">
-                  <h4>Ejercicios:</h4>
-                  <div className="exercises-list">
-                    {routine.exercises.map(exercise => (
-                      <div key={exercise.id} className="exercise-item">
-                        <div className="exercise-info">
-                          <span className="exercise-name">{exercise.name}</span>
-                          <span className="exercise-details">
-                            {exercise.sets} series × {exercise.reps} reps
-                            {exercise.weight > 0 && ` × ${exercise.weight}kg`}
-                          </span>
-                        </div>
-                        {exercise.notes && (
-                          <div className="exercise-notes">
-                            <small>{exercise.notes}</small>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="routine-actions">
-                <button className="action-btn secondary">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                  </svg>
-                  Editar
-                </button>
-                <button 
-                  className="action-btn primary"
-                  onClick={() => {
-                    setSelectedRoutine(routine);
-                    setShowAddExerciseModal(true);
-                  }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="16"/>
-                    <line x1="8" y1="12" x2="16" y2="12"/>
-                  </svg>
-                  Agregar Ejercicio
-                </button>
-                <button className="action-btn success">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="5,3 19,12 5,21"/>
-                  </svg>
-                  Iniciar
-                </button>
-              </div>
+            <div 
+              key={routine.id} 
+              className="routine-card"
+              onClick={() => handleRoutineClick(routine)}
+            >
+              <h3 className="routine-name">{routine.name}</h3>
             </div>
           ))
         )}
