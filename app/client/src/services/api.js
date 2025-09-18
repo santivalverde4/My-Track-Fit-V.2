@@ -167,4 +167,97 @@ export const apiService = {
   }
 };
 
+// Servicios de rutinas
+export const routineService = {
+  // Obtener todas las rutinas
+  getRoutines: async () => {
+    try {
+      const response = await api.get('/api/routines');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Crear nueva rutina
+  createRoutine: async (routineData) => {
+    try {
+      const response = await api.post('/api/routines', routineData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener rutina específica
+  getRoutine: async (routineId) => {
+    try {
+      const response = await api.get(`/api/routines/${routineId}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar rutina
+  updateRoutine: async (routineId, routineData) => {
+    try {
+      const response = await api.put(`/api/routines/${routineId}`, routineData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Eliminar rutina
+  deleteRoutine: async (routineId) => {
+    try {
+      const response = await api.delete(`/api/routines/${routineId}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Agregar ejercicio a rutina
+  addExercise: async (routineId, exerciseData) => {
+    try {
+      const response = await api.post(`/api/routines/${routineId}/exercises`, exerciseData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar ejercicio
+  updateExercise: async (routineId, exerciseId, exerciseData) => {
+    try {
+      const response = await api.put(`/api/routines/${routineId}/exercises/${exerciseId}`, exerciseData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Eliminar ejercicio
+  deleteExercise: async (routineId, exerciseId) => {
+    try {
+      const response = await api.delete(`/api/routines/${routineId}/exercises/${exerciseId}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Marcar rutina como usada
+  markAsUsed: async (routineId) => {
+    try {
+      const response = await api.post(`/api/routines/${routineId}/use`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
 export default api;

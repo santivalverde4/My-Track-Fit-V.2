@@ -7,7 +7,7 @@ const BottomNavigation = ({ activeSection, onSectionChange }) => {
   const navigationItems = [
     {
       id: 'workouts',
-      label: 'Entrenamientos',
+      label: 'Rutinas',
       icon: (isActive) => (
         <svg 
           width="24" 
@@ -26,7 +26,7 @@ const BottomNavigation = ({ activeSection, onSectionChange }) => {
           <path d="M14.5 6.5L16 12l-1.5 5.5"/>
         </svg>
       ),
-      ariaLabel: 'Ir a entrenamientos'
+      ariaLabel: 'Ir a rutinas de entrenamiento'
     },
     {
       id: 'wellness',

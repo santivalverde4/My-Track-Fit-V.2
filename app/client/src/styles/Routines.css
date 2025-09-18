@@ -1,0 +1,839 @@
+/* ========================================
+   Routines Component Styles
+   ======================================== */
+
+.routines-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: var(--surface-color, #ffffff);
+  min-height: 100vh;
+}
+
+/* ========================================
+   Header Section
+   ======================================== */
+
+.routines-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-title h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #1a202c);
+  margin: 0;
+}
+
+.add-routine-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--primary-color, #3182ce);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+}
+
+.add-routine-btn:hover {
+  background: var(--primary-hover, #2c5aa0);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(49, 130, 206, 0.4);
+}
+
+.add-routine-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.header-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary, #718096);
+  margin: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ========================================
+   Action Buttons
+   ======================================== */
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.add-exercise-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  background: var(--success-color, #48bb78);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+  font-family: inherit;
+}
+
+.add-exercise-btn:hover:not(:disabled) {
+  background: var(--success-hover, #38a169);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(72, 187, 120, 0.4);
+}
+
+.add-exercise-btn:disabled {
+  background: var(--disabled-bg, #e2e8f0);
+  color: var(--text-secondary, #718096);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ========================================
+   Loading & Empty States
+   ======================================== */
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary, #718096);
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border-color, #e2e8f0);
+  border-top: 4px solid var(--primary-color, #3182ce);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--text-secondary, #718096);
+}
+
+.empty-icon {
+  margin-bottom: 1.5rem;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a202c);
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  margin: 0 0 2rem 0;
+  max-width: 400px;
+}
+
+.create-first-routine-btn {
+  padding: 0.875rem 2rem;
+  background: var(--primary-color, #3182ce);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.create-first-routine-btn:hover {
+  background: var(--primary-hover, #2c5aa0);
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   Routines List
+   ======================================== */
+
+.routines-list {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+/* ========================================
+   Routine Card
+   ======================================== */
+
+.routine-card {
+  background: var(--card-bg, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.routine-card:hover {
+  border-color: var(--primary-color, #3182ce);
+  box-shadow: 0 8px 24px rgba(49, 130, 206, 0.15);
+  transform: translateY(-2px);
+}
+
+.routine-header {
+  margin-bottom: 1.5rem;
+}
+
+.routine-title-section {
+  margin-bottom: 1rem;
+}
+
+.routine-category {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color, #3182ce);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  text-transform: capitalize;
+}
+
+.category-text {
+  font-weight: 500;
+}
+
+.routine-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a202c);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.routine-description {
+  font-size: 1rem;
+  color: var(--text-secondary, #718096);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.routine-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--surface-color, #ffffff);
+  border-radius: 8px;
+  border: 1px solid var(--border-light, #f1f5f9);
+}
+
+.metadata-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 80px;
+}
+
+.metadata-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary, #718096);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metadata-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a202c);
+}
+
+.difficulty-badge {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* ========================================
+   Exercises Preview
+   ======================================== */
+
+.exercises-preview {
+  margin-bottom: 1.5rem;
+}
+
+.exercises-preview h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a202c);
+  margin: 0 0 0.75rem 0;
+}
+
+.exercises-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.exercise-item {
+  background: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-light, #f1f5f9);
+  border-radius: 8px;
+  padding: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.exercise-item:hover {
+  border-color: var(--border-color, #e2e8f0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.exercise-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.exercise-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary, #1a202c);
+}
+
+.exercise-details {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #718096);
+  font-weight: 500;
+}
+
+.exercise-notes {
+  margin-top: 0.5rem;
+}
+
+.exercise-notes small {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #718096);
+  font-style: italic;
+}
+
+/* ========================================
+   Routine Actions
+   ======================================== */
+
+.routine-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  flex: 1;
+  min-width: 100px;
+  justify-content: center;
+}
+
+.action-btn.primary {
+  background: var(--primary-color, #3182ce);
+  color: white;
+}
+
+.action-btn.primary:hover {
+  background: var(--primary-hover, #2c5aa0);
+  transform: translateY(-1px);
+}
+
+.action-btn.secondary {
+  background: var(--surface-color, #ffffff);
+  color: var(--text-primary, #1a202c);
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.action-btn.secondary:hover {
+  background: var(--hover-bg, #f7fafc);
+  border-color: var(--primary-color, #3182ce);
+}
+
+.action-btn.success {
+  background: var(--success-color, #48bb78);
+  color: white;
+}
+
+.action-btn.success:hover {
+  background: var(--success-hover, #38a169);
+  transform: translateY(-1px);
+}
+
+/* ========================================
+   Modal Styles
+   ======================================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: var(--surface-color, #ffffff);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.modal-header h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a202c);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.modal-subtitle {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-secondary, #718096);
+}
+
+.modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-secondary, #718096);
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: var(--hover-bg, #f7fafc);
+  color: var(--text-primary, #1a202c);
+}
+
+/* ========================================
+   Modal Form
+   ======================================== */
+
+.modal-form {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary, #1a202c);
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color, #e2e8f0);
+  border-radius: 6px;
+  background: var(--surface-color, #ffffff);
+  color: var(--text-primary, #1a202c);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color, #3182ce);
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.form-input.error {
+  border-color: var(--error-color, #e53e3e);
+  background: var(--error-bg, #fed7d7);
+}
+
+.form-input.error:focus {
+  border-color: var(--error-color, #e53e3e);
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.error-message {
+  font-size: 0.85rem;
+  color: var(--error-color, #e53e3e);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.global-error {
+  background: var(--error-bg, #fed7d7);
+  border: 1px solid var(--error-color, #e53e3e);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+/* ========================================
+   Modal Actions
+   ======================================== */
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.modal-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  min-width: 100px;
+}
+
+.modal-btn.primary {
+  background: var(--primary-color, #3182ce);
+  color: white;
+}
+
+.modal-btn.primary:hover:not(:disabled) {
+  background: var(--primary-hover, #2c5aa0);
+  transform: translateY(-1px);
+}
+
+.modal-btn.secondary {
+  background: var(--surface-color, #ffffff);
+  color: var(--text-primary, #1a202c);
+  border: 2px solid var(--border-color, #e2e8f0);
+}
+
+.modal-btn.secondary:hover {
+  background: var(--hover-bg, #f7fafc);
+  border-color: var(--primary-color, #3182ce);
+}
+
+.modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .routines-container {
+    padding: 1rem;
+  }
+
+  .header-title {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .header-title h2 {
+    font-size: 2rem;
+  }
+
+  .action-buttons {
+    margin-bottom: 1.5rem;
+  }
+
+  .add-exercise-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    gap: 0.5rem;
+  }
+
+  .routines-list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .routine-metadata {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .metadata-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .routine-actions {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    flex: none;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .routines-container {
+    padding: 0.75rem;
+  }
+
+  .header-title {
+    gap: 0.75rem;
+  }
+
+  .header-title h2 {
+    font-size: 1.75rem;
+  }
+
+  .add-routine-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0.6rem;
+  }
+
+  .action-buttons {
+    margin-bottom: 1rem;
+  }
+
+  .add-exercise-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    gap: 0.4rem;
+  }
+
+  .add-routine-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .routine-card {
+    padding: 1rem;
+  }
+
+  .routine-name {
+    font-size: 1.25rem;
+  }
+
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    max-height: 95vh;
+  }
+
+  .modal-header,
+  .modal-form {
+    padding: 1rem;
+  }
+}
+
+/* ========================================
+   High Contrast Mode Support
+   ======================================== */
+
+@media (prefers-contrast: high) {
+  .routine-card,
+  .exercise-item,
+  .modal-content {
+    border-width: 2px;
+  }
+
+  .form-input {
+    border-width: 2px;
+  }
+
+  .action-btn,
+  .modal-btn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ========================================
+   Reduced Motion Support
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .routine-card:hover,
+  .action-btn:hover,
+  .add-routine-btn:hover,
+  .add-exercise-btn:hover {
+    transform: none;
+  }
+}
+
+/* ========================================
+   Focus Visible Support
+   ======================================== */
+
+.add-routine-btn:focus-visible,
+.add-exercise-btn:focus-visible,
+.action-btn:focus-visible,
+.modal-btn:focus-visible,
+.modal-close:focus-visible,
+.form-input:focus-visible {
+  outline: 2px solid var(--primary-color, #3182ce);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   CSS Custom Properties (Variables)
+   ======================================== */
+
+:root {
+  --primary-color: #3182ce;
+  --primary-hover: #2c5aa0;
+  --success-color: #48bb78;
+  --success-hover: #38a169;
+  --error-color: #e53e3e;
+  --error-bg: #fed7d7;
+  --warning-color: #ed8936;
+  --text-primary: #1a202c;
+  --text-secondary: #718096;
+  --surface-color: #ffffff;
+  --card-bg: #f8fafc;
+  --border-color: #e2e8f0;
+  --border-light: #f1f5f9;
+  --hover-bg: #f7fafc;
+  --disabled-bg: #e2e8f0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #63b3ed;
+    --primary-hover: #4299e1;
+    --success-color: #68d391;
+    --success-hover: #48bb78;
+    --error-color: #fc8181;
+    --error-bg: #2d1b1b;
+    --warning-color: #f6ad55;
+    --text-primary: #f7fafc;
+    --text-secondary: #a0aec0;
+    --surface-color: #2d3748;
+    --card-bg: #1a202c;
+    --border-color: #4a5568;
+    --border-light: #2d3748;
+    --hover-bg: #2d3748;
+    --disabled-bg: #1a202c;
+  }
+}
