@@ -337,4 +337,84 @@ export const workoutService = {
   }
 };
 
+// Servicios de ejercicios
+export const exerciseService = {
+  // Obtener ejercicios de un entrenamiento específico
+  getExercisesByWorkout: async (routineId, workoutId) => {
+    try {
+      // Mock data - ejercicios por entrenamiento
+      const mockExercises = {
+        success: true,
+        routineId: routineId,
+        workoutId: workoutId,
+        workoutName: `Entrenamiento ${workoutId}`,
+        exercises: [
+          {
+            id: 1,
+            name: "Press de Banca",
+            weight: 80,
+            reps: 10,
+            difficulty: 7
+          },
+          {
+            id: 2,
+            name: "Sentadillas",
+            weight: 100,
+            reps: 12,
+            difficulty: 6
+          },
+          {
+            id: 3,
+            name: "Peso Muerto",
+            weight: 120,
+            reps: 8,
+            difficulty: 9
+          },
+          {
+            id: 4,
+            name: "Press Militar",
+            weight: 50,
+            reps: 10,
+            difficulty: 5
+          },
+          {
+            id: 5,
+            name: "Dominadas",
+            weight: 0,
+            reps: 8,
+            difficulty: 8
+          }
+        ]
+      };
+
+      // Simular delay de red
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      return mockExercises;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Crear nuevo ejercicio
+  createExercise: async (routineId, workoutId, exerciseData) => {
+    try {
+      const response = await api.post(`/api/routines/${routineId}/workouts/${workoutId}/exercises`, exerciseData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Eliminar ejercicio
+  deleteExercise: async (routineId, workoutId, exerciseId) => {
+    try {
+      const response = await api.delete(`/api/routines/${routineId}/workouts/${workoutId}/exercises/${exerciseId}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
 export default api;

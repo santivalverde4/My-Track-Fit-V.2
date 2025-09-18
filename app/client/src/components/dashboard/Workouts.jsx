@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { workoutService } from '../../services/api';
+import Exercises from './Exercises';
 import '../../styles/Workouts.css';
 
 const Workouts = ({ routineId, routineName, onBack }) => {
@@ -8,6 +9,10 @@ const Workouts = ({ routineId, routineName, onBack }) => {
   const [showAddWorkoutModal, setShowAddWorkoutModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  
+  // Estado para navegación a ejercicios
+  const [currentView, setCurrentView] = useState('workouts'); // 'workouts' | 'exercises'
+  const [selectedWorkoutForExercises, setSelectedWorkoutForExercises] = useState(null);
 
   // Estado para nuevo entrenamiento
   const [newWorkout, setNewWorkout] = useState({
@@ -83,9 +88,27 @@ const Workouts = ({ routineId, routineName, onBack }) => {
 
   // Manejar click en entrenamiento
   const handleWorkoutClick = (workout) => {
-    // TODO: Navegar a ejercicios del entrenamiento
-    console.log('Clicked workout:', workout);
+    setSelectedWorkoutForExercises(workout);
+    setCurrentView('exercises');
   };
+
+  // Funciones de navegación
+  const handleBackToWorkouts = () => {
+    setCurrentView('workouts');
+    setSelectedWorkoutForExercises(null);
+  };
+
+  // Renderizado condicional según la vista actual
+  if (currentView === 'exercises' && selectedWorkoutForExercises) {
+    return (
+      <Exercises 
+        routineId={routineId}
+        workoutId={selectedWorkoutForExercises.id}
+        workoutName={selectedWorkoutForExercises.name}
+        onBack={handleBackToWorkouts}
+      />
+    );
+  }
 
   return (
     <div className="workouts-container">
