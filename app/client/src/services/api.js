@@ -151,6 +151,38 @@ export const userService = {
     } catch (error) {
       throw error;
     }
+  },
+
+  // Actualizar nombre de usuario
+  updateUsername: async (usernameData) => {
+    try {
+      const response = await api.put('/api/user/username', usernameData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Cambiar contraseña
+  updatePassword: async (passwordData) => {
+    try {
+      const response = await api.put('/api/user/password', passwordData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Eliminar cuenta
+  deleteAccount: async (confirmationData) => {
+    try {
+      const response = await api.delete('/api/user/account', {
+        data: confirmationData
+      });
+      return response;
+    } catch (error) {
+      throw error;
+    }
   }
 };
 
