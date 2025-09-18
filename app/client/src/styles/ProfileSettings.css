@@ -1,0 +1,517 @@
+/* ========================================
+   Profile Settings Component Styles
+   ======================================== */
+
+.profile-settings {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: var(--surface-color, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   Header Section
+   ======================================== */
+
+.settings-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border-color, #e2e8f0);
+}
+
+.settings-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary, #1a202c);
+  margin: 0 0 0.5rem 0;
+}
+
+.settings-header p {
+  font-size: 1rem;
+  color: var(--text-secondary, #718096);
+  margin: 0;
+}
+
+/* ========================================
+   Settings Sections
+   ======================================== */
+
+.settings-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.settings-section {
+  background: var(--section-bg, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.settings-section:hover {
+  border-color: var(--primary-color, #3182ce);
+  box-shadow: 0 2px 8px rgba(49, 130, 206, 0.1);
+}
+
+.danger-section {
+  background: var(--danger-bg, #fef5e7);
+  border-color: var(--danger-border, #f6ad55);
+}
+
+.danger-section:hover {
+  border-color: var(--danger-color, #e53e3e);
+  box-shadow: 0 2px 8px rgba(229, 62, 62, 0.1);
+}
+
+/* Section Headers */
+.section-header {
+  margin-bottom: 1.5rem;
+}
+
+.section-header h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a202c);
+  margin: 0 0 0.5rem 0;
+}
+
+.section-header p {
+  font-size: 0.95rem;
+  color: var(--text-secondary, #718096);
+  margin: 0;
+}
+
+/* ========================================
+   Form Styles
+   ======================================== */
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.danger-form {
+  background: var(--surface-color, #ffffff);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--danger-border, #f6ad55);
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary, #1a202c);
+  margin: 0;
+}
+
+.form-input {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid var(--border-color, #e2e8f0);
+  border-radius: 6px;
+  background: var(--surface-color, #ffffff);
+  color: var(--text-primary, #1a202c);
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color, #3182ce);
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.form-input:disabled {
+  background: var(--disabled-bg, #f7fafc);
+  color: var(--text-secondary, #718096);
+  cursor: not-allowed;
+}
+
+.form-input.error {
+  border-color: var(--error-color, #e53e3e);
+  background: var(--error-bg, #fed7d7);
+}
+
+.form-input.error:focus {
+  border-color: var(--error-color, #e53e3e);
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+.form-help {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #718096);
+  margin: 0;
+}
+
+/* Password Container */
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container .form-input {
+  padding-right: 3rem;
+  flex: 1;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary, #718096);
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle:hover {
+  color: var(--primary-color, #3182ce);
+  background: var(--hover-bg, #f7fafc);
+}
+
+.password-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.2);
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+
+.settings-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  min-height: 48px;
+}
+
+.settings-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Primary Button */
+.settings-button.primary {
+  background: var(--primary-color, #3182ce);
+  color: white;
+}
+
+.settings-button.primary:hover:not(:disabled) {
+  background: var(--primary-hover, #2c5aa0);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+}
+
+.settings-button.primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Secondary Button */
+.settings-button.secondary {
+  background: var(--surface-color, #ffffff);
+  color: var(--text-primary, #1a202c);
+  border: 2px solid var(--border-color, #e2e8f0);
+}
+
+.settings-button.secondary:hover:not(:disabled) {
+  background: var(--hover-bg, #f7fafc);
+  border-color: var(--primary-color, #3182ce);
+}
+
+/* Danger Button */
+.settings-button.danger {
+  background: var(--danger-color, #e53e3e);
+  color: white;
+}
+
+.settings-button.danger:hover:not(:disabled) {
+  background: var(--danger-hover, #c53030);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+}
+
+.settings-button.danger:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* ========================================
+   Error Messages
+   ======================================== */
+
+.error-message {
+  font-size: 0.85rem;
+  color: var(--error-color, #e53e3e);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.global-error {
+  background: var(--error-bg, #fed7d7);
+  border: 1px solid var(--error-color, #e53e3e);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* ========================================
+   Loading Animation
+   ======================================== */
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   Warning Box (Danger Section)
+   ======================================== */
+
+.danger-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.warning-box {
+  background: var(--surface-color, #ffffff);
+  border: 2px solid var(--danger-color, #e53e3e);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.warning-box h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--danger-color, #e53e3e);
+  margin: 0 0 1rem 0;
+}
+
+.warning-box p {
+  font-size: 1rem;
+  color: var(--text-primary, #1a202c);
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.warning-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.warning-box li {
+  font-size: 0.95rem;
+  color: var(--text-primary, #1a202c);
+  padding: 0.25rem 0;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.warning-box li::before {
+  content: "⚠️";
+  position: absolute;
+  left: 0;
+  top: 0.25rem;
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .profile-settings {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+
+  .settings-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+  }
+
+  .settings-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .settings-sections {
+    gap: 2rem;
+  }
+
+  .settings-section {
+    padding: 1.5rem;
+  }
+
+  .section-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .settings-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-settings {
+    padding: 0.75rem;
+    margin: 0.25rem;
+  }
+
+  .settings-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .settings-section {
+    padding: 1rem;
+  }
+
+  .form-input {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .settings-button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* ========================================
+   High Contrast Mode Support
+   ======================================== */
+
+@media (prefers-contrast: high) {
+  .settings-section {
+    border-width: 2px;
+  }
+
+  .form-input {
+    border-width: 2px;
+  }
+
+  .settings-button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ========================================
+   Reduced Motion Support
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .settings-button:hover {
+    transform: none;
+  }
+}
+
+/* ========================================
+   Focus Visible Support
+   ======================================== */
+
+.form-input:focus-visible,
+.settings-button:focus-visible,
+.password-toggle:focus-visible {
+  outline: 2px solid var(--primary-color, #3182ce);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   CSS Custom Properties (Variables)
+   ======================================== */
+
+:root {
+  --primary-color: #3182ce;
+  --primary-hover: #2c5aa0;
+  --danger-color: #e53e3e;
+  --danger-hover: #c53030;
+  --danger-bg: #fef5e7;
+  --danger-border: #f6ad55;
+  --error-color: #e53e3e;
+  --error-bg: #fed7d7;
+  --text-primary: #1a202c;
+  --text-secondary: #718096;
+  --surface-color: #ffffff;
+  --section-bg: #f8fafc;
+  --border-color: #e2e8f0;
+  --hover-bg: #f7fafc;
+  --disabled-bg: #f7fafc;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #63b3ed;
+    --primary-hover: #4299e1;
+    --danger-color: #fc8181;
+    --danger-hover: #f56565;
+    --danger-bg: #2d1b1b;
+    --danger-border: #c05621;
+    --error-color: #fc8181;
+    --error-bg: #2d1b1b;
+    --text-primary: #f7fafc;
+    --text-secondary: #a0aec0;
+    --surface-color: #2d3748;
+    --section-bg: #1a202c;
+    --border-color: #4a5568;
+    --hover-bg: #2d3748;
+    --disabled-bg: #1a202c;
+  }
+}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import BottomNavigation from '../navigation/BottomNavigation';
+import ProfileSettings from './ProfileSettings';
 import '../../styles/Dashboard.css';
 
 const Dashboard = () => {
@@ -29,12 +30,7 @@ const Dashboard = () => {
           </div>
         );
       case 'profile':
-        return (
-          <div className="dashboard-content">
-            <h2>Editar Cuenta</h2>
-            <p>Aquí irá la configuración de la cuenta...</p>
-          </div>
-        );
+        return <ProfileSettings />;
       default:
         return (
           <div className="dashboard-content">
