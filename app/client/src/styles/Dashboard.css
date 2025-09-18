@@ -1,0 +1,144 @@
+/* Dashboard.css - Estilos para el dashboard principal */
+
+/* Variables específicas del dashboard */
+:root {
+  --dashboard-header-height: 60px;
+  --bottom-nav-height: 80px;
+  --content-padding: 1rem;
+  
+  /* Colores del dashboard */
+  --dashboard-bg: #f8fafc;
+  --header-bg: #ffffff;
+  --header-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --content-bg: #ffffff;
+  --content-border-radius: 12px;
+}
+
+/* Container principal del dashboard */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--dashboard-bg);
+  font-family: var(--font-family);
+}
+
+/* Header del dashboard */
+.dashboard-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--dashboard-header-height);
+  background-color: var(--header-bg);
+  box-shadow: var(--header-shadow);
+  z-index: 100;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--content-padding);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.welcome-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Contenido principal */
+.dashboard-main {
+  flex: 1;
+  margin-top: var(--dashboard-header-height);
+  margin-bottom: var(--bottom-nav-height);
+  padding: var(--content-padding);
+  overflow-y: auto;
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--content-bg);
+  border-radius: var(--content-border-radius);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  min-height: calc(100vh - var(--dashboard-header-height) - var(--bottom-nav-height) - 2rem);
+}
+
+.dashboard-content h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-lg) 0;
+  line-height: 1.3;
+}
+
+.dashboard-content p {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: var(--spacing-lg);
+    margin: var(--spacing-sm);
+    border-radius: var(--spacing-sm);
+  }
+  
+  .header-content {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .dashboard-title {
+    font-size: var(--font-size-lg);
+  }
+  
+  .welcome-text {
+    display: none; /* Ocultar en móviles para ahorrar espacio */
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-main {
+    padding: var(--spacing-sm);
+  }
+  
+  .dashboard-content {
+    padding: var(--spacing-md);
+    margin: 0;
+  }
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dashboard-bg: #0f172a;
+    --header-bg: #1e293b;
+    --content-bg: #1e293b;
+    --header-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}

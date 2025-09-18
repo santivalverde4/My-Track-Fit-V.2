@@ -1,0 +1,218 @@
+/* Navigation.css - Estilos para la barra de navegación inferior */
+
+/* Variables específicas de navegación */
+:root {
+  --nav-bg: #ffffff;
+  --nav-border: #e2e8f0;
+  --nav-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  --nav-item-active: #2563eb;
+  --nav-item-inactive: #64748b;
+  --nav-item-hover: #f1f5f9;
+  --nav-item-focus: #dbeafe;
+  --nav-transition: all 0.2s ease-in-out;
+}
+
+/* Contenedor principal de navegación */
+.bottom-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-nav-height);
+  background-color: var(--nav-bg);
+  border-top: 1px solid var(--nav-border);
+  box-shadow: var(--nav-shadow);
+  z-index: 100;
+}
+
+.nav-container {
+  display: flex;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+}
+
+/* Elementos de navegación */
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: var(--spacing-sm);
+  transition: var(--nav-transition);
+  color: var(--nav-item-inactive);
+  text-decoration: none;
+  position: relative;
+  min-height: 64px; /* Tamaño mínimo para touch targets */
+}
+
+.nav-item:hover {
+  background-color: var(--nav-item-hover);
+  color: var(--nav-item-active);
+}
+
+.nav-item:focus {
+  outline: none;
+  background-color: var(--nav-item-focus);
+  color: var(--nav-item-active);
+  box-shadow: 0 0 0 2px var(--nav-item-active);
+}
+
+.nav-item.active {
+  color: var(--nav-item-active);
+}
+
+.nav-item.focused {
+  background-color: var(--nav-item-focus);
+}
+
+/* Contenedor de iconos */
+.nav-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  transition: var(--nav-transition);
+}
+
+.nav-icon {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  transition: var(--nav-transition);
+}
+
+.nav-icon.active {
+  stroke-width: 2.5;
+  transform: scale(1.1);
+}
+
+/* Labels de navegación */
+.nav-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+  transition: var(--nav-transition);
+  margin: 0;
+}
+
+.nav-item.active .nav-label {
+  font-weight: 600;
+}
+
+/* Efectos de activación */
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 3px;
+  background-color: var(--nav-item-active);
+  border-radius: 0 0 2px 2px;
+}
+
+/* Estados de interacción */
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-item.active:active {
+  transform: scale(1.05);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 0;
+  }
+  
+  .nav-item {
+    padding: var(--spacing-xs);
+    gap: 2px;
+  }
+  
+  .nav-label {
+    font-size: 0.7rem;
+  }
+  
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .nav-icon-container {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-label {
+    font-size: 0.65rem;
+  }
+  
+  .nav-item {
+    gap: 1px;
+  }
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nav-bg: #1e293b;
+    --nav-border: #334155;
+    --nav-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+    --nav-item-inactive: #94a3b8;
+    --nav-item-hover: #334155;
+    --nav-item-focus: #1e40af;
+  }
+}
+
+/* Alto contraste */
+@media (prefers-contrast: high) {
+  :root {
+    --nav-item-active: #0000ff;
+    --nav-item-inactive: #000000;
+    --nav-border: #000000;
+  }
+}
+
+/* Reducir movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .nav-item,
+  .nav-icon,
+  .nav-icon-container,
+  .nav-label {
+    transition: none;
+  }
+  
+  .nav-item:active,
+  .nav-item.active:active {
+    transform: none;
+  }
+  
+  .nav-icon.active {
+    transform: none;
+  }
+}
+
+/* Mejoras para lectores de pantalla */
+.nav-item[aria-current="page"] {
+  font-weight: 600;
+}
+
+.nav-item:focus-visible {
+  outline: 2px solid var(--nav-item-active);
+  outline-offset: 2px;
+}

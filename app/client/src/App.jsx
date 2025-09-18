@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import SignUp from './components/auth/SignUp';
 import Login from './components/auth/Login';
+import Dashboard from './components/dashboard/Dashboard';
 import './App.css';
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           
           {/* Rutas futuras */}
-          <Route path="/dashboard" element={<div>Dashboard - Próximamente</div>} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/forgot-password" element={<div>Recuperar Contraseña - Próximamente</div>} />
           
           {/* Ruta 404 */}
