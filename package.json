@@ -1,0 +1,30 @@
+{
+  "name": "my-track-fit-v.2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app/server/index.js",
+  "scripts": {
+    "start": "node app/server/index.js",
+    "dev": "nodemon app/server/index.js",
+    "client": "cd app/client && npm run dev",
+    "server": "nodemon app/server/index.js",
+    "dev:both": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "cd app/client && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mssql2": "^3.3.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.10"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "watch": ["app/server"],
+  "ext": "js,json",
+  "ignore": ["node_modules", "app/client"],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "delay": 1000
+}
