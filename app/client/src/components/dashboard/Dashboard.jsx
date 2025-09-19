@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import BottomNavigation from '../navigation/BottomNavigation';
 import ProfileSettings from './ProfileSettings';
+import SmartTrainer from './SmartTrainer';
 import '../../styles/Dashboard.css';
 
 const Dashboard = () => {
@@ -23,12 +24,7 @@ const Dashboard = () => {
           </div>
         );
       case 'help':
-        return (
-          <div className="dashboard-content">
-            <h2>Smart Trainer</h2>
-            <p>Aquí irá tu entrenador personal inteligente...</p>
-          </div>
-        );
+        return <SmartTrainer />;
       case 'profile':
         return <ProfileSettings />;
       default:
