@@ -1,0 +1,476 @@
+/* Wellness.css - Estilos para el módulo de bienestar */
+
+/* Variables para el módulo de bienestar */
+:root {
+  /* Colores temáticos del bienestar */
+  --wellness-primary: #16a34a;
+  --wellness-secondary: #059669;
+  --wellness-accent: #0891b2;
+  --wellness-warning: #ea580c;
+  --wellness-danger: #dc2626;
+  --wellness-info: #2563eb;
+  
+  /* Gradientes */
+  --wellness-gradient: linear-gradient(135deg, #16a34a 0%, #059669 100%);
+  --nutrition-gradient: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+  --injury-gradient: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+  --stats-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  
+  /* Sombras */
+  --wellness-shadow: 0 4px 6px rgba(22, 163, 74, 0.1);
+  --wellness-shadow-hover: 0 8px 25px rgba(22, 163, 74, 0.15);
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Container principal del bienestar */
+.wellness-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  background: var(--content-bg);
+  border-radius: var(--content-border-radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  min-height: calc(100vh - var(--dashboard-header-height) - var(--bottom-nav-height) - 2rem);
+}
+
+/* Header del bienestar */
+.wellness-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.wellness-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  background: var(--wellness-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.wellness-header p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Grid de tarjetas principales */
+.wellness-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Tarjetas del bienestar */
+.wellness-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.wellness-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--wellness-primary);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.wellness-card:hover::before {
+  transform: scaleX(1);
+}
+
+.wellness-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--wellness-shadow-hover);
+  border-color: rgba(22, 163, 74, 0.2);
+}
+
+.wellness-card:focus {
+  outline: none;
+  border-color: var(--wellness-primary);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+/* Variantes de color para las tarjetas */
+.wellness-card.success::before {
+  background: var(--wellness-gradient);
+}
+
+.wellness-card.danger::before {
+  background: var(--injury-gradient);
+}
+
+.wellness-card.info::before {
+  background: var(--stats-gradient);
+}
+
+/* Icono de la tarjeta */
+.wellness-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--wellness-primary);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.wellness-card.success .wellness-card-icon {
+  background: rgba(5, 150, 105, 0.1);
+  color: var(--wellness-secondary);
+}
+
+.wellness-card.danger .wellness-card-icon {
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--wellness-danger);
+}
+
+.wellness-card.info .wellness-card-icon {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--wellness-info);
+}
+
+.wellness-card:hover .wellness-card-icon {
+  transform: scale(1.1);
+}
+
+/* Contenido de la tarjeta */
+.wellness-card-content {
+  flex: 1;
+}
+
+.wellness-card-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.wellness-card-content p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Flecha de la tarjeta */
+.wellness-card-arrow {
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.wellness-card:hover .wellness-card-arrow {
+  color: var(--wellness-primary);
+  transform: translateX(4px);
+}
+
+/* Resumen del día */
+.wellness-summary {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid var(--border-color);
+}
+
+.wellness-summary h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.summary-icon {
+  font-size: 2rem;
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+  line-height: 1;
+}
+
+.summary-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Header con botón de regreso */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.back-button:hover,
+.back-button:focus {
+  background: var(--wellness-primary);
+  color: white;
+  border-color: var(--wellness-primary);
+  outline: none;
+}
+
+.section-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.section-header p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Botones de acción */
+.section-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+}
+
+.add-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 48px;
+}
+
+.add-button.primary {
+  background: var(--wellness-gradient);
+  color: white;
+  box-shadow: var(--wellness-shadow);
+}
+
+.add-button.primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--wellness-shadow-hover);
+}
+
+.add-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Tabs de navegación */
+.nutrition-tabs, .stats-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.tab-button {
+  padding: 1rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-height: 48px;
+}
+
+.tab-button:hover {
+  color: var(--text-primary);
+  background: rgba(22, 163, 74, 0.05);
+}
+
+.tab-button.active {
+  color: var(--wellness-primary);
+  border-bottom-color: var(--wellness-primary);
+  background: rgba(22, 163, 74, 0.1);
+}
+
+.tab-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+}
+
+/* Estados vacíos y de carga */
+.empty-state, .loading-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+}
+
+.empty-state svg {
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-state p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .wellness-container {
+    padding: 1rem 0.5rem;
+    margin: 0.5rem;
+  }
+  
+  .wellness-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .wellness-card {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  
+  .wellness-card-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .wellness-card-content h3 {
+    font-size: 1.1rem;
+  }
+  
+  .wellness-card-content p {
+    font-size: 0.85rem;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .wellness-header h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .wellness-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .wellness-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .wellness-card-content h3 {
+    font-size: 1rem;
+  }
+  
+  .wellness-summary {
+    padding: 1.5rem;
+  }
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .wellness-card {
+    background: var(--section-bg);
+    border-color: var(--border-color);
+  }
+  
+  .wellness-summary {
+    background: var(--section-bg);
+  }
+  
+  .summary-card {
+    background: var(--surface-color);
+  }
+}

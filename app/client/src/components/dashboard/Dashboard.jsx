@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import BottomNavigation from '../navigation/BottomNavigation';
 import ProfileSettings from './ProfileSettings';
+import Wellness from './Wellness';
 import '../../styles/Dashboard.css';
 
 const Dashboard = () => {
@@ -16,12 +17,8 @@ const Dashboard = () => {
           </div>
         );
       case 'wellness':
-        return (
-          <div className="dashboard-content">
-            <h2>Bienestar</h2>
-            <p>Aquí irá el contenido de bienestar...</p>
-          </div>
-        );
+        return <Wellness />;
+        
       case 'help':
         return (
           <div className="dashboard-content">
