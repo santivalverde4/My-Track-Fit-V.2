@@ -3,8 +3,6 @@ import BottomNavigation from '../navigation/BottomNavigation';
 import ProfileSettings from './ProfileSettings';
 import Wellness from './Wellness';
 import SmartTrainer from './SmartTrainer';
-import SmartTrainer from './SmartTrainer';
-import ProfileSettings from './ProfileSettings';
 import Routines from './Routines';
 import '../../styles/Dashboard.css';
 
