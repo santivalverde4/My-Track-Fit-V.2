@@ -1,32 +1,34 @@
-# 💪 My Track-Fit V.2
+# � My Track-Fit V.2
 
-Una aplicación web de fitness completa construida con el stack SERN (SQL, Express, React, Node.js) que permite a los usuarios gestionar sus entrenamientos, bienestar y progreso fitness con un enfoque en accesibilidad y experiencia de usuario.
+Una aplicación móvil de fitness completa desarrollada con React Native y backend Express que permite a los usuarios gestionar sus entrenamientos, bienestar y progreso fitness con un enfoque en experiencia de usuario nativa y rendimiento optimizado para dispositivos móviles.
 
 ## 🌟 Características
 
 ### ✅ Implementadas
 - **Autenticación Completa**: Sistema de registro e inicio de sesión con validaciones robustas
-- **Dashboard Intuitivo**: Interfaz principal con navegación por pestañas
+- **Dashboard Nativo**: Interfaz principal optimizada para dispositivos móviles
 - **Gestión de Cuenta**: Editar usuario, cambiar contraseña y eliminar cuenta
+- **Sistema de Entrenamientos**: Gestión completa de rutinas, entrenamientos y ejercicios
+- **Módulo de Bienestar**: Seguimiento de nutrición, lesiones y estadísticas
 - **Smart Trainer con IA**: Entrenador personal inteligente con interfaz de chat
-- **Accesibilidad WCAG AA**: Cumple estándares de accesibilidad web
-- **Diseño Responsive**: Optimizado para móviles, tablets y desktop
+- **Navegación Nativa**: Experiencia fluida con React Navigation
 - **API RESTful**: Backend completo con endpoints para todas las funcionalidades
 
 ### 🚧 En Desarrollo
-- Sistema de entrenamientos personalizados
-- Módulo de bienestar y nutrición
-- Integración IA avanzada para Smart Trainer
-- Seguimiento de progreso y estadísticas
+- **Notificaciones Push**: Recordatorios de entrenamientos y objetivos
+- **Modo Offline**: Funcionalidad sin conexión a internet
+- **Integración IA avanzada**: Conexión con APIs de IA reales
+- **Sincronización en la Nube**: Backup automático de datos
+- **Wearables Integration**: Conexión con dispositivos fitness
 
 ## 🛠️ Stack Tecnológico
 
-### Frontend
-- **React 18** - Biblioteca de UI
-- **Vite** - Herramienta de build rápida
-- **React Router** - Navegación SPA
-- **Axios** - Cliente HTTP
-- **CSS3** - Estilos con variables personalizadas
+### Frontend Móvil
+- **React Native** - Framework de desarrollo móvil multiplataforma
+- **React Navigation** - Navegación nativa para móviles
+- **React Native Vector Icons** - Iconos nativos
+- **AsyncStorage** - Almacenamiento local persistente
+- **React Native Gesture Handler** - Gestos nativos optimizados
 
 ### Backend
 - **Node.js** - Runtime de JavaScript
@@ -38,42 +40,45 @@ Una aplicación web de fitness completa construida con el stack SERN (SQL, Expre
 - **MySQL** - Base de datos relacional
 - **MySQL2** - Driver para Node.js
 
-### Inteligencia Artificial (En desarrollo)
-- **Smart Trainer Chat** - Interfaz de conversación implementada
-- **Mockup IA** - Sistema de respuestas simuladas
-- **Preparado para APIs IA** - OpenAI, Claude, Gemini
-- **Análisis Contextual** - Base para recomendaciones personalizadas
+### Desarrollo Móvil
+- **Android Studio** - IDE para desarrollo Android
+- **Xcode** - IDE para desarrollo iOS (macOS requerido)
+- **Metro Bundler** - Bundler optimizado para React Native
+- **Flipper** - Herramienta de debugging para React Native
 
 ## 📁 Estructura del Proyecto
 
 ```
 My-Track-Fit-V.2/
-├── app/
-│   ├── client/                 # Frontend React
-│   │   ├── public/
-│   │   ├── src/
-│   │   │   ├── components/
-│   │   │   │   ├── auth/
-│   │   │   │   │   ├── SignUp.jsx
-│   │   │   │   │   └── Login.jsx
-│   │   │   │   ├── dashboard/
-│   │   │   │   │   ├── Dashboard.jsx
-│   │   │   │   │   ├── ProfileSettings.jsx
-│   │   │   │   │   └── SmartTrainer.jsx
-│   │   │   │   └── navigation/
-│   │   │   │       └── BottomNavigation.jsx
-│   │   │   ├── services/
-│   │   │   │   └── api.js
-│   │   │   ├── styles/
-│   │   │   │   ├── Auth.css
-│   │   │   │   ├── Dashboard.css
-│   │   │   │   ├── Navigation.css
-│   │   │   │   ├── ProfileSettings.css
-│   │   │   │   └── SmartTrainer.css
-│   │   │   ├── App.jsx
-│   │   │   └── main.jsx
-│   │   ├── package.json
-│   │   └── vite.config.js
+├── mobile/                     # Aplicación React Native
+│   ├── android/               # Proyecto Android nativo
+│   ├── ios/                   # Proyecto iOS nativo (macOS)
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── auth/
+│   │   │   │   ├── SignUp.js
+│   │   │   │   └── Login.js
+│   │   │   ├── dashboard/
+│   │   │   │   ├── Dashboard.js
+│   │   │   │   ├── ProfileSettings.js
+│   │   │   │   ├── SmartTrainer.js
+│   │   │   │   ├── Routines.js
+│   │   │   │   ├── Workouts.js
+│   │   │   │   ├── Exercises.js
+│   │   │   │   └── Wellness.js
+│   │   │   └── navigation/
+│   │   │       └── TabNavigator.js
+│   │   │   └── api.js
+│   │   ├── styles/
+│   │   │   └── globalStyles.js
+│   │   ├── utils/
+│   │   │   ├── storage.js
+│   │   │   └── constants.js
+│   │   ├── App.js
+│   │   ├── index.js
+│   │   └── metro.config.js
+│   ├── package.json
+│   └── app.json
 │   └── server/                 # Backend Express
 │       ├── index.js
 │       └── package.json
@@ -84,9 +89,13 @@ My-Track-Fit-V.2/
 ## 🚀 Instalación y Configuración
 
 ### Prerrequisitos
-- Node.js (v16 o superior)
-- npm o yarn
-- Git
+- **Node.js** (v16 o superior)
+- **npm** o **yarn**
+- **Git**
+- **Android Studio** (para desarrollo Android)
+- **Xcode** (para desarrollo iOS - solo macOS)
+- **Java Development Kit (JDK)** 11 o superior
+- **Android SDK** con API Level 31+
 
 ### 1. Clonar el repositorio
 ```bash
@@ -111,48 +120,77 @@ DB_NAME=trackfit_db
 JWT_SECRET=tu_jwt_secret_seguro
 ```
 
-### 3. Configurar el Frontend
+### 3. Configurar la App Móvil
 ```bash
-cd ../client
+cd mobile
 npm install
 ```
 
-Crear archivo `.env`:
-```env
-VITE_API_URL=http://localhost:5000
+### 4. Configurar React Native
+```bash
+# Instalar CLI de React Native (si no está instalado)
+npm install -g @react-native-community/cli
+
+# Para Android (configurar variables de entorno)
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
 ## 🏃‍♂️ Ejecutar la Aplicación
 
-### Opción 1: Desarrollo Simultáneo (Recomendado)
-```bash
-# Desde la raíz del proyecto
-npm install
-npm run dev
-```
-
-### Opción 2: Ejecutar por Separado
-
-**Terminal 1 - Backend:**
+### 1. Iniciar el Backend
 ```bash
 cd app/server
 npm run dev
 ```
 
-**Terminal 2 - Frontend:**
+### 2. Ejecutar en Android
 ```bash
-cd app/client
-npm run dev
+cd mobile
+
+# Iniciar Metro Bundler
+npm start
+
+# En otra terminal - Ejecutar en Android
+npm run android
+
+# O ejecutar en emulador específico
+npx react-native run-android
 ```
 
-## 📱 Características de Accesibilidad
+### 3. Ejecutar en iOS (solo macOS)
+```bash
+cd mobile
 
-- **Navegación por Teclado**: Toda la interfaz es navegable con teclado
-- **Lectores de Pantalla**: Compatible con NVDA, JAWS y VoiceOver
-- **Alto Contraste**: Soporte para modo de alto contraste
-- **Etiquetas ARIA**: Implementación completa de atributos ARIA
-- **Textos Alternativos**: Todas las imágenes e iconos tienen alt text
-- **Indicadores de Error**: Mensajes de error claros y descriptivos
+# Instalar pods (solo primera vez)
+cd ios && pod install && cd ..
+
+# Ejecutar en iOS
+npm run ios
+
+# O ejecutar en simulador específico
+npx react-native run-ios
+```
+
+### 4. Desarrollo con Hot Reload
+```bash
+# El Metro Bundler proporciona hot reload automático
+# Los cambios se reflejan inmediatamente en el dispositivo/emulador
+```
+
+## 📱 Características Móviles Nativas
+
+- **Navegación Nativa**: Experiencia fluida con React Navigation
+- **Gestos Táctiles**: Soporte completo para gestos nativos (swipe, pinch, etc.)
+- **Rendimiento Optimizado**: 60 FPS con optimizaciones nativas
+- **Almacenamiento Local**: Persistencia de datos con AsyncStorage
+- **Accesibilidad Móvil**: Compatible con lectores de pantalla nativos
+- **Notificaciones Push**: Preparado para notificaciones locales y remotas
+- **Orientación Adaptativa**: Soporte para modo portrait y landscape
+- **Temas del Sistema**: Adaptación automática a modo claro/oscuro
 
 ## 🎨 Componentes Principales
 
@@ -163,39 +201,9 @@ npm run dev
 ### Dashboard
 - **Dashboard**: Interfaz principal con navegación
 - **ProfileSettings**: Gestión completa de cuenta de usuario
-- **SmartTrainer**: Entrenador personal con IA e interfaz de chat
 
 ### Navegación
 - **BottomNavigation**: Menú inferior con 4 secciones principales
-
-## 🤖 Smart Trainer - Funcionalidades IA
-
-### Características del Smart Trainer
-- **Interfaz de Chat**: Conversación natural con el entrenador virtual
-- **Respuestas Inteligentes**: Mockup de respuestas contextuales
-- **Sugerencias Rápidas**: Botones para preguntas frecuentes
-- **Diseño Responsive**: Optimizado para móvil y desktop
-- **Integración Visual**: Mantiene la estética del proyecto
-
-### Capacidades del Trainer
-- Asesoramiento en rutinas de ejercicio
-- Consejos de nutrición y bienestar
-- Motivación y seguimiento de progreso
-- Respuestas personalizadas según el perfil del usuario
-
-### Mockup Actual
-```
-Usuario: "Hola"
-Smart Trainer: "¡Hola! Soy Smart Trainer, tu entrenador personal 
-inteligente. Estoy aquí para ayudarte a alcanzar tus objetivos 
-de fitness y bienestar..."
-```
-
-### Próximas Integraciones IA
-- Conexión con APIs de IA (OpenAI, Claude, etc.)
-- Análisis de datos de entrenamiento
-- Recomendaciones personalizadas basadas en historial
-- Integración con módulos de nutrición y bienestar
 
 ## 🔧 API Endpoints
 
@@ -218,23 +226,44 @@ DELETE /api/user/account     # Eliminar cuenta
 ## 🧪 Testing
 
 ```bash
-# Frontend
-cd app/client
-npm run test
+# Testing en React Native
+cd mobile
+npm test
 
-# Backend
+# Testing en dispositivo físico
+npm run android --device
+npm run ios --device
+
+# Backend testing
 cd app/server
 npm run test
 ```
 
 ## 📦 Build para Producción
 
+### Android APK
 ```bash
-# Frontend
-cd app/client
-npm run build
+cd mobile
 
-# El build se genera en app/client/dist/
+# Debug APK
+npm run build:android:debug
+
+# Release APK (requiere configuración de signing)
+npm run build:android:release
+
+# AAB para Google Play Store
+npm run build:android:bundle
+```
+
+### iOS App
+```bash
+cd mobile
+
+# Build para simulador
+npm run build:ios:debug
+
+# Build para dispositivo (requiere certificados de Apple)
+npm run build:ios:release
 ```
 
 ## 🤝 Contribuir
@@ -247,47 +276,58 @@ npm run build
 
 ## 📋 Scripts Disponibles
 
-### Root
-- `npm run dev` - Ejecuta frontend y backend simultáneamente
-- `npm run build` - Build de producción
-- `npm run lint` - Linting del código
-
-### Frontend (`app/client`)
-- `npm run dev` - Servidor de desarrollo
-- `npm run build` - Build de producción
-- `npm run preview` - Vista previa del build
-- `npm run lint` - ESLint
+### Aplicación Móvil (`mobile/`)
+- `npm start` - Iniciar Metro Bundler
+- `npm run android` - Ejecutar en Android
+- `npm run ios` - Ejecutar en iOS
+- `npm run build:android:debug` - Build debug para Android
+- `npm run build:android:release` - Build release para Android
+- `npm run build:ios:debug` - Build debug para iOS
+- `npm run build:ios:release` - Build release para iOS
+- `npm test` - Testing de componentes
+- `npm run lint` - ESLint para React Native
 
 ### Backend (`app/server`)
 - `npm run dev` - Servidor con nodemon
 - `npm start` - Servidor de producción
 - `npm run lint` - ESLint
 
-## 🔐 Seguridad
+## 🔐 Seguridad Móvil
 
-- Validación de datos en frontend y backend
-- Sanitización de inputs
-- Headers de seguridad CORS configurados
-- JWT para autenticación (preparado)
-- Validación de contraseñas seguras
+- **Almacenamiento Seguro**: AsyncStorage con encriptación
+- **Validación de Datos**: Sanitización en frontend y backend
+- **Headers de Seguridad**: CORS configurado para móviles
+- **JWT Móvil**: Autenticación persistente y segura
+- **Biometría**: Preparado para autenticación biométrica
+- **SSL Pinning**: Preparado para conexiones seguras
+- **Ofuscación de Código**: Build optimizado para producción
 
 ## 📈 Roadmap
 
-### v2.1 (Próximamente)
-- [ ] Base de datos MySQL integrada
-- [ ] Sistema de entrenamientos
-- [ ] Módulo de nutrición
-- [ ] Integración IA real para Smart Trainer
+### v3.0 - React Native (Actual)
+- [x] **Migración Completa**: De React web a React Native
+- [x] **Sistema de Entrenamientos**: Gestión completa de rutinas
+- [x] **Módulo de Bienestar**: Nutrición, lesiones y estadísticas
+- [x] **Smart Trainer**: Interfaz de chat con IA mockup
+- [x] **Navegación Nativa**: Tab navigation optimizada
 
-### v2.2
-- [ ] Análisis avanzado con IA
-- [ ] Estadísticas predictivas
-- [ ] Notificaciones push inteligentes
+### v3.1 (Próximamente)
+- [ ] **Base de Datos Integrada**: MySQL con sincronización
+- [ ] **Notificaciones Push**: Recordatorios y motivación
+- [ ] **Modo Offline**: Funcionalidad sin conexión
+- [ ] **Integración IA Real**: APIs de ChatGPT/Claude
 
-### v2.3
-- [ ] Aplicación móvil nativa
-- [ ] Integración con wearables
-- [ ] Gamificación con IA
+### v3.2
+- [ ] **Autenticación Biométrica**: TouchID/FaceID
+- [ ] **Sincronización Cloud**: Backup automático
+- [ ] **Wearables Integration**: Apple Watch, Fitbit
+- [ ] **Gamificación Avanzada**: Sistema de logros y niveles
+
+### v3.3
+- [ ] **Publicación en Stores**: Google Play y App Store
+- [ ] **Analytics Avanzados**: Métricas de uso y rendimiento
+- [ ] **Social Features**: Compartir entrenamientos y competencias
+- [ ] **Premium Features**: Suscripción con características avanzadas
 
 ## 📞 Soporte
 
