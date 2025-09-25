@@ -8,6 +8,7 @@ Una aplicación web de fitness completa construida con el stack SERN (SQL, Expre
 - **Autenticación Completa**: Sistema de registro e inicio de sesión con validaciones robustas
 - **Dashboard Intuitivo**: Interfaz principal con navegación por pestañas
 - **Gestión de Cuenta**: Editar usuario, cambiar contraseña y eliminar cuenta
+- **Smart Trainer con IA**: Entrenador personal inteligente con interfaz de chat
 - **Accesibilidad WCAG AA**: Cumple estándares de accesibilidad web
 - **Diseño Responsive**: Optimizado para móviles, tablets y desktop
 - **API RESTful**: Backend completo con endpoints para todas las funcionalidades
@@ -15,7 +16,7 @@ Una aplicación web de fitness completa construida con el stack SERN (SQL, Expre
 ### 🚧 En Desarrollo
 - Sistema de entrenamientos personalizados
 - Módulo de bienestar y nutrición
-- Smart Trainer con IA
+- Integración IA avanzada para Smart Trainer
 - Seguimiento de progreso y estadísticas
 
 ## 🛠️ Stack Tecnológico
@@ -37,6 +38,12 @@ Una aplicación web de fitness completa construida con el stack SERN (SQL, Expre
 - **MySQL** - Base de datos relacional
 - **MySQL2** - Driver para Node.js
 
+### Inteligencia Artificial (En desarrollo)
+- **Smart Trainer Chat** - Interfaz de conversación implementada
+- **Mockup IA** - Sistema de respuestas simuladas
+- **Preparado para APIs IA** - OpenAI, Claude, Gemini
+- **Análisis Contextual** - Base para recomendaciones personalizadas
+
 ## 📁 Estructura del Proyecto
 
 ```
@@ -51,7 +58,8 @@ My-Track-Fit-V.2/
 │   │   │   │   │   └── Login.jsx
 │   │   │   │   ├── dashboard/
 │   │   │   │   │   ├── Dashboard.jsx
-│   │   │   │   │   └── ProfileSettings.jsx
+│   │   │   │   │   ├── ProfileSettings.jsx
+│   │   │   │   │   └── SmartTrainer.jsx
 │   │   │   │   └── navigation/
 │   │   │   │       └── BottomNavigation.jsx
 │   │   │   ├── services/
@@ -60,7 +68,8 @@ My-Track-Fit-V.2/
 │   │   │   │   ├── Auth.css
 │   │   │   │   ├── Dashboard.css
 │   │   │   │   ├── Navigation.css
-│   │   │   │   └── ProfileSettings.css
+│   │   │   │   ├── ProfileSettings.css
+│   │   │   │   └── SmartTrainer.css
 │   │   │   ├── App.jsx
 │   │   │   └── main.jsx
 │   │   ├── package.json
@@ -154,9 +163,39 @@ npm run dev
 ### Dashboard
 - **Dashboard**: Interfaz principal con navegación
 - **ProfileSettings**: Gestión completa de cuenta de usuario
+- **SmartTrainer**: Entrenador personal con IA e interfaz de chat
 
 ### Navegación
 - **BottomNavigation**: Menú inferior con 4 secciones principales
+
+## 🤖 Smart Trainer - Funcionalidades IA
+
+### Características del Smart Trainer
+- **Interfaz de Chat**: Conversación natural con el entrenador virtual
+- **Respuestas Inteligentes**: Mockup de respuestas contextuales
+- **Sugerencias Rápidas**: Botones para preguntas frecuentes
+- **Diseño Responsive**: Optimizado para móvil y desktop
+- **Integración Visual**: Mantiene la estética del proyecto
+
+### Capacidades del Trainer
+- Asesoramiento en rutinas de ejercicio
+- Consejos de nutrición y bienestar
+- Motivación y seguimiento de progreso
+- Respuestas personalizadas según el perfil del usuario
+
+### Mockup Actual
+```
+Usuario: "Hola"
+Smart Trainer: "¡Hola! Soy Smart Trainer, tu entrenador personal 
+inteligente. Estoy aquí para ayudarte a alcanzar tus objetivos 
+de fitness y bienestar..."
+```
+
+### Próximas Integraciones IA
+- Conexión con APIs de IA (OpenAI, Claude, etc.)
+- Análisis de datos de entrenamiento
+- Recomendaciones personalizadas basadas en historial
+- Integración con módulos de nutrición y bienestar
 
 ## 🔧 API Endpoints
 
@@ -238,16 +277,17 @@ npm run build
 - [ ] Base de datos MySQL integrada
 - [ ] Sistema de entrenamientos
 - [ ] Módulo de nutrición
+- [ ] Integración IA real para Smart Trainer
 
 ### v2.2
-- [ ] Smart Trainer con IA
-- [ ] Estadísticas avanzadas
-- [ ] Notificaciones push
+- [ ] Análisis avanzado con IA
+- [ ] Estadísticas predictivas
+- [ ] Notificaciones push inteligentes
 
 ### v2.3
 - [ ] Aplicación móvil nativa
 - [ ] Integración con wearables
-- [ ] Gamificación
+- [ ] Gamificación con IA
 
 ## 📞 Soporte
 
