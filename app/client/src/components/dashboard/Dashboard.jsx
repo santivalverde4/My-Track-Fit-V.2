@@ -4,6 +4,8 @@ import ProfileSettings from './ProfileSettings';
 import Wellness from './Wellness';
 import SmartTrainer from './SmartTrainer';
 import SmartTrainer from './SmartTrainer';
+import ProfileSettings from './ProfileSettings';
+import Routines from './Routines';
 import '../../styles/Dashboard.css';
 
 const Dashboard = () => {
@@ -12,12 +14,7 @@ const Dashboard = () => {
   const renderContent = () => {
     switch (activeSection) {
       case 'workouts':
-        return (
-          <div className="dashboard-content">
-            <h2>Entrenamientos</h2>
-            <p>Aquí irá el contenido de entrenamientos...</p>
-          </div>
-        );
+        return <Routines />;
       case 'wellness':
         return <Wellness />;
         

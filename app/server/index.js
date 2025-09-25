@@ -141,122 +141,106 @@ app.put('/api/user/profile', authenticateToken, (req, res) => {
         firstName,
         lastName
       }
+// ========================================
+// RUTAS DE RUTINAS
+// ========================================
+
+// Obtener todas las rutinas del usuario
+app.get('/api/routines', authenticateToken, (req, res) => {
+  // Simulamos rutinas del usuario
+  const mockRoutines = [
+    {
+      id: 1,
+      name: 'Rutina de Fuerza',
+      description: 'Entrenamiento completo de fuerza para todo el cuerpo',
+      difficulty: 'intermedio',
+      estimatedTime: 45,
+      category: 'fuerza',
+      exercises: [
+        {
+          id: 1,
+          name: 'Sentadillas',
+          description: 'Ejercicio para piernas y glúteos',
+          sets: 4,
+          reps: 12,
+          weight: 80,
+          restTime: 90,
+          notes: 'Mantener la espalda recta'
+        }
+      ],
+      userId: req.user.id,
+      createdAt: '2024-01-15',
+      lastUsed: '2024-01-20'
+    }
+  ];
+
+  setTimeout(() => {
+    res.json({
+      routines: mockRoutines,
+      total: mockRoutines.length
+    });
+  }, 500);
+});
+
+// Crear nueva rutina
+app.post('/api/routines', authenticateToken, (req, res) => {
+  const { name, description, difficulty, estimatedTime, category } = req.body;
+
+  if (!name || !description) {
+    return res.status(400).json({
+      message: 'Nombre y descripción son requeridos'
+    });
+  }
+
+  setTimeout(() => {
+    const newRoutine = {
+      id: Date.now(),
+      name,
+      description,
+      difficulty,
+      estimatedTime,
+      category,
+      exercises: [],
+      userId: req.user.id,
+      createdAt: new Date().toISOString().split('T')[0]
+    };
+
+    res.status(201).json({
+      message: 'Rutina creada exitosamente',
+      routine: newRoutine
     });
   }, 800);
 });
 
-app.put('/api/user/username', authenticateToken, (req, res) => {
-  const { newUsername } = req.body;
+// Agregar ejercicio a rutina
+app.post('/api/routines/:id/exercises', authenticateToken, (req, res) => {
+  const routineId = parseInt(req.params.id);
+  const { name, description, sets, reps, weight, restTime, notes } = req.body;
 
-  if (!newUsername) {
+  if (!name) {
     return res.status(400).json({
-      message: 'El nuevo nombre de usuario es requerido'
-    });
-  }
-
-  if (newUsername.length < 3) {
-    return res.status(400).json({
-      message: 'El nombre de usuario debe tener al menos 3 caracteres'
-    });
-  }
-
-  if (!/^[a-zA-Z0-9_]+$/.test(newUsername)) {
-    return res.status(400).json({
-      message: 'El nombre de usuario solo puede contener letras, números y guiones bajos'
-    });
-  }
-
-  // Simular verificación de disponibilidad
-  if (newUsername === 'admin' || newUsername === 'root') {
-    return res.status(409).json({
-      message: 'Este nombre de usuario no está disponible'
+      message: 'El nombre del ejercicio es requerido'
     });
   }
 
   setTimeout(() => {
-    res.json({
-      message: 'Nombre de usuario actualizado exitosamente',
-      user: {
-        ...req.user,
-        username: newUsername
-      }
+    const newExercise = {
+      id: Date.now(),
+      name,
+      description: description || '',
+      sets: parseInt(sets),
+      reps: parseInt(reps),
+      weight: parseFloat(weight) || 0,
+      restTime: parseInt(restTime),
+      notes: notes || '',
+      routineId
+    };
+
+    res.status(201).json({
+      message: 'Ejercicio agregado exitosamente',
+      exercise: newExercise
     });
-  }, 1000);
-});
-
-app.put('/api/user/password', authenticateToken, (req, res) => {
-  const { currentPassword, newPassword } = req.body;
-
-  if (!currentPassword || !newPassword) {
-    return res.status(400).json({
-      message: 'Contraseña actual y nueva contraseña son requeridas'
-    });
-  }
-
-  if (newPassword.length < 6) {
-    return res.status(400).json({
-      message: 'La nueva contraseña debe tener al menos 6 caracteres'
-    });
-  }
-
-  if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(newPassword)) {
-    return res.status(400).json({
-      message: 'La contraseña debe contener al menos una mayúscula, una minúscula y un número'
-    });
-  }
-
-  // Simular verificación de contraseña actual
-  if (currentPassword !== 'password') {
-    return res.status(401).json({
-      message: 'La contraseña actual es incorrecta'
-    });
-  }
-
-  setTimeout(() => {
-    res.json({
-      message: 'Contraseña actualizada exitosamente'
-    });
-  }, 1200);
-});
-
-app.delete('/api/user/account', authenticateToken, (req, res) => {
-  const { password } = req.body;
-
-  if (!password) {
-    return res.status(400).json({
-      message: 'Contraseña requerida para confirmar eliminación'
-    });
-  }
-
-  // Simular verificación de contraseña
-  if (password !== 'password') {
-    return res.status(401).json({
-      message: 'Contraseña incorrecta'
-    });
-  }
-
-  setTimeout(() => {
-    res.json({
-      message: 'Cuenta eliminada exitosamente'
-    });
-  }, 1500);
-});
-
-// Manejo de errores 404
-app.use('*', (req, res) => {
-  res.status(404).json({
-    message: 'Ruta no encontrada',
-    path: req.originalUrl
-  });
-});
-
-// Manejo de errores globales
-app.use((error, req, res, next) => {
-  console.error('Error:', error);
-  res.status(500).json({
-    message: 'Error interno del servidor',
-    error: process.env.NODE_ENV === 'development' ? error.message : undefined
-  });
+  }, 600);
 });
 
 // Iniciar servidor

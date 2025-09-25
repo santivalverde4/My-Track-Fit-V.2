@@ -109,19 +109,6 @@
   font-weight: 600;
 }
 
-/* Efectos de activación */
-.nav-item.active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 32px;
-  height: 3px;
-  background-color: var(--nav-item-active);
-  border-radius: 0 0 2px 2px;
-}
-
 /* Estados de interacción */
 .nav-item:active {
   transform: scale(0.95);
