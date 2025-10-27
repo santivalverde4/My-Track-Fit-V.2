@@ -1,0 +1,214 @@
+{
+  "info": {
+    "name": "My Track Fit API",
+    "description": "Colección de endpoints para My Track Fit Backend",
+    "version": "2.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": "{{token}}"
+  },
+  "variables": {
+    "baseUrl": "http://localhost:5000",
+    "token": ""
+  },
+  "requests": [
+    {
+      "name": "Health Check",
+      "method": "GET",
+      "url": "{{baseUrl}}/health",
+      "headers": []
+    },
+    {
+      "name": "Register",
+      "method": "POST",
+      "url": "{{baseUrl}}/api/auth/register",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"test123456\"\n}"
+      }
+    },
+    {
+      "name": "Login",
+      "method": "POST",
+      "url": "{{baseUrl}}/api/auth/login",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"test123456\"\n}"
+      }
+    },
+    {
+      "name": "Get Profile",
+      "method": "GET",
+      "url": "{{baseUrl}}/api/auth/profile",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ]
+    },
+    {
+      "name": "Get All Exercises",
+      "method": "GET",
+      "url": "{{baseUrl}}/api/exercises",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ]
+    },
+    {
+      "name": "Create Exercise",
+      "method": "POST",
+      "url": "{{baseUrl}}/api/exercises",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"name\": \"Press Banca\",\n  \"categoria\": \"Pecho\",\n  \"descripcion\": \"Ejercicio compuesto para pectoral\"\n}"
+      }
+    },
+    {
+      "name": "Get My Routines",
+      "method": "GET",
+      "url": "{{baseUrl}}/api/routines",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ]
+    },
+    {
+      "name": "Create Routine",
+      "method": "POST",
+      "url": "{{baseUrl}}/api/routines",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"nombre\": \"Rutina de Fuerza\",\n  \"descripcion\": \"Rutina enfocada en ganar fuerza\",\n  \"activa\": true\n}"
+      }
+    },
+    {
+      "name": "Get Nutrition Summary",
+      "method": "GET",
+      "url": "{{baseUrl}}/api/nutrition/summary?fecha=2025-10-27",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ]
+    },
+    {
+      "name": "Create Nutrition Log",
+      "method": "POST",
+      "url": "{{baseUrl}}/api/nutrition/logs",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"fecha\": \"2025-10-27\",\n  \"tipo_comida\": \"desayuno\",\n  \"nombre_alimento\": \"Huevos revueltos\",\n  \"cantidad_gramos\": 150,\n  \"calorias\": 250,\n  \"proteinas\": 18,\n  \"carbohidratos\": 2,\n  \"grasas\": 18\n}"
+      }
+    },
+    {
+      "name": "Get Active Injuries",
+      "method": "GET",
+      "url": "{{baseUrl}}/api/injuries?active=true",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ]
+    },
+    {
+      "name": "Create Injury",
+      "method": "POST",
+      "url": "{{baseUrl}}/api/injuries",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"nombre_lesion\": \"Tendinitis rotuliana\",\n  \"parte_cuerpo\": \"Rodilla\",\n  \"severidad\": \"moderada\",\n  \"fecha_lesion\": \"2025-10-27\",\n  \"descripcion\": \"Dolor en la rodilla al correr\",\n  \"estado\": \"activa\"\n}"
+      }
+    },
+    {
+      "name": "Get Metrics Summary",
+      "method": "GET",
+      "url": "{{baseUrl}}/api/statistics/summary?days=30",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        }
+      ]
+    },
+    {
+      "name": "Save Daily Metrics",
+      "method": "POST",
+      "url": "{{baseUrl}}/api/statistics/metrics",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer {{token}}"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"fecha\": \"2025-10-27\",\n  \"peso\": 75.5,\n  \"horas_sueno\": 7.5\n}"
+      }
+    }
+  ]
+}
