@@ -231,4 +231,34 @@ router.get('/verify', authMiddleware, (req, res) => {
   });
 });
 
+/**
+ * POST /api/auth/request-password-reset
+ * Solicitar recuperación de contraseña
+ */
+router.post('/request-password-reset', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        error: 'El email es requerido'
+      });
+    }
+
+    const result = await AuthService.requestPasswordReset(email);
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
 export default router;

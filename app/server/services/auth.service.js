@@ -8,6 +8,9 @@ import { EmailService } from './email.service.js';
 // Almacén temporal de usuarios pendientes de confirmación
 const pendingUsers = {};
 
+// Almacén temporal de tokens de recuperación de contraseña
+const passwordResetTokens = {};
+
 export const AuthService = {
   /**
    * Registrar nuevo usuario
@@ -267,5 +270,108 @@ export const AuthService = {
         error: error.message 
       };
     }
+  },
+
+  /**
+   * Solicitar recuperación de contraseña
+   */
+  async requestPasswordReset(email) {
+    try {
+      // Buscar usuario por email
+      const { data: user } = await UserModel.findByEmail(email);
+      
+      if (!user) {
+        // Por seguridad, no revelar si el email existe o no
+        return {
+          success: true,
+          message: 'Si el correo existe, recibirás un email para restablecer tu contraseña.'
+        };
+      }
+
+      // Generar token único
+      const token = uuidv4();
+      passwordResetTokens[token] = email;
+
+      // Enviar email de recuperación
+      console.log('📧 Enviando email de recuperación a:', email);
+      const emailResult = await EmailService.sendPasswordResetEmail(email, user.username, token);
+      
+      if (!emailResult.success) {
+        console.error('❌ Error enviando email de recuperación');
+        return {
+          success: false,
+          error: 'Error enviando correo de recuperación'
+        };
+      }
+
+      console.log('✅ Email de recuperación enviado');
+      return {
+        success: true,
+        message: 'Correo de recuperación enviado exitosamente'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: 'Error en la solicitud de recuperación: ' + error.message
+      };
+    }
+  },
+
+  /**
+   * Resetear contraseña con token
+   */
+  async resetPassword(token, newPassword) {
+    try {
+      const email = passwordResetTokens[token];
+      
+      if (!email) {
+        return {
+          success: false,
+          error: 'Token inválido o expirado'
+        };
+      }
+
+      // Buscar usuario
+      const { data: user } = await UserModel.findByEmail(email);
+      
+      if (!user) {
+        return {
+          success: false,
+          error: 'Usuario no encontrado'
+        };
+      }
+
+      // Hashear nueva contraseña
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      // Actualizar contraseña
+      const { error } = await UserModel.update(user.id, { password: hashedPassword });
+      
+      if (error) {
+        return { success: false, error: error.message };
+      }
+
+      // Eliminar token usado
+      delete passwordResetTokens[token];
+
+      console.log('✅ Contraseña actualizada para:', email);
+
+      return {
+        success: true,
+        message: 'Contraseña actualizada exitosamente'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: 'Error al resetear contraseña: ' + error.message
+      };
+    }
+  },
+
+  /**
+   * Verificar si un token de reset es válido
+   */
+  isResetTokenValid(token) {
+    return !!passwordResetTokens[token];
   }
 };

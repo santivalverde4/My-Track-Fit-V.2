@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 
 // Importar rutas
 import authRoutes from './routes/auth.routes.js';
+import publicRoutes from './routes/public.routes.js';
 import exerciseRoutes from './routes/exercise.routes.js';
 import routineRoutes from './routes/routine.routes.js';
 import nutritionRoutes from './routes/nutrition.routes.js';
@@ -66,6 +67,9 @@ app.use('/api/routines', routineRoutes);
 app.use('/api/nutrition', nutritionRoutes);
 app.use('/api/injuries', injuryRoutes);
 app.use('/api/statistics', statisticsRoutes);
+
+// Registrar rutas públicas (páginas HTML)
+app.use('/', publicRoutes);
 
 // Ruta 404
 app.use((req, res) => {
