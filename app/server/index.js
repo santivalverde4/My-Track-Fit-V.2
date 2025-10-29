@@ -10,6 +10,7 @@ import routineRoutes from './routes/routine.routes.js';
 import nutritionRoutes from './routes/nutrition.routes.js';
 import injuryRoutes from './routes/injury.routes.js';
 import statisticsRoutes from './routes/statistics.routes.js';
+import smarttrainerRoutes from './routes/smarttrainer.routes.js';
 
 // Cargar variables de entorno
 dotenv.config();
@@ -67,6 +68,7 @@ app.use('/api/routines', routineRoutes);
 app.use('/api/nutrition', nutritionRoutes);
 app.use('/api/injuries', injuryRoutes);
 app.use('/api/statistics', statisticsRoutes);
+app.use('/api/smarttrainer', smarttrainerRoutes);
 
 // Registrar rutas públicas (páginas HTML)
 app.use('/', publicRoutes);

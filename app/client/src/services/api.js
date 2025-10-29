@@ -35,11 +35,17 @@ api.interceptors.response.use(
       // Error del servidor
       const { status, data } = error.response;
       
+      console.log('🚨 Error Response Status:', status);
+      console.log('🚨 Error Response Data:', data);
+      
       switch (status) {
         case 401:
           // Token expirado o inválido
-          localStorage.removeItem('authToken');
-          window.location.href = '/login';
+          console.error('❌ ERROR 401: Token inválido o expirado');
+          console.error('❌ Data:', data);
+          // TEMPORALMENTE COMENTADO PARA DEBUG
+          // localStorage.removeItem('authToken');
+          // window.location.href = '/login';
           break;
         case 403:
           console.error('Acceso denegado');
@@ -78,8 +84,10 @@ export const authService = {
       const response = await api.post('/api/auth/register', userData);
       
       // Si el registro es exitoso y devuelve un token
-      if (response.token) {
-        localStorage.setItem('authToken', response.token);
+      const token = response.token || response.data?.token;
+      
+      if (token) {
+        localStorage.setItem('authToken', token);
       }
       
       return response;
@@ -93,9 +101,16 @@ export const authService = {
     try {
       const response = await api.post('/api/auth/login', credentials);
       
-      // Guardar token
-      if (response.token) {
-        localStorage.setItem('authToken', response.token);
+      console.log('📥 Respuesta completa del login:', response);
+      
+      // Guardar token (puede estar en response.token o response.data.token)
+      const token = response.token || response.data?.token;
+      
+      if (token) {
+        localStorage.setItem('authToken', token);
+        console.log('✅ Token guardado en localStorage');
+      } else {
+        console.error('❌ No se encontró token en la respuesta:', response);
       }
       
       return response;
@@ -442,6 +457,60 @@ export const exerciseService = {
   deleteExercise: async (routineId, workoutId, exerciseId) => {
     try {
       const response = await api.delete(`/api/routines/${routineId}/workouts/${workoutId}/exercises/${exerciseId}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+// Servicios de SmartTrainer (IA)
+export const smarttrainerService = {
+  chat: async (message, conversationHistory = []) => {
+    try {
+      const response = await api.post('/api/smarttrainer/chat', {
+        message,
+        conversationHistory
+      });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  generateWorkout: async (userProfile) => {
+    try {
+      const response = await api.post('/api/smarttrainer/generate-workout', userProfile);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  generateNutrition: async (userProfile) => {
+    try {
+      const response = await api.post('/api/smarttrainer/generate-nutrition', userProfile);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  analyzeExercise: async (exerciseName) => {
+    try {
+      const response = await api.post('/api/smarttrainer/analyze-exercise', { exerciseName });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getInjuryAdvice: async (injuryType, description) => {
+    try {
+      const response = await api.post('/api/smarttrainer/injury-advice', {
+        injuryType,
+        description
+      });
       return response;
     } catch (error) {
       throw error;

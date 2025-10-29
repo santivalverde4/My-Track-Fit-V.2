@@ -1,26 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { smarttrainerService } from '../../services/api';
 import '../../styles/SmartTrainer.css';
 
 const SmartTrainer = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      type: 'user',
-      text: 'Hola',
-      timestamp: '10:30'
-    },
-    {
-      id: 2,
       type: 'trainer',
-      text: '¡Hola! Soy Smart Trainer, tu entrenador personal inteligente. Estoy aquí para ayudarte a alcanzar tus objetivos de fitness y bienestar. Puedo asistirte con rutinas de ejercicio, consejos de nutrición, seguimiento de progreso y motivación diaria. ¿En qué te gustaría que te ayude hoy?',
-      timestamp: '10:30'
+      text: '¡Hola! Soy SmartTrainer, tu entrenador personal de IA. Estoy aquí para ayudarte con entrenamientos, nutrición, lesiones y bienestar. ¿En qué puedo ayudarte hoy?',
+      timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
     }
   ]);
   const [newMessage, setNewMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
 
-  const handleSendMessage = (e) => {
+  // Auto-scroll al último mensaje
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (newMessage.trim()) {
+    if (newMessage.trim() && !isLoading) {
       const userMessage = {
         id: messages.length + 1,
         type: 'user',
@@ -29,30 +36,63 @@ const SmartTrainer = () => {
       };
       
       setMessages([...messages, userMessage]);
+      const currentMessage = newMessage;
       setNewMessage('');
+      setIsLoading(true);
       
-      // Simular respuesta del trainer después de un breve delay
-      setTimeout(() => {
-        const trainerResponse = {
+      try {
+        // Debug: verificar token
+        const token = localStorage.getItem('authToken');
+        console.log('🔑 Token existe:', !!token);
+        console.log('🔑 Token:', token ? token.substring(0, 20) + '...' : 'No token');
+
+        // Preparar historial de conversación para la IA
+        const conversationHistory = messages.map(msg => ({
+          role: msg.type === 'user' ? 'user' : 'model',
+          content: msg.text
+        }));
+
+        console.log('📤 Enviando mensaje a SmartTrainer:', currentMessage);
+
+        // Enviar mensaje a la IA
+        const response = await smarttrainerService.chat(currentMessage, conversationHistory);
+        
+        console.log('📥 Respuesta recibida:', response);
+        
+        if (response.success) {
+          const trainerResponse = {
+            id: messages.length + 2,
+            type: 'trainer',
+            text: response.message,
+            timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+          };
+          setMessages(prev => [...prev, trainerResponse]);
+        } else {
+          const errorMessage = {
+            id: messages.length + 2,
+            type: 'trainer',
+            text: 'Lo siento, tuve un problema al procesar tu mensaje. Por favor, intenta de nuevo.',
+            timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+          };
+          setMessages(prev => [...prev, errorMessage]);
+        }
+      } catch (error) {
+        console.error('❌ Error al enviar mensaje:', error);
+        console.error('❌ Error completo:', JSON.stringify(error, null, 2));
+        console.error('❌ Error.response:', error.response);
+        console.error('❌ Error.message:', error.message);
+        
+        const errorMessage = {
           id: messages.length + 2,
           type: 'trainer',
-          text: getTrainerResponse(newMessage),
+          text: `Error: ${error.message || 'Error de conexión'}. Verifica tu conexión a internet e intenta de nuevo.`,
           timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
         };
-        setMessages(prev => [...prev, trainerResponse]);
-      }, 1000);
+        setMessages(prev => [...prev, errorMessage]);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  };
-
-  const getTrainerResponse = (userMessage) => {
-    const responses = [
-      'Excelente pregunta. Te puedo ayudar con eso. ¿Te gustaría que creemos un plan personalizado?',
-      'Perfecto. Basándome en tu perfil, te recomiendo comenzar con ejercicios de intensidad moderada.',
-      'Me parece una gran idea. ¿Cuántos días a la semana puedes dedicar al entrenamiento?',
-      'Entiendo perfectamente. Vamos paso a paso para que logres tus objetivos de forma segura.',
-      'Esa es una consulta muy común. Te voy a dar algunos consejos prácticos que puedes implementar hoy mismo.'
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
   };
 
   return (
@@ -75,11 +115,25 @@ const SmartTrainer = () => {
         {messages.map((message) => (
           <div key={message.id} className={`message ${message.type}`}>
             <div className="message-content">
-              <p>{message.text}</p>
+              <div className="message-text">
+                <ReactMarkdown>{message.text}</ReactMarkdown>
+              </div>
               <span className="message-time">{message.timestamp}</span>
             </div>
           </div>
         ))}
+        {isLoading && (
+          <div className="message trainer">
+            <div className="message-content">
+              <div className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Input para nuevo mensaje */}

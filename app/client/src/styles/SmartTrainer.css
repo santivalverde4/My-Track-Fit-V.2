@@ -382,6 +382,143 @@
   --error-color: #e53e3e;
 }
 
+/* ========================================
+   Markdown Formatting in Messages
+   ======================================== */
+
+.message-text {
+  width: 100%;
+}
+
+/* Encabezados en Markdown */
+.message-text h1,
+.message-text h2,
+.message-text h3,
+.message-text h4 {
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+.message-text h1 { font-size: 1.3rem; }
+.message-text h2 { font-size: 1.2rem; }
+.message-text h3 { font-size: 1.1rem; }
+.message-text h4 { font-size: 1rem; }
+
+/* Párrafos */
+.message-text p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+/* Listas */
+.message-text ul,
+.message-text ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.message-text li {
+  margin: 0.3rem 0;
+  line-height: 1.5;
+}
+
+/* Negrita y cursiva */
+.message-text strong {
+  font-weight: 600;
+}
+
+.message-text em {
+  font-style: italic;
+}
+
+/* Código inline */
+.message-text code {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+}
+
+.message.user .message-text code {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Bloques de código */
+.message-text pre {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.75rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+
+.message-text pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Enlaces */
+.message-text a {
+  color: inherit;
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+.message-text a:hover {
+  opacity: 1;
+}
+
+/* Citas */
+.message-text blockquote {
+  border-left: 3px solid currentColor;
+  padding-left: 1rem;
+  margin: 0.5rem 0;
+  opacity: 0.8;
+}
+
+/* Separadores */
+.message-text hr {
+  border: none;
+  border-top: 1px solid currentColor;
+  opacity: 0.3;
+  margin: 0.75rem 0;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.5rem;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background: var(--primary-color, #3182ce);
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   :root {
