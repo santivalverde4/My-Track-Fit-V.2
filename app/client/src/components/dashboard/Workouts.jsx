@@ -118,7 +118,7 @@ const Workouts = ({ routineId, routineName, onBack }) => {
           <h2>Entrenamientos - {routineName}</h2>
           <div className="header-buttons">
             <button 
-              className="back-btn"
+              className="btn btn-secondary btn-icon"
               onClick={onBack}
               aria-label="Volver a rutinas"
             >
@@ -128,7 +128,7 @@ const Workouts = ({ routineId, routineName, onBack }) => {
               </svg>
             </button>
             <button
-              className="add-workout-btn"
+              className="btn btn-success btn-icon"
               onClick={() => setShowAddWorkoutModal(true)}
               aria-label="Agregar nuevo entrenamiento"
               title="Crear nuevo entrenamiento"
@@ -157,7 +157,7 @@ const Workouts = ({ routineId, routineName, onBack }) => {
             <h3>No hay entrenamientos creados</h3>
             <p>Comienza creando tu primer entrenamiento para esta rutina</p>
             <button
-              className="create-first-workout-btn"
+              className="btn btn-primary btn-lg"
               onClick={() => setShowAddWorkoutModal(true)}
             >
               Crear Mi Primer Entrenamiento
@@ -179,9 +179,15 @@ const Workouts = ({ routineId, routineName, onBack }) => {
       {/* Modal Crear Entrenamiento */}
       {showAddWorkoutModal && (
         <div className="modal-overlay" onClick={() => setShowAddWorkoutModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div 
+            className="modal-content" 
+            onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title-crear-entrenamiento"
+          >
             <div className="modal-header">
-              <h3>Crear Nuevo Entrenamiento</h3>
+              <h3 id="modal-title-crear-entrenamiento">Crear Nuevo Entrenamiento</h3>
               <button
                 className="modal-close"
                 onClick={() => setShowAddWorkoutModal(false)}
@@ -224,14 +230,14 @@ const Workouts = ({ routineId, routineName, onBack }) => {
               <div className="modal-actions">
                 <button
                   type="button"
-                  className="modal-btn secondary"
+                  className="btn btn-secondary"
                   onClick={() => setShowAddWorkoutModal(false)}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="modal-btn primary"
+                  className="btn btn-success"
                   disabled={loading}
                 >
                   {loading ? 'Creando...' : 'Crear Entrenamiento'}

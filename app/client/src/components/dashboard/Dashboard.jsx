@@ -32,6 +32,11 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      {/* Skip Link para accesibilidad */}
+      <a href="#main-content" className="skip-link">
+        Saltar al contenido principal
+      </a>
+
       {/* Header */}
       <header className="dashboard-header">
         <div className="header-content">
@@ -43,7 +48,7 @@ const Dashboard = () => {
       </header>
 
       {/* Main Content */}
-      <main className="dashboard-main" role="main">
+      <main id="main-content" className="dashboard-main" role="main">
         {renderContent()}
       </main>
 

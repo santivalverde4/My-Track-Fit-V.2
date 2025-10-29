@@ -33,9 +33,9 @@
   --warning-hover: #c2410c;
   --warning-light: #f97316;
   
-  --error-color: #dc2626;
+  --error-color: #c91818;
   --error-hover: #b91c1c;
-  --error-light: #ef4444;
+  --error-light: #e11616;
   --error-bg: #fef2f2;
   
   --info-color: #0891b2;
@@ -43,22 +43,22 @@
   --info-light: #06b6d4;
   
   /* Colores neutros */
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --text-disabled: #d1d5db;
+  --text-primary: #f7fafc;
+  --text-secondary: #cbd5e0;
+  --text-muted: #a0aec0;
+  --text-disabled: #718096;
   
   /* Fondos */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  --bg-disabled: #e5e7eb;
+  --bg-primary: #2d3748;
+  --bg-secondary: #1a202c;
+  --bg-tertiary: #374151;
+  --bg-disabled: #4b5563;
   
   /* Bordes */
-  --border-color: #e5e7eb;
-  --border-light: #f1f5f9;
+  --border-color: #4a5568;
+  --border-light: #2d3748;
   --border-focus: #2563eb;
-  --border-error: #dc2626;
+  --border-error: #e11616;
   
   /* ========================================
      SISTEMA DE SOMBRAS UNIFICADO
@@ -134,6 +134,30 @@
   --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   ACCESIBILIDAD - Skip Link
+   ======================================== */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary-color);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 4px 0;
+  z-index: 10000;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--border-focus);
+  outline-offset: 2px;
 }
 
 /* ========================================
@@ -249,15 +273,15 @@
    ======================================== */
 
 .btn-secondary {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  border-color: var(--border-color);
+  background-color: #2d3748;
+  color: #f7fafc;
+  border-color: #4a5568;
   box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: var(--bg-secondary);
-  border-color: var(--text-secondary);
+  background-color: #1a202c;
+  border-color: #4a5568;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
@@ -280,10 +304,10 @@
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: var(--error-hover);
-  border-color: var(--error-hover);
+  background-color: #c70f0f;
+  border-color: #ef4444;
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.25);
+  box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.35);
 }
 
 .btn-danger:active:not(:disabled) {
@@ -532,8 +556,9 @@
   }
   
   .btn-secondary {
-    background-color: var(--bg-secondary);
-    border-color: var(--border-color);
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #f7fafc;
   }
 }
 
@@ -541,6 +566,36 @@
    ACCESIBILIDAD
    ======================================== */
 
+/* Focus visible mejorado para navegación por teclado */
+*:focus-visible {
+  outline: 3px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* Asegurar que los botones tengan focus visible */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* Touch targets mínimos para dispositivos móviles (48x48px) */
+@media (pointer: coarse) {
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  .clickable {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+/* Reducir animaciones para usuarios con preferencias de movimiento reducido */
 @media (prefers-reduced-motion: reduce) {
   .btn {
     transition: none;

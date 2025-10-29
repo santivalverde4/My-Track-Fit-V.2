@@ -12,8 +12,8 @@
 
 /* Formulario para agregar lesión */
 .add-injury-form {
-  background: #fef7f0;
-  border: 2px solid #fed7aa;
+  background: #374151;
+  border: 2px solid #4a5568;
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 2rem;
@@ -22,7 +22,7 @@
 .add-injury-form h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 1.5rem 0;
 }
 
@@ -47,7 +47,18 @@
 .form-label {
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: #e2e8f0;
+}
+
+.form-label .required {
+  color: #f87171;
+  margin-left: 0.25rem;
+}
+
+.error-message {
+  font-size: 0.85rem;
+  color: #f87171;
+  margin-top: 0.25rem;
 }
 
 .form-input {
@@ -56,22 +67,33 @@
   border-radius: 6px;
   font-size: 1rem;
   transition: all 0.2s ease;
-  background: white;
+  background: #2d3748;
+  color: #f7fafc;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: var(--wellness-primary);
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
 }
 
 .form-input.error {
   border-color: var(--error-color);
-  background: #fef2f2;
+  background: #3d2626;
 }
 
 .form-input.error:focus {
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.form-input::placeholder {
+  color: #718096;
+  opacity: 1;
+}
+
+.form-input option {
+  background: #2d3748;
+  color: #f7fafc;
 }
 
 .form-actions {
@@ -126,8 +148,8 @@
 }
 
 .injury-card {
-  background: white;
-  border: 1px solid var(--border-color);
+  background: #2d3748;
+  border: 1px solid #4a5568;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
@@ -149,14 +171,14 @@
 .injury-title h4 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 0.25rem 0;
 }
 
 .injury-type {
   font-size: 0.8rem;
-  color: var(--text-secondary);
-  background: var(--bg-secondary);
+  color: #cbd5e0;
+  background: #1a202c;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
 }
@@ -187,15 +209,16 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
+  color: #e2e8f0;
 }
 
 .detail-label {
-  color: var(--text-secondary);
+  color: #a0aec0;
 }
 
 .detail-value {
   font-weight: 500;
-  color: var(--text-primary);
+  color: #f7fafc;
 }
 
 .severity-badge {
@@ -247,11 +270,11 @@
 }
 
 .progress-card {
-  background: white;
+  background: #2d3748;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
+  border: 1px solid #4a5568;
 }
 
 .progress-header {
@@ -268,20 +291,20 @@
 .progress-header h4 {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0;
 }
 
 .progress-header p {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: #cbd5e0;
   margin: 0;
 }
 
 .progress-bar {
   width: 100%;
   height: 8px;
-  background: var(--bg-secondary);
+  background: #1a202c;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -294,7 +317,8 @@
 
 /* Seguimiento de agua */
 .water-tracker {
-  background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border: 2px solid #4a5568;
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -304,12 +328,12 @@
 .water-header h4 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 0.5rem 0;
 }
 
 .water-header p {
-  color: var(--text-secondary);
+  color: #cbd5e0;
   margin: 0 0 1rem 0;
 }
 
@@ -324,7 +348,7 @@
 .water-glass {
   width: 40px;
   height: 40px;
-  border: 2px solid #0891b2;
+  border: 2px solid #06b6d4;
   border-radius: 8px;
   background: transparent;
   font-size: 1.5rem;
@@ -333,11 +357,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #06b6d4;
 }
 
 .water-glass.filled {
   background: #0891b2;
   color: white;
+  border-color: #0891b2;
 }
 
 .water-glass:hover {
@@ -353,10 +379,10 @@
 .water-button {
   width: 40px;
   height: 40px;
-  border: 2px solid #0891b2;
+  border: 2px solid #06b6d4;
   border-radius: 50%;
-  background: white;
-  color: #0891b2;
+  background: transparent;
+  color: #06b6d4;
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
@@ -369,6 +395,7 @@
 .water-button:hover:not(:disabled) {
   background: #0891b2;
   color: white;
+  border-color: #0891b2;
 }
 
 .water-button:disabled {
@@ -404,14 +431,14 @@
 .meals-section h4 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 1.5rem 0;
 }
 
 .empty-meals {
   text-align: center;
   padding: 2rem;
-  color: var(--text-secondary);
+  color: #cbd5e0;
 }
 
 .empty-icon {
@@ -427,17 +454,17 @@
 }
 
 .meal-section {
-  background: white;
+  background: #2d3748;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
+  border: 1px solid #4a5568;
 }
 
 .meal-type-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 1rem 0;
   display: flex;
   align-items: center;
@@ -445,7 +472,7 @@
 }
 
 .no-meals {
-  color: var(--text-secondary);
+  color: #cbd5e0;
   font-style: italic;
   text-align: center;
   padding: 1rem;
@@ -463,9 +490,9 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem;
-  background: var(--bg-secondary);
+  background: #1a202c;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border: 1px solid #4a5568;
 }
 
 .meal-info {
@@ -482,14 +509,14 @@
 .meal-main h6 {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0;
 }
 
 .meal-time {
   font-size: 0.8rem;
-  color: var(--text-secondary);
-  background: white;
+  color: #cbd5e0;
+  background: #374151;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
 }
@@ -502,15 +529,15 @@
 
 .meal-macros span {
   font-size: 0.8rem;
-  color: var(--text-secondary);
-  background: white;
+  color: #cbd5e0;
+  background: #374151;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
 }
 
 .meal-portion, .meal-notes {
   font-size: 0.8rem;
-  color: var(--text-secondary);
+  color: #cbd5e0;
   margin: 0.25rem 0 0 0;
   line-height: 1.3;
 }
@@ -519,7 +546,7 @@
   background: none;
   border: 2px solid transparent;
   border-radius: 4px;
-  color: var(--text-muted);
+  color: #a0aec0;
   cursor: pointer;
   padding: 0.5rem;
   transition: all 0.2s ease;
@@ -530,7 +557,7 @@
 
 .delete-meal-button:hover {
   color: var(--error-color);
-  background: #fef2f2;
+  background: #3d2626;
   border-color: var(--error-color);
 }
 
@@ -541,7 +568,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -550,7 +577,8 @@
 }
 
 .modal-content {
-  background: white;
+  background: #2d3748;
+  border: 2px solid #4a5568;
   border-radius: 12px;
   padding: 2rem;
   max-width: 500px;
@@ -566,13 +594,13 @@
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid var(--border-color);
+  border-bottom: 2px solid #4a5568;
 }
 
 .modal-header h4 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0;
 }
 
@@ -580,7 +608,7 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: var(--text-secondary);
+  color: #cbd5e0;
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 4px;
@@ -588,8 +616,8 @@
 }
 
 .modal-close:hover {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+  background: #1a202c;
+  color: #f7fafc;
 }
 
 .meal-form {
@@ -605,7 +633,7 @@
 .common-foods label {
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: #e2e8f0;
   margin-bottom: 0.5rem;
   display: block;
 }
@@ -618,8 +646,8 @@
 
 .food-button {
   padding: 0.5rem 0.75rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  background: #1a202c;
+  border: 1px solid #4a5568;
   border-radius: 6px;
   font-size: 0.8rem;
   cursor: pointer;
@@ -641,7 +669,7 @@
 .nutrition-goals h4 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 2rem 0;
   text-align: center;
 }
@@ -657,15 +685,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: white;
-  border: 1px solid var(--border-color);
+  background: #2d3748;
+  border: 1px solid #4a5568;
   border-radius: 8px;
   box-shadow: var(--shadow-sm);
 }
 
 .goal-item label {
   font-weight: 500;
-  color: var(--text-primary);
+  color: #f7fafc;
 }
 
 .goal-input {
@@ -677,14 +705,16 @@
 .goal-input input {
   width: 80px;
   padding: 0.5rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid #4a5568;
   border-radius: 4px;
   text-align: center;
   font-weight: 500;
+  background: #1a202c;
+  color: #f7fafc;
 }
 
 .goal-input span {
-  color: var(--text-secondary);
+  color: #cbd5e0;
   font-size: 0.9rem;
 }
 
@@ -706,16 +736,17 @@
 
 .time-selector {
   padding: 0.5rem 1rem;
-  border: 2px solid var(--border-color);
+  border: 2px solid #4a5568;
   border-radius: 8px;
   font-size: 0.9rem;
-  background: white;
+  background: #2d3748;
+  color: #f7fafc;
   cursor: pointer;
 }
 
 .time-selector:focus {
   outline: none;
-  border-color: var(--wellness-primary);
+  border-color: #16a34a;
 }
 
 /* Estadísticas generales */
@@ -731,27 +762,30 @@
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: white;
+  background: #2d3748;
   border-radius: 12px;
   box-shadow: var(--shadow-sm);
-  border-left: 4px solid var(--wellness-primary);
+  border-left: 4px solid #16a34a;
+  border: 1px solid #4a5568;
+  border-left: 4px solid #16a34a;
 }
 
 .stat-card.success {
-  border-left-color: var(--wellness-secondary);
+  border-left-color: #10b981;
 }
 
 .stat-card.warning {
-  border-left-color: var(--wellness-warning);
+  border-left-color: #ea580c;
 }
 
 .stat-card.info {
-  border-left-color: var(--wellness-info);
+  border-left-color: #0891b2;
 }
 
 .stat-icon {
   font-size: 2rem;
-  background: rgba(22, 163, 74, 0.1);
+  background: rgba(22, 163, 74, 0.2);
+  color: #22c55e;
   padding: 0.75rem;
   border-radius: 50%;
   display: flex;
@@ -762,29 +796,30 @@
 .stat-content h4 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 0.25rem 0;
 }
 
 .stat-content p {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: #cbd5e0;
   margin: 0;
 }
 
 /* Sección de progreso */
 .progress-section {
-  background: white;
+  background: #2d3748;
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
   box-shadow: var(--shadow-sm);
+  border: 1px solid #4a5568;
 }
 
 .progress-section h4 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 1.5rem 0;
 }
 
@@ -808,27 +843,28 @@
 
 .progress-header span:first-child {
   font-weight: 500;
-  color: var(--text-primary);
+  color: #f7fafc;
 }
 
 .progress-header span:last-child {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: #cbd5e0;
 }
 
 /* Gráfico de actividad */
 .chart-section {
-  background: white;
+  background: #2d3748;
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;
   box-shadow: var(--shadow-sm);
+  border: 1px solid #4a5568;
 }
 
 .chart-section h4 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 1.5rem 0;
 }
 
@@ -838,7 +874,7 @@
   align-items: flex-end;
   height: 120px;
   padding: 1rem 0;
-  background: var(--bg-secondary);
+  background: #1a202c;
   border-radius: 8px;
 }
 
@@ -858,27 +894,28 @@
 
 .bar-label {
   font-size: 0.8rem;
-  color: var(--text-secondary);
+  color: #cbd5e0;
 }
 
 .bar-value {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
 }
 
 /* Logros */
 .achievements-section {
-  background: white;
+  background: #2d3748;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
+  border: 1px solid #4a5568;
 }
 
 .achievements-section h4 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 1.5rem 0;
 }
 
@@ -893,37 +930,38 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: var(--bg-secondary);
+  background: #1a202c;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border: 1px solid #4a5568;
 }
 
 .achievement-icon {
   font-size: 1.5rem;
-  background: rgba(22, 163, 74, 0.1);
+  background: rgba(22, 163, 74, 0.2);
   padding: 0.5rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #22c55e;
 }
 
 .achievement-item h5 {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 0.25rem 0;
 }
 
 .achievement-item p {
   font-size: 0.8rem;
-  color: var(--text-secondary);
+  color: #cbd5e0;
   margin: 0;
 }
 
 .achievement-date {
   font-size: 0.8rem;
-  color: var(--text-secondary);
+  color: #a0aec0;
   margin-left: auto;
 }
 
@@ -936,11 +974,12 @@
 }
 
 .wellness-card {
-  background: white;
+  background: #2d3748;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   text-align: center;
+  border: 1px solid #4a5568;
 }
 
 .wellness-icon {
@@ -951,14 +990,14 @@
 .wellness-content h5 {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 0.5rem 0;
 }
 
 .wellness-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #f7fafc;
   margin: 0 0 0.5rem 0;
 }
 
@@ -1090,5 +1129,81 @@
   .stat-card {
     flex-direction: column;
     gap: 0.5rem;
+  }
+}
+
+/* ===========================================
+   ESTILOS PARA GRÁFICOS DE ESTADÍSTICAS
+   =========================================== */
+
+.chart-section {
+  background: #2d3748;
+  border: 2px solid #4a5568;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.chart-section h3,
+.chart-section h4 {
+  color: #f7fafc;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.chart-section h3 i,
+.chart-section h4 i {
+  color: #3b82f6;
+  font-size: 1.5rem;
+}
+
+/* Tooltips de Recharts con tema oscuro */
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+.recharts-default-tooltip {
+  background-color: #2d3748 !important;
+  border: 1px solid #4a5568 !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+}
+
+.recharts-tooltip-label {
+  color: #f7fafc !important;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.recharts-tooltip-item {
+  color: #cbd5e0 !important;
+}
+
+/* Leyendas de Recharts */
+.recharts-legend-wrapper {
+  margin-top: 1rem;
+}
+
+.recharts-legend-item-text {
+  color: #cbd5e0 !important;
+}
+
+/* Responsive para gráficos */
+@media (max-width: 768px) {
+  .chart-section {
+    padding: 1rem;
+  }
+  
+  .chart-section h3,
+  .chart-section h4 {
+    font-size: 1rem;
+  }
+  
+  .recharts-wrapper {
+    font-size: 0.75rem;
   }
 }
