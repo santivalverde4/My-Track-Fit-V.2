@@ -1,348 +1,742 @@
-# � My Track-Fit V.2
+# My Track Fit V.2
 
-Una aplicación móvil de fitness completa desarrollada con React Native y backend Express que permite a los usuarios gestionar sus entrenamientos, bienestar y progreso fitness con un enfoque en experiencia de usuario nativa y rendimiento optimizado para dispositivos móviles.
+Aplicación completa de fitness con frontend React (Vite) y backend Node.js/Express que permite a los usuarios gestionar entrenamientos, nutrición, lesiones y estadísticas personales con un sistema de autenticación robusto y base de datos PostgreSQL en Supabase.
 
-## 🌟 Características
+## Tabla de Contenidos
 
-### ✅ Implementadas
-- **Autenticación Completa**: Sistema de registro e inicio de sesión con validaciones robustas
-- **Dashboard Nativo**: Interfaz principal optimizada para dispositivos móviles
-- **Gestión de Cuenta**: Editar usuario, cambiar contraseña y eliminar cuenta
-- **Sistema de Entrenamientos**: Gestión completa de rutinas, entrenamientos y ejercicios
-- **Módulo de Bienestar**: Seguimiento de nutrición, lesiones y estadísticas
-- **Smart Trainer con IA**: Entrenador personal inteligente con interfaz de chat
-- **Navegación Nativa**: Experiencia fluida con React Navigation
-- **API RESTful**: Backend completo con endpoints para todas las funcionalidades
+- [Características](#características)
+- [Stack Tecnológico](#stack-tecnológico)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Instalación y Configuración](#instalación-y-configuración)
+- [Ejecutar la Aplicación](#ejecutar-la-aplicación)
+- [API Endpoints](#api-endpoints)
+- [Arquitectura del Backend](#arquitectura-del-backend)
+- [Base de Datos](#base-de-datos)
+- [Scripts Disponibles](#scripts-disponibles)
+- [Seguridad](#seguridad)
+- [Contribuir](#contribuir)
 
-### 🚧 En Desarrollo
-- **Notificaciones Push**: Recordatorios de entrenamientos y objetivos
-- **Modo Offline**: Funcionalidad sin conexión a internet
-- **Integración IA avanzada**: Conexión con APIs de IA reales
-- **Sincronización en la Nube**: Backup automático de datos
-- **Wearables Integration**: Conexión con dispositivos fitness
+## Características
 
-## 🛠️ Stack Tecnológico
+### Implementadas
 
-### Frontend Móvil
-- **React Native** - Framework de desarrollo móvil multiplataforma
-- **React Navigation** - Navegación nativa para móviles
-- **React Native Vector Icons** - Iconos nativos
-- **AsyncStorage** - Almacenamiento local persistente
-- **React Native Gesture Handler** - Gestos nativos optimizados
+**Autenticación y Usuarios**
+- Sistema de registro e inicio de sesión con JWT
+- Gestión de perfil de usuario
+- Cambio de contraseña con validación
+- Autenticación persistente con tokens
+
+**Sistema de Entrenamientos**
+- Gestión completa de rutinas personalizadas
+- Creación y edición de entrenamientos por día
+- Catálogo de ejercicios con categorías
+- Configuración de series, repeticiones, peso y descanso
+- Activación/desactivación de rutinas
+
+**Nutrición**
+- Registro diario de comidas (desayuno, almuerzo, cena, merienda)
+- Catálogo de alimentos base con información nutricional
+- Cálculo automático de macronutrientes
+- Objetivos nutricionales personalizados
+- Resumen nutricional por día
+
+**Gestión de Lesiones**
+- Registro de lesiones con nivel de severidad
+- Seguimiento por parte del cuerpo afectada
+- Estados: activa, en recuperación, curada
+- Tiempo estimado de recuperación
+- Historial completo de lesiones
+
+**Estadísticas y Métricas**
+- Registro diario de peso corporal
+- Seguimiento de horas de sueño
+- Resúmenes estadísticos con promedios
+- Archivos JSONB para datos adicionales
+- Visualización de progreso histórico
+
+**Smart Trainer**
+- Interfaz de chat con IA (preparado para integración)
+- Recomendaciones personalizadas
+- Análisis de progreso
+
+### En Desarrollo
+
+- Integración con APIs de IA reales (OpenAI, Claude)
+- Notificaciones y recordatorios
+- Gráficos y visualizaciones avanzadas
+- Exportación de datos
+- Modo oscuro completo
+
+## Stack Tecnológico
+
+### Frontend
+- **React 18** - Librería de UI
+- **Vite** - Build tool y dev server
+- **React Router DOM** - Enrutamiento del lado del cliente
+- **CSS3** - Estilos personalizados
 
 ### Backend
 - **Node.js** - Runtime de JavaScript
-- **Express.js** - Framework web
-- **CORS** - Manejo de políticas de origen cruzado
-- **dotenv** - Gestión de variables de entorno
+- **Express 5** - Framework web
+- **Supabase** - Base de datos PostgreSQL (BaaS)
+- **@supabase/supabase-js** - Cliente oficial de Supabase
+- **JWT (jsonwebtoken)** - Autenticación con tokens
+- **bcryptjs** - Encriptación de contraseñas
+- **CORS** - Manejo de Cross-Origin Resource Sharing
+- **dotenv** - Variables de entorno
 
-### Base de Datos (Preparado)
-- **MySQL** - Base de datos relacional
-- **MySQL2** - Driver para Node.js
+### Desarrollo
+- **nodemon** - Auto-restart en desarrollo
+- **concurrently** - Ejecutar múltiples comandos
+- **ESLint** - Linter de código
 
-### Desarrollo Móvil
-- **Android Studio** - IDE para desarrollo Android
-- **Xcode** - IDE para desarrollo iOS (macOS requerido)
-- **Metro Bundler** - Bundler optimizado para React Native
-- **Flipper** - Herramienta de debugging para React Native
-
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 My-Track-Fit-V.2/
-├── mobile/                     # Aplicación React Native
-│   ├── android/               # Proyecto Android nativo
-│   ├── ios/                   # Proyecto iOS nativo (macOS)
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── auth/
-│   │   │   │   ├── SignUp.js
-│   │   │   │   └── Login.js
-│   │   │   ├── dashboard/
-│   │   │   │   ├── Dashboard.js
-│   │   │   │   ├── ProfileSettings.js
-│   │   │   │   ├── SmartTrainer.js
-│   │   │   │   ├── Routines.js
-│   │   │   │   ├── Workouts.js
-│   │   │   │   ├── Exercises.js
-│   │   │   │   └── Wellness.js
-│   │   │   └── navigation/
-│   │   │       └── TabNavigator.js
-│   │   │   └── api.js
-│   │   ├── styles/
-│   │   │   └── globalStyles.js
-│   │   ├── utils/
-│   │   │   ├── storage.js
-│   │   │   └── constants.js
-│   │   ├── App.js
-│   │   ├── index.js
-│   │   └── metro.config.js
-│   ├── package.json
-│   └── app.json
+├── app/
+│   ├── client/                 # Frontend React (Vite)
+│   │   ├── public/
+│   │   ├── src/
+│   │   │   ├── components/
+│   │   │   │   ├── auth/
+│   │   │   │   │   ├── Login.jsx
+│   │   │   │   │   └── SignUp.jsx
+│   │   │   │   ├── dashboard/
+│   │   │   │   │   ├── Dashboard.jsx
+│   │   │   │   │   ├── Exercises.jsx
+│   │   │   │   │   ├── InjuryManagement.jsx
+│   │   │   │   │   ├── NutritionManagement.jsx
+│   │   │   │   │   ├── ProfileSettings.jsx
+│   │   │   │   │   ├── Routines.jsx
+│   │   │   │   │   ├── SmartTrainer.jsx
+│   │   │   │   │   ├── UserStatistics.jsx
+│   │   │   │   │   ├── Wellness.jsx
+│   │   │   │   │   └── Workouts.jsx
+│   │   │   │   └── navigation/
+│   │   │   │       └── BottomNavigation.jsx
+│   │   │   ├── services/
+│   │   │   │   └── api.js
+│   │   │   ├── styles/
+│   │   │   ├── App.jsx
+│   │   │   ├── App.css
+│   │   │   ├── main.jsx
+│   │   │   └── index.css
+│   │   ├── index.html
+│   │   ├── vite.config.js
+│   │   ├── package.json
+│   │   └── eslint.config.js
+│   │
 │   └── server/                 # Backend Express
-│       ├── index.js
-│       └── package.json
-├── README.md
-└── .gitignore
+│       ├── config/             # Configuración
+│       │   ├── supabase.js    # Cliente de Supabase
+│       │   ├── database.js    # Helpers de DB
+│       │   └── middleware.js  # Middleware de autenticación
+│       ├── models/             # Modelos de datos
+│       │   ├── user.model.js
+│       │   ├── exercise.model.js
+│       │   ├── routine.model.js
+│       │   ├── nutrition.model.js
+│       │   ├── injury.model.js
+│       │   └── statistics.model.js
+│       ├── routes/             # Rutas de la API
+│       │   ├── auth.routes.js
+│       │   ├── exercise.routes.js
+│       │   ├── routine.routes.js
+│       │   ├── nutrition.routes.js
+│       │   ├── injury.routes.js
+│       │   └── statistics.routes.js
+│       ├── services/           # Lógica de negocio
+│       │   ├── auth.service.js
+│       │   ├── exercise.service.js
+│       │   ├── routine.service.js
+│       │   ├── nutrition.service.js
+│       │   ├── injury.service.js
+│       │   └── statistics.service.js
+│       ├── scripts.sql         # Script de creación de DB
+│       ├── index.js            # Servidor principal
+│       ├── package.json
+│       └── README.md
+│
+├── .env                        # Variables de entorno
+├── .env.example                # Ejemplo de .env
+├── .gitignore
+├── package.json                # Root package.json
+├── nodemon.json
+└── README.md                   # Este archivo
 ```
 
-## 🚀 Instalación y Configuración
+## Instalación y Configuración
 
 ### Prerrequisitos
-- **Node.js** (v16 o superior)
-- **npm** o **yarn**
-- **Git**
-- **Android Studio** (para desarrollo Android)
-- **Xcode** (para desarrollo iOS - solo macOS)
-- **Java Development Kit (JDK)** 11 o superior
-- **Android SDK** con API Level 31+
+
+- Node.js (v16 o superior)
+- npm o yarn
+- Cuenta en Supabase
+- Git
 
 ### 1. Clonar el repositorio
+
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/santivalverde4/My-Track-Fit-V.2.git
 cd My-Track-Fit-V.2
 ```
 
-### 2. Configurar el Backend
+### 2. Instalar dependencias
+
 ```bash
-cd app/server
+# Instalar dependencias raíz (backend)
 npm install
+
+# Instalar dependencias del cliente
+cd app/client
+npm install
+cd ../..
 ```
 
-Crear archivo `.env`:
+### 3. Configurar Supabase
+
+#### Crear proyecto en Supabase
+1. Ve a [supabase.com](https://supabase.com) y crea una cuenta
+2. Crea un nuevo proyecto
+3. Anota la URL del proyecto y la clave anon/public
+
+#### Ejecutar script SQL
+1. En tu proyecto de Supabase, ve a **SQL Editor**
+2. Copia el contenido de `app/server/scripts.sql`
+3. Ejecuta el script para crear todas las tablas
+
+#### Obtener credenciales
+1. Ve a **Settings** > **API**
+2. Copia:
+   - **Project URL**: Tu `SUPABASE_URL`
+   - **anon public**: Tu `SUPABASE_KEY` (NO uses service_role)
+
+### 4. Configurar variables de entorno
+
+Crea un archivo `.env` en la raíz del proyecto:
+
 ```env
+# Supabase Configuration
+SUPABASE_URL=https://tu-proyecto.supabase.co
+SUPABASE_KEY=tu_clave_anon_public_aqui
+
+# JWT Configuration
+JWT_SECRET=tu_clave_secreta_jwt_aqui
+JWT_EXPIRES_IN=7d
+
+# Server Configuration
 PORT=5000
 NODE_ENV=development
-DB_HOST=localhost
-DB_USER=tu_usuario
-DB_PASSWORD=tu_contraseña
-DB_NAME=trackfit_db
-JWT_SECRET=tu_jwt_secret_seguro
+
+# CORS Configuration
+CLIENT_URL=http://localhost:5173
 ```
 
-### 3. Configurar la App Móvil
+#### Generar JWT_SECRET
+
+Ejecuta este comando para generar una clave segura:
+
 ```bash
-cd mobile
-npm install
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
-### 4. Configurar React Native
-```bash
-# Instalar CLI de React Native (si no está instalado)
-npm install -g @react-native-community/cli
+## Ejecutar la Aplicación
 
-# Para Android (configurar variables de entorno)
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
+### Desarrollo (Frontend y Backend simultáneamente)
+
+```bash
+npm run dev:both
 ```
 
-## 🏃‍♂️ Ejecutar la Aplicación
+### Solo Backend
 
-### 1. Iniciar el Backend
 ```bash
-cd app/server
 npm run dev
+# o
+npm run server
 ```
 
-### 2. Ejecutar en Android
-```bash
-cd mobile
+### Solo Frontend
 
-# Iniciar Metro Bundler
+```bash
+npm run client
+```
+
+### Producción
+
+```bash
+# Backend
 npm start
 
-# En otra terminal - Ejecutar en Android
-npm run android
-
-# O ejecutar en emulador específico
-npx react-native run-android
+# Frontend (build)
+npm run build
 ```
 
-### 3. Ejecutar en iOS (solo macOS)
+### Verificar que funciona
+
+#### Health check del backend
 ```bash
-cd mobile
-
-# Instalar pods (solo primera vez)
-cd ios && pod install && cd ..
-
-# Ejecutar en iOS
-npm run ios
-
-# O ejecutar en simulador específico
-npx react-native run-ios
+curl http://localhost:5000/health
 ```
 
-### 4. Desarrollo con Hot Reload
-```bash
-# El Metro Bundler proporciona hot reload automático
-# Los cambios se reflejan inmediatamente en el dispositivo/emulador
+Deberías ver:
+```json
+{
+  "success": true,
+  "status": "healthy",
+  "timestamp": "2025-10-28T..."
+}
 ```
 
-## 📱 Características Móviles Nativas
+## API Endpoints
 
-- **Navegación Nativa**: Experiencia fluida con React Navigation
-- **Gestos Táctiles**: Soporte completo para gestos nativos (swipe, pinch, etc.)
-- **Rendimiento Optimizado**: 60 FPS con optimizaciones nativas
-- **Almacenamiento Local**: Persistencia de datos con AsyncStorage
-- **Accesibilidad Móvil**: Compatible con lectores de pantalla nativos
-- **Notificaciones Push**: Preparado para notificaciones locales y remotas
-- **Orientación Adaptativa**: Soporte para modo portrait y landscape
-- **Temas del Sistema**: Adaptación automática a modo claro/oscuro
+### Base URL
+```
+http://localhost:5000/api
+```
 
-## 🎨 Componentes Principales
+### Autenticación (/api/auth)
 
-### Autenticación
-- **SignUp**: Registro con validación de campos
-- **Login**: Inicio de sesión con opción "recordarme"
-
-### Dashboard
-- **Dashboard**: Interfaz principal con navegación
-- **ProfileSettings**: Gestión completa de cuenta de usuario
-
-### Navegación
-- **BottomNavigation**: Menú inferior con 4 secciones principales
-
-## 🔧 API Endpoints
-
-### Autenticación
 ```http
-POST /api/auth/register    # Registro de usuario
-POST /api/auth/login       # Inicio de sesión
-GET  /api/auth/verify      # Verificar token
+POST   /auth/register          # Registrar nuevo usuario
+POST   /auth/login             # Iniciar sesión
+GET    /auth/profile           # Obtener perfil (requiere auth)
+PUT    /auth/profile           # Actualizar perfil (requiere auth)
+GET    /auth/verify            # Verificar token (requiere auth)
 ```
 
-### Usuario
+### Ejercicios (/api/exercises)
+
 ```http
-GET    /api/user/profile     # Obtener perfil
-PUT    /api/user/profile     # Actualizar perfil
-PUT    /api/user/username    # Cambiar usuario
-PUT    /api/user/password    # Cambiar contraseña
-DELETE /api/user/account     # Eliminar cuenta
+GET    /exercises              # Listar todos los ejercicios
+GET    /exercises/search?q=    # Buscar ejercicios
+GET    /exercises/category/:categoria    # Por categoría
+GET    /exercises/:id          # Obtener por ID
+POST   /exercises              # Crear ejercicio
+PUT    /exercises/:id          # Actualizar ejercicio
+DELETE /exercises/:id          # Eliminar ejercicio
 ```
 
-## 🧪 Testing
+### Rutinas (/api/routines)
+
+```http
+GET    /routines               # Mis rutinas
+GET    /routines/:id           # Rutina completa por ID
+POST   /routines               # Crear rutina
+PUT    /routines/:id           # Actualizar rutina
+PATCH  /routines/:id/toggle    # Activar/desactivar
+DELETE /routines/:id           # Eliminar rutina
+```
+
+#### Entrenamientos
+
+```http
+GET    /routines/:routineId/workouts          # Entrenamientos de rutina
+POST   /routines/:routineId/workouts          # Crear entrenamiento
+PUT    /routines/workouts/:workoutId          # Actualizar entrenamiento
+DELETE /routines/workouts/:workoutId          # Eliminar entrenamiento
+```
+
+#### Instancias de Ejercicios
+
+```http
+POST   /routines/workouts/:workoutId/exercises    # Agregar ejercicios
+PUT    /routines/exercises/:instanceId            # Actualizar ejercicio
+DELETE /routines/exercises/:instanceId            # Eliminar ejercicio
+```
+
+### Nutrición (/api/nutrition)
+
+#### Alimentos
+
+```http
+GET    /nutrition/foods            # Listar alimentos
+GET    /nutrition/foods/search?q=  # Buscar alimentos
+POST   /nutrition/foods            # Crear alimento
+```
+
+#### Registros Nutricionales
+
+```http
+GET    /nutrition/logs?fecha=                          # Por fecha
+GET    /nutrition/logs?fechaInicio=&fechaFin=          # Por rango
+GET    /nutrition/summary?fecha=                       # Resumen del día
+POST   /nutrition/logs                                 # Crear registro
+PUT    /nutrition/logs/:id                             # Actualizar registro
+DELETE /nutrition/logs/:id                             # Eliminar registro
+```
+
+#### Objetivos Nutricionales
+
+```http
+GET    /nutrition/goals         # Obtener objetivos
+POST   /nutrition/goals         # Crear objetivos
+PUT    /nutrition/goals         # Actualizar objetivos
+```
+
+### Lesiones (/api/injuries)
+
+```http
+GET    /injuries                        # Mis lesiones
+GET    /injuries?active=true            # Solo activas
+GET    /injuries/body-part/:parte       # Por zona del cuerpo
+GET    /injuries/:id                    # Por ID
+POST   /injuries                        # Registrar lesión
+PUT    /injuries/:id                    # Actualizar lesión
+PATCH  /injuries/:id/status             # Cambiar estado
+DELETE /injuries/:id                    # Eliminar lesión
+```
+
+### Estadísticas (/api/statistics)
+
+#### Métricas
+
+```http
+GET    /statistics/metrics?fecha=                       # Por fecha
+GET    /statistics/metrics?fechaInicio=&fechaFin=       # Por rango
+GET    /statistics/metrics?last=30                      # Últimas N
+POST   /statistics/metrics                              # Guardar métricas
+GET    /statistics/summary?days=30                      # Resumen
+```
+
+#### Archivos de Usuario
+
+```http
+GET    /statistics/files               # Archivos JSONB
+PUT    /statistics/files/:fileType     # Actualizar archivo
+```
+
+### Formato de Respuestas
+
+Todas las respuestas siguen este formato:
+
+**Éxito:**
+```json
+{
+  "success": true,
+  "data": { ... },
+  "message": "Operación exitosa"
+}
+```
+
+**Error:**
+```json
+{
+  "success": false,
+  "error": "Mensaje de error descriptivo"
+}
+```
+
+### Autenticación en Requests
+
+Para rutas protegidas, incluye el token JWT en el header:
+
+```http
+Authorization: Bearer {tu_token_jwt}
+```
+
+## Arquitectura del Backend
+
+### Patrón de Capas
+
+El backend sigue una arquitectura de tres capas bien definida:
+
+```
+Cliente → Routes → Services → Models → Supabase → PostgreSQL
+            ↓
+       Middleware (Auth)
+```
+
+#### 1. Routes (Controladores)
+- Manejan requests HTTP
+- Validaciones básicas de entrada
+- Respuestas HTTP
+- No contienen lógica de negocio
+
+#### 2. Services (Lógica de Negocio)
+- Validaciones complejas
+- Procesamiento de datos
+- Coordinación entre múltiples modelos
+- Manejo de errores de negocio
+
+#### 3. Models (Acceso a Datos)
+- Queries a Supabase
+- Operaciones CRUD puras
+- Sin lógica de negocio
+- Retornan data y error
+
+#### 4. Config (Configuración)
+- Cliente de Supabase
+- Middleware de autenticación
+- Helpers y utilidades
+
+### Flujo de una Petición
+
+1. Cliente envía request a una ruta
+2. Middleware verifica autenticación (si es necesario)
+3. Route valida parámetros y llama al Service
+4. Service ejecuta lógica de negocio y llama a Models
+5. Models ejecutan queries en Supabase
+6. Respuesta se propaga de vuelta al cliente
+
+### Ventajas de esta Arquitectura
+
+- **Separación de responsabilidades**: Cada capa tiene un propósito claro
+- **Mantenibilidad**: Código organizado y fácil de encontrar
+- **Escalabilidad**: Fácil agregar nuevas features
+- **Testeable**: Cada capa puede probarse independientemente
+- **Reutilizable**: Services y Models pueden usarse en múltiples rutas
+
+## Base de Datos
+
+### Tecnología
+
+- **PostgreSQL** - Base de datos relacional
+- **Supabase** - Hosting de PostgreSQL con APIs automáticas
+- **@supabase/supabase-js** - Cliente para Node.js
+
+### Uso de Supabase
+
+En este proyecto, Supabase se usa como:
+
+- **Base de datos PostgreSQL**: Solo para almacenamiento de datos
+- **NO se usa Supabase Auth**: Autenticación personalizada con JWT
+- **NO se usa Supabase Storage**: Sin almacenamiento de archivos
+- **NO se usa Supabase Realtime**: Sin suscripciones en tiempo real
+
+Básicamente, Supabase = PostgreSQL con hosting gratuito.
+
+### Tablas Principales
+
+**users** - Usuarios del sistema
+```sql
+id, username, password, confirmed
+```
+
+**exercises** - Catálogo de ejercicios
+```sql
+id, name, categoria, descripcion, created_at
+```
+
+**rutinas** - Rutinas de entrenamiento
+```sql
+id, usuario_id, nombre, descripcion, activa, created_at
+```
+
+**entrenamientos** - Días de entrenamiento
+```sql
+id, rutina_id, nombre, dia_semana, orden, created_at
+```
+
+**exercise_instances** - Ejercicios configurados
+```sql
+id, entrenamiento_id, exercise_id, series, repeticiones, peso, descanso, notas, orden
+```
+
+**AlimentosBase** - Catálogo de alimentos
+```sql
+id, nombre, calorias_por_100g, proteinas_por_100g, carbohidratos_por_100g, grasas_por_100g, categoria
+```
+
+**NutricionTemporal** - Registros de comidas
+```sql
+id, usuario_id, fecha, tipo_comida, alimento_id, cantidad_gramos, calorias, proteinas, carbohidratos, grasas
+```
+
+**ObjetivosNutricionales** - Objetivos del usuario
+```sql
+id, usuario_id, calorias_objetivo, proteinas_objetivo, carbohidratos_objetivo, grasas_objetivo, agua_objetivo
+```
+
+**LesionesTemporales** - Registro de lesiones
+```sql
+id, usuario_id, nombre_lesion, parte_cuerpo, severidad, fecha_lesion, estado, tiempo_estimado_recuperacion
+```
+
+**MetricasDiarias** - Métricas diarias
+```sql
+id, usuario_id, fecha, peso, horas_sueno, created_at
+```
+
+**ArchivosUsuario** - Datos JSONB adicionales
+```sql
+id, idcliente, ArchivoBody, ArchivoRutina, ArchivoEjercicio, archivonutricion, archivolesiones, archivoestadisticas, archivoia
+```
+
+### Relaciones
+
+- users → rutinas (1:N)
+- rutinas → entrenamientos (1:N)
+- entrenamientos → exercise_instances (1:N)
+- exercises → exercise_instances (1:N)
+- users → NutricionTemporal (1:N)
+- users → LesionesTemporales (1:N)
+- users → MetricasDiarias (1:N)
+- users → ObjetivosNutricionales (1:1)
+- users → ArchivosUsuario (1:1)
+
+## Scripts Disponibles
+
+### Root (Backend)
 
 ```bash
-# Testing en React Native
-cd mobile
-npm test
+npm start           # Servidor en producción
+npm run dev         # Servidor con nodemon
+npm run server      # Servidor con nodemon
+npm run client      # Frontend con Vite
+npm run dev:both    # Backend + Frontend simultáneamente
+npm run build       # Build del frontend
+npm test            # Tests (si existen)
+```
 
-# Testing en dispositivo físico
-npm run android --device
-npm run ios --device
+### Frontend (app/client)
 
-# Backend testing
+```bash
+npm run dev         # Dev server de Vite
+npm run build       # Build de producción
+npm run preview     # Preview del build
+npm run lint        # ESLint
+```
+
+## Seguridad
+
+### Implementado
+
+- **Contraseñas hasheadas**: bcrypt con 10 salt rounds
+- **Autenticación JWT**: Tokens firmados con secret key
+- **Middleware de autenticación**: Verificación en todas las rutas protegidas
+- **CORS configurado**: Solo permite requests del frontend autorizado
+- **Variables de entorno**: Credenciales fuera del código
+- **Validación de datos**: En services antes de guardar en DB
+- **Headers seguros**: CORS y headers HTTP apropiados
+
+### Recomendaciones Adicionales
+
+- **Rate Limiting**: Limitar requests por IP
+- **Helmet.js**: Headers de seguridad HTTP
+- **Input Sanitization**: Validación más estricta con Joi o Zod
+- **HTTPS**: En producción, siempre usar SSL/TLS
+- **Row Level Security**: Configurar RLS en Supabase (opcional)
+- **Logs**: Sistema de logging con Winston o similar
+- **Secrets Rotation**: Rotar JWT_SECRET periódicamente
+
+## Testing
+
+### Backend
+
+```bash
 cd app/server
-npm run test
+npm test
 ```
 
-## 📦 Build para Producción
+### Frontend
 
-### Android APK
 ```bash
-cd mobile
-
-# Debug APK
-npm run build:android:debug
-
-# Release APK (requiere configuración de signing)
-npm run build:android:release
-
-# AAB para Google Play Store
-npm run build:android:bundle
+cd app/client
+npm test
 ```
 
-### iOS App
+## Deployment
+
+### Backend
+
+**Opciones de hosting:**
+- Heroku
+- Railway
+- Render
+- DigitalOcean
+- AWS EC2
+- Vercel (serverless)
+
+**Pasos generales:**
+1. Configurar variables de entorno en el servicio
+2. Conectar con repositorio Git
+3. Configurar build command: `npm install`
+4. Configurar start command: `npm start`
+
+### Frontend
+
+**Opciones de hosting:**
+- Vercel
+- Netlify
+- GitHub Pages
+- Cloudflare Pages
+
+**Build:**
 ```bash
-cd mobile
-
-# Build para simulador
-npm run build:ios:debug
-
-# Build para dispositivo (requiere certificados de Apple)
-npm run build:ios:release
+cd app/client
+npm run build
+# Output en app/client/dist
 ```
 
-## 🤝 Contribuir
+### Base de Datos
+
+Supabase ya está en la nube, no requiere deployment adicional.
+
+## Contribuir
 
 1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
+2. Crea una rama (`git checkout -b feature/NuevaFeature`)
+3. Commit tus cambios (`git commit -m 'Agregar NuevaFeature'`)
+4. Push a la rama (`git push origin feature/NuevaFeature`)
 5. Abre un Pull Request
 
-## 📋 Scripts Disponibles
+### Convenciones
 
-### Aplicación Móvil (`mobile/`)
-- `npm start` - Iniciar Metro Bundler
-- `npm run android` - Ejecutar en Android
-- `npm run ios` - Ejecutar en iOS
-- `npm run build:android:debug` - Build debug para Android
-- `npm run build:android:release` - Build release para Android
-- `npm run build:ios:debug` - Build debug para iOS
-- `npm run build:ios:release` - Build release para iOS
-- `npm test` - Testing de componentes
-- `npm run lint` - ESLint para React Native
+- Usar ES Modules (import/export)
+- Nombrar archivos en camelCase o kebab-case
+- Comentar código complejo
+- Seguir la estructura de carpetas existente
+- Validar con ESLint antes de commit
 
-### Backend (`app/server`)
-- `npm run dev` - Servidor con nodemon
-- `npm start` - Servidor de producción
-- `npm run lint` - ESLint
+## Troubleshooting
 
-## 🔐 Seguridad Móvil
+### Error: "Missing Supabase environment variables"
+- Verifica que `.env` existe en la raíz
+- Comprueba que tiene `SUPABASE_URL` y `SUPABASE_KEY`
+- Reinicia el servidor después de modificar `.env`
 
-- **Almacenamiento Seguro**: AsyncStorage con encriptación
-- **Validación de Datos**: Sanitización en frontend y backend
-- **Headers de Seguridad**: CORS configurado para móviles
-- **JWT Móvil**: Autenticación persistente y segura
-- **Biometría**: Preparado para autenticación biométrica
-- **SSL Pinning**: Preparado para conexiones seguras
-- **Ofuscación de Código**: Build optimizado para producción
+### Error: "relation does not exist"
+- Ejecuta `app/server/scripts.sql` en Supabase SQL Editor
+- Verifica que las tablas se crearon correctamente
 
-## 📈 Roadmap
+### Error: "CORS policy"
+- Verifica que `CLIENT_URL` en `.env` coincide con la URL del frontend
+- Por defecto debe ser `http://localhost:5173` (Vite)
 
-### v3.0 - React Native (Actual)
-- [x] **Migración Completa**: De React web a React Native
-- [x] **Sistema de Entrenamientos**: Gestión completa de rutinas
-- [x] **Módulo de Bienestar**: Nutrición, lesiones y estadísticas
-- [x] **Smart Trainer**: Interfaz de chat con IA mockup
-- [x] **Navegación Nativa**: Tab navigation optimizada
+### Error: "Token inválido"
+- Verifica que `JWT_SECRET` está configurado en `.env`
+- El token expira según `JWT_EXPIRES_IN` (por defecto 7 días)
+- Haz logout y login nuevamente
 
-### v3.1 (Próximamente)
-- [ ] **Base de Datos Integrada**: MySQL con sincronización
-- [ ] **Notificaciones Push**: Recordatorios y motivación
-- [ ] **Modo Offline**: Funcionalidad sin conexión
-- [ ] **Integración IA Real**: APIs de ChatGPT/Claude
+### Puerto ya en uso
+```bash
+# Windows
+netstat -ano | findstr :5000
+taskkill /PID <PID> /F
 
-### v3.2
-- [ ] **Autenticación Biométrica**: TouchID/FaceID
-- [ ] **Sincronización Cloud**: Backup automático
-- [ ] **Wearables Integration**: Apple Watch, Fitbit
-- [ ] **Gamificación Avanzada**: Sistema de logros y niveles
+# Linux/Mac
+lsof -ti:5000 | xargs kill -9
+```
 
-### v3.3
-- [ ] **Publicación en Stores**: Google Play y App Store
-- [ ] **Analytics Avanzados**: Métricas de uso y rendimiento
-- [ ] **Social Features**: Compartir entrenamientos y competencias
-- [ ] **Premium Features**: Suscripción con características avanzadas
+## Licencia
 
-## 📞 Soporte
+Este proyecto está bajo la Licencia ISC.
 
-Para reportar bugs o solicitar features:
-- Crea un issue en GitHub
-- Contacta al equipo de desarrollo
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
-
-## 👨‍💻 Desarrollado por
+## Autores
 
 **Santiago Valverde y Adrián Barquero**
-- Universidad - Proyecto de Diseño
-- Stack: SERN (SQL, Express, React, Node.js)
+
+Universidad - Proyecto de Diseño
+
+Stack: PERN (PostgreSQL, Express, React, Node.js)
+
+## Contacto
+
+Para reportar bugs o solicitar features, crea un issue en GitHub.
 
 ---
+
+Versión: 2.0.0
+Última actualización: Octubre 2025
