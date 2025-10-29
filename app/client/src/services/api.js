@@ -1,5 +1,49 @@
 import axios from 'axios';
 
+/**
+ * API SERVICE - MyTrackFit v2.0
+ * 
+ * Servicios disponibles:
+ * 
+ * 1. authService - Autenticación y sesión
+ *    - register, login, logout, isAuthenticated, getToken, verifyToken
+ * 
+ * 2. userService - Gestión de perfil
+ *    - getProfile, updateProfile, updateUsername, updatePassword, deleteAccount
+ * 
+ * 3. routineService - Rutinas de entrenamiento
+ *    - getRoutines, createRoutine, getRoutine, updateRoutine, deleteRoutine
+ *    - addExercise, updateExercise, deleteExercise, markAsUsed
+ * 
+ * 4. workoutService - Entrenamientos
+ *    - getWorkoutsByRoutine, createWorkout, deleteWorkout
+ * 
+ * 5. exerciseService - Ejercicios
+ *    - getExercisesByWorkout, createExercise, deleteExercise
+ * 
+ * 6. injuryService - Gestión de lesiones
+ *    - getInjuries, createInjury, updateInjury, updateInjuryStatus, deleteInjury, getInjury
+ * 
+ * 7. nutritionService - Nutrición y alimentación
+ *    - getTodayMeals, getMealsByDate, addMeal, updateMeal, deleteMeal
+ *    - getNutritionGoals, updateNutritionGoals, updateWaterIntake
+ *    - getDailySummary, searchFoods
+ * 
+ * 8. statisticsService - Estadísticas y análisis
+ *    - getStatistics, getWeightProgress, getWeeklyActivity
+ *    - getTopExercises, getExerciseDistribution
+ *    - getWeeklyMacros, getWeeklyCalories, getWellnessMetrics
+ *    - getOverviewSummary
+ * 
+ * 9. dailyMetricsService - Métricas diarias
+ *    - getTodayMetrics, getMetricsByDate, updateDailyMetrics
+ *    - updateWeight, updateEnergyLevel, updateStressLevel
+ *    - updateSleepHours, updateWaterGlasses
+ * 
+ * 10. apiService - Utilidades generales
+ *     - ping
+ */
+
 // Configuración base de axios
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -317,6 +361,348 @@ export const routineService = {
   markAsUsed: async (routineId) => {
     try {
       const response = await api.post(`/api/routines/${routineId}/use`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+// Servicios de lesiones
+export const injuryService = {
+  // Obtener todas las lesiones del usuario
+  getInjuries: async () => {
+    try {
+      const response = await api.get('/api/injuries');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Crear nueva lesión
+  createInjury: async (injuryData) => {
+    try {
+      const response = await api.post('/api/injuries', injuryData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar lesión
+  updateInjury: async (injuryId, injuryData) => {
+    try {
+      const response = await api.put(`/api/injuries/${injuryId}`, injuryData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar estado de lesión
+  updateInjuryStatus: async (injuryId, status) => {
+    try {
+      const response = await api.patch(`/api/injuries/${injuryId}/status`, { status });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Eliminar lesión
+  deleteInjury: async (injuryId) => {
+    try {
+      const response = await api.delete(`/api/injuries/${injuryId}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener lesión específica
+  getInjury: async (injuryId) => {
+    try {
+      const response = await api.get(`/api/injuries/${injuryId}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+// Servicios de nutrición
+export const nutritionService = {
+  // Obtener comidas del día actual
+  getTodayMeals: async () => {
+    try {
+      const response = await api.get('/api/nutrition/today');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener comidas por fecha
+  getMealsByDate: async (date) => {
+    try {
+      const response = await api.get(`/api/nutrition/date/${date}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Agregar comida
+  addMeal: async (mealData) => {
+    try {
+      const response = await api.post('/api/nutrition/meals', mealData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar comida
+  updateMeal: async (mealId, mealData) => {
+    try {
+      const response = await api.put(`/api/nutrition/meals/${mealId}`, mealData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Eliminar comida
+  deleteMeal: async (mealId) => {
+    try {
+      const response = await api.delete(`/api/nutrition/meals/${mealId}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener objetivos nutricionales del usuario
+  getNutritionGoals: async () => {
+    try {
+      const response = await api.get('/api/nutrition/goals');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar objetivos nutricionales
+  updateNutritionGoals: async (goalsData) => {
+    try {
+      const response = await api.put('/api/nutrition/goals', goalsData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Registrar vasos de agua
+  updateWaterIntake: async (glasses) => {
+    try {
+      const response = await api.post('/api/nutrition/water', { glasses });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener resumen nutricional diario
+  getDailySummary: async (date) => {
+    try {
+      const response = await api.get(`/api/nutrition/summary/${date}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Buscar alimentos
+  searchFoods: async (query) => {
+    try {
+      const response = await api.get(`/api/nutrition/foods/search?q=${encodeURIComponent(query)}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+// Servicios de estadísticas
+export const statisticsService = {
+  // Obtener todas las estadísticas del usuario
+  getStatistics: async (timeRange = '7days') => {
+    try {
+      const response = await api.get(`/api/statistics?timeRange=${timeRange}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener progreso de peso
+  getWeightProgress: async (timeRange = '7days') => {
+    try {
+      const response = await api.get(`/api/statistics/weight?timeRange=${timeRange}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener actividad semanal
+  getWeeklyActivity: async () => {
+    try {
+      const response = await api.get('/api/statistics/activity/weekly');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener top ejercicios por volumen
+  getTopExercises: async (limit = 5) => {
+    try {
+      const response = await api.get(`/api/statistics/exercises/top?limit=${limit}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener distribución de ejercicios por categoría
+  getExerciseDistribution: async () => {
+    try {
+      const response = await api.get('/api/statistics/exercises/distribution');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener macros semanales
+  getWeeklyMacros: async () => {
+    try {
+      const response = await api.get('/api/statistics/nutrition/macros/weekly');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener calorías semanales
+  getWeeklyCalories: async () => {
+    try {
+      const response = await api.get('/api/statistics/nutrition/calories/weekly');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener métricas de bienestar
+  getWellnessMetrics: async (timeRange = '7days') => {
+    try {
+      const response = await api.get(`/api/statistics/wellness?timeRange=${timeRange}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener resumen general (cards)
+  getOverviewSummary: async () => {
+    try {
+      const response = await api.get('/api/statistics/overview');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
+// Servicios de métricas diarias
+export const dailyMetricsService = {
+  // Obtener métricas del día actual
+  getTodayMetrics: async () => {
+    try {
+      const response = await api.get('/api/metrics/today');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Obtener métricas por fecha
+  getMetricsByDate: async (date) => {
+    try {
+      const response = await api.get(`/api/metrics/date/${date}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Registrar/actualizar métricas diarias
+  updateDailyMetrics: async (metricsData) => {
+    try {
+      const response = await api.post('/api/metrics/daily', metricsData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar peso
+  updateWeight: async (weight, date = null) => {
+    try {
+      const response = await api.post('/api/metrics/weight', { weight, date });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar nivel de energía
+  updateEnergyLevel: async (energyLevel, date = null) => {
+    try {
+      const response = await api.post('/api/metrics/energy', { energyLevel, date });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar nivel de estrés
+  updateStressLevel: async (stressLevel, date = null) => {
+    try {
+      const response = await api.post('/api/metrics/stress', { stressLevel, date });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar horas de sueño
+  updateSleepHours: async (hours, date = null) => {
+    try {
+      const response = await api.post('/api/metrics/sleep', { hours, date });
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar vasos de agua
+  updateWaterGlasses: async (glasses, date = null) => {
+    try {
+      const response = await api.post('/api/metrics/water', { glasses, date });
       return response;
     } catch (error) {
       throw error;

@@ -1,69 +1,79 @@
 import { useState, useEffect } from 'react';
+import { LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { statisticsService } from '../../services/api';
+import '../../styles/GlobalStyles.css';
+import '../../styles/WellnessComponents.css';
 
 const UserStatistics = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [timeRange, setTimeRange] = useState('7days');
   const [loading, setLoading] = useState(false);
-  const [statistics, setStatistics] = useState({
-    overview: {
-      totalWorkouts: 24,
-      totalHours: 36,
-      avgCaloriesBurned: 425,
-      currentStreak: 7,
-      longestStreak: 14,
-      favoriteExercise: 'Running'
-    },
-    fitness: {
-      workoutsThisWeek: 5,
-      workoutsLastWeek: 4,
-      caloriesBurnedWeek: 2125,
-      avgWorkoutDuration: 45,
-      strengthWorkouts: 12,
-      cardioWorkouts: 12,
-      flexibilityWorkouts: 8
-    },
-    wellness: {
-      avgSleep: 7.5,
-      waterIntakeAvg: 7.2,
-      stressLevel: 3.8,
-      energyLevel: 7.8,
-      moodScore: 8.2,
-      injuryDays: 3
-    },
-    nutrition: {
-      avgCalories: 1920,
-      avgProtein: 142,
-      avgCarbs: 235,
-      avgFat: 68,
-      mealsLogged: 156,
-      targetDaysReached: 18
-    }
-  });
 
   const [chartData, setChartData] = useState({
-    workouts: [
-      { day: 'Lun: ', value: 1 },
-      { day: 'Mar: ', value: 1 },
-      { day: 'Mié: ', value: 0 },
-      { day: 'Jue: ', value: 1 },
-      { day: 'Vie: ', value: 1 },
-      { day: 'Sáb: ', value: 1 },
-      { day: 'Dom: ', value: 0 }
+    // Progreso de peso corporal (MetricasDiarias.peso)
+    weightProgress: [
+      { fecha: '22 Oct', peso: 75.2 },
+      { fecha: '23 Oct', peso: 75.0 },
+      { fecha: '24 Oct', peso: 74.8 },
+      { fecha: '25 Oct', peso: 74.7 },
+      { fecha: '26 Oct', peso: 74.5 },
+      { fecha: '27 Oct', peso: 74.3 },
+      { fecha: '28 Oct', peso: 74.1 }
     ],
-    calories: [
-      { day: 'Lun: ', burned: 450, consumed: 1850 },
-      { day: 'Mar: ', burned: 380, consumed: 1920 },
-      { day: 'Mié: ', burned: 250, consumed: 2100 },
-      { day: 'Jue: ', burned: 520, consumed: 1800 },
-      { day: 'Vie: ', burned: 410, consumed: 1950 },
-      { day: 'Sáb: ', burned: 380, consumed: 2200 },
-      { day: 'Dom: ', burned: 200, consumed: 2050 }
+    // Entrenamientos por día (Entrenamientos + Instancias_Ejercicios)
+    workoutsWeek: [
+      { dia: 'Lun', entrenamientos: 1, ejercicios: 8 },
+      { dia: 'Mar', entrenamientos: 1, ejercicios: 6 },
+      { dia: 'Mié', entrenamientos: 0, ejercicios: 0 },
+      { dia: 'Jue', entrenamientos: 1, ejercicios: 7 },
+      { dia: 'Vie', entrenamientos: 1, ejercicios: 5 },
+      { dia: 'Sáb', entrenamientos: 1, ejercicios: 9 },
+      { dia: 'Dom', entrenamientos: 0, ejercicios: 0 }
     ],
-    weight: [
-      { week: 'Sem 1: ', value: 75.2 },
-      { week: 'Sem 2: ', value: 74.8 },
-      { week: 'Sem 3: ', value: 74.5 },
-      { week: 'Sem 4: ', value: 74.1 }
+    // Volumen total por ejercicio (Instancias_Ejercicios)
+    topExercises: [
+      { nombre: 'Sentadillas', volumen: 2850 },
+      { nombre: 'Press Banca', volumen: 2240 },
+      { nombre: 'Peso Muerto', volumen: 3120 },
+      { nombre: 'Dominadas', volumen: 1680 },
+      { nombre: 'Press Militar', volumen: 1450 }
+    ],
+    // Distribución por categoría (Ejercicios.categoria)
+    exerciseDistribution: [
+      { name: 'Fuerza', value: 45, color: '#3b82f6' },
+      { name: 'Cardio', value: 30, color: '#10b981' },
+      { name: 'Flexibilidad', value: 15, color: '#f59e0b' },
+      { name: 'Movilidad', value: 10, color: '#8b5cf6' }
+    ],
+    // Macros diarios (NutricionTemporal)
+    macrosWeek: [
+      { dia: 'Lun', proteinas: 142, carbohidratos: 235, grasas: 68 },
+      { dia: 'Mar', proteinas: 138, carbohidratos: 242, grasas: 72 },
+      { dia: 'Mié', proteinas: 145, carbohidratos: 228, grasas: 65 },
+      { dia: 'Jue', proteinas: 150, carbohidratos: 240, grasas: 70 },
+      { dia: 'Vie', proteinas: 135, carbohidratos: 250, grasas: 75 },
+      { dia: 'Sáb', proteinas: 148, carbohidratos: 260, grasas: 78 },
+      { dia: 'Dom', proteinas: 140, carbohidratos: 245, grasas: 68 }
+    ],
+    // Calorías consumidas vs quemadas
+    caloriesWeek: [
+      { dia: 'Lun', consumidas: 1920, quemadas: 450 },
+      { dia: 'Mar', consumidas: 1950, quemadas: 380 },
+      { dia: 'Mié', consumidas: 2100, quemadas: 250 },
+      { dia: 'Jue', consumidas: 1880, quemadas: 520 },
+      { dia: 'Vie', consumidas: 2050, quemadas: 410 },
+      { dia: 'Sáb', consumidas: 2200, quemadas: 380 },
+      { dia: 'Dom', consumidas: 2000, quemadas: 200 }
+    ],
+    // Métricas de bienestar (MetricasDiarias)
+    wellnessMetrics: [
+      { dia: 'Lun', energia: 8, estres: 4, sueno: 7.5, agua: 8 },
+      { dia: 'Mar', energia: 7, estres: 5, sueno: 7.0, agua: 7 },
+      { dia: 'Mié', energia: 6, estres: 6, sueno: 6.5, agua: 6 },
+      { dia: 'Jue', energia: 8, estres: 3, sueno: 8.0, agua: 8 },
+      { dia: 'Vie', energia: 9, estres: 3, sueno: 8.0, agua: 9 },
+      { dia: 'Sáb', energia: 8, estres: 4, sueno: 7.5, agua: 7 },
+      { dia: 'Dom', energia: 7, estres: 5, sueno: 7.0, agua: 8 }
     ]
   });
 
@@ -73,405 +83,198 @@ const UserStatistics = ({ onBack }) => {
 
   const loadStatistics = async () => {
     setLoading(true);
-    // Simular carga de datos basada en el rango de tiempo
-    setTimeout(() => {
+    try {
+      const response = await statisticsService.getStatistics(timeRange);
+      
+      if (response.charts) {
+        setChartData({
+          weightProgress: response.charts.weightProgress || chartData.weightProgress,
+          workoutsWeek: response.charts.workoutsWeek || chartData.workoutsWeek,
+          topExercises: response.charts.topExercises || chartData.topExercises,
+          exerciseDistribution: response.charts.exerciseDistribution || chartData.exerciseDistribution,
+          macrosWeek: response.charts.macrosWeek || chartData.macrosWeek,
+          caloriesWeek: response.charts.caloriesWeek || chartData.caloriesWeek,
+          wellnessMetrics: response.charts.wellnessMetrics || chartData.wellnessMetrics
+        });
+      }
+      
+      console.log('Estadísticas cargadas exitosamente');
+    } catch (error) {
+      console.error('Error al cargar estadísticas:', error);
+      // Mantener datos mock si falla la API
+    } finally {
       setLoading(false);
-    }, 800);
-  };
-
-  const formatDuration = (minutes) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    if (hours > 0) {
-      return `${hours}h ${mins}m`;
     }
-    return `${mins}m`;
   };
 
   const renderOverviewTab = () => (
     <div className="stats-overview">
-      {/* Quick Stats Cards */}
-      <div className="quick-stats">
-        <div className="stat-card primary">
-          <div className="stat-icon"></div>
-          <div className="stat-content">
-            <h4>{statistics.overview.currentStreak}</h4>
-            <p>Días consecutivos</p>
-          </div>
-        </div>
-        <div className="stat-card success">
-          <div className="stat-icon"></div>
-          <div className="stat-content">
-            <h4>{statistics.overview.totalWorkouts}</h4>
-            <p>Entrenamientos totales</p>
-          </div>
-        </div>
-        <div className="stat-card warning">
-          <div className="stat-icon"></div>
-          <div className="stat-content">
-            <h4>{statistics.overview.totalHours}h</h4>
-            <p>Horas entrenadas</p>
-          </div>
-        </div>
-        <div className="stat-card info">
-          <div className="stat-icon"></div>
-          <div className="stat-content">
-            <h4>{statistics.overview.avgCaloriesBurned}</h4>
-            <p>Kcal promedio</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Progress Indicators */}
-      <div className="progress-section">
-        <h4>Progreso Semanal</h4>
-        <div className="progress-items">
-          <div className="progress-item">
-            <div className="progress-header">
-              <span>Entrenamientos </span>
-              <span>{statistics.fitness.workoutsThisWeek}/5</span>
-            </div>
-            <div className="progress-bar">
-              <div 
-                className="progress-fill"
-                style={{ 
-                  width: `${(statistics.fitness.workoutsThisWeek / 5) * 100}%`,
-                  backgroundColor: '#22c55e'
-                }}
-              />
-            </div>
-          </div>
-          <div className="progress-item">
-            <div className="progress-header">
-              <span>Calorías quemadas </span>
-              <span>{statistics.fitness.caloriesBurnedWeek}/2500</span>
-            </div>
-            <div className="progress-bar">
-              <div 
-                className="progress-fill"
-                style={{ 
-                  width: `${(statistics.fitness.caloriesBurnedWeek / 2500) * 100}%`,
-                  backgroundColor: '#f59e0b'
-                }}
-              />
-            </div>
-          </div>
-          <div className="progress-item">
-            <div className="progress-header">
-              <span>Hidratación promedio </span>
-              <span>{statistics.wellness.waterIntakeAvg}/8 vasos</span>
-            </div>
-            <div className="progress-bar">
-              <div 
-                className="progress-fill"
-                style={{ 
-                  width: `${(statistics.wellness.waterIntakeAvg / 8) * 100}%`,
-                  backgroundColor: '#3b82f6'
-                }}
-              />
-            </div>
-          </div>
-        </div>
-        <br></br>
-      </div>
-
-      {/* Activity Chart */}
+      {/* Gráfico de progreso de peso */}
       <div className="chart-section">
-        <h4>Actividad de la Semana</h4>
-    
-        <div className="activity-chart">
-          {chartData.workouts.map((day, index) => (
-            <div key={index} className="chart-bar">
-              <span className="bar-label">{day.day} </span>
-              <span className="bar-value">{day.value} entrenamiento(s)</span>
-              <div 
-                className="bar"
-                style={{ 
-                  height: `${Math.max(day.value * 40, 4)}px`,
-                  backgroundColor: day.value > 0 ? '#22c55e' : '#e5e7eb'
-                }}
-              />
-            <br></br>
-            </div>
-          ))}
-        </div>
+        <h3>
+          <i className="bi bi-graph-up"></i>
+          Progreso de Peso Corporal
+        </h3>
+        <ResponsiveContainer width="100%" height={250}>
+          <LineChart data={chartData.weightProgress}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#4a5568" />
+            <XAxis dataKey="fecha" stroke="#cbd5e0" />
+            <YAxis stroke="#cbd5e0" domain={['dataMin - 1', 'dataMax + 1']} />
+            <Tooltip 
+              contentStyle={{ backgroundColor: '#2d3748', border: '1px solid #4a5568', borderRadius: '8px' }}
+              labelStyle={{ color: '#f7fafc' }}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="peso" 
+              stroke="#3b82f6" 
+              strokeWidth={3}
+              dot={{ fill: '#3b82f6', r: 5 }}
+              activeDot={{ r: 7 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
 
-      {/* Recent Achievements */}
-      <div className="achievements-section">
-        <h4>Logros Recientes</h4>
-        <div className="achievements-list">
-          <div className="achievement-item">
-            <span className="achievement-date">Hoy</span>
-            <span className="achievement-icon"></span>
-            <div>
-              <h5>Semana Perfecta</h5>
-              <p>Completaste 5 entrenamientos esta semana</p>
-            </div>
-            
-          </div>
-          <div className="achievement-item">
-            <span className="achievement-date">Hoy</span>
-            <span className="achievement-icon"></span>
-            <div>
-              <h5>Racha de 7 días</h5>
-              <p>¡Excelente consistencia!</p>
-            </div>
-            
-          </div>
-          <div className="achievement-item">
-            <span className="achievement-date">Ayer</span>
-            <span className="achievement-icon"></span>
-            <div>
-              <h5>Hidratación Perfecta</h5>
-              <p>8 vasos de agua por 3 días seguidos</p>
-            </div>
-            
-          </div>
-        </div>
+      {/* Gráfico de actividad semanal */}
+      <div className="chart-section">
+        <h3>
+          <i className="bi bi-calendar-week"></i>
+          Actividad Semanal
+        </h3>
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart data={chartData.workoutsWeek}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#4a5568" />
+            <XAxis dataKey="dia" stroke="#cbd5e0" />
+            <YAxis stroke="#cbd5e0" />
+            <Tooltip 
+              contentStyle={{ backgroundColor: '#2d3748', border: '1px solid #4a5568', borderRadius: '8px' }}
+              labelStyle={{ color: '#f7fafc' }}
+            />
+            <Legend />
+            <Bar dataKey="entrenamientos" fill="#10b981" name="Entrenamientos" />
+            <Bar dataKey="ejercicios" fill="#3b82f6" name="Ejercicios" />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
 
   const renderFitnessTab = () => (
     <div className="stats-fitness">
-      <div className="fitness-metrics">
-        <div className="metric-card">
-          <h5>Entrenamientos</h5>
-          <div className="metric-comparison">
-            <span className="current-week"> Esta semana:  {statistics.fitness.workoutsThisWeek}</span>
-            <span className="last-week"> Semana pasada:  {statistics.fitness.workoutsLastWeek}</span>
-            <span className={`change ${statistics.fitness.workoutsThisWeek > statistics.fitness.workoutsLastWeek ? 'positive' : 'negative'}`}>
-              {statistics.fitness.workoutsThisWeek >  statistics.fitness.workoutsLastWeek ? ' ↗ ' : ' ↘ '}
-              {Math.abs(statistics.fitness.workoutsThisWeek - statistics.fitness.workoutsLastWeek)}
-            </span>
-          </div>
-        </div>
-
-        <div className="metric-card">
-          <h5>Duración promedio</h5>
-          <div className="metric-value">
-            {formatDuration(statistics.fitness.avgWorkoutDuration)}
-          </div>
-        </div>
-
-        <div className="metric-card">
-          <h5>Calorías quemadas</h5>
-          <div className="metric-value">
-            {statistics.fitness.caloriesBurnedWeek} kcal
-          </div>
-        </div>
+      {/* Gráfico de Top 5 Ejercicios por Volumen */}
+      <div className="chart-section">
+        <h4>
+          <i className="bi bi-trophy-fill"></i>
+          Top 5 Ejercicios por Volumen Total (kg)
+        </h4>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={chartData.topExercises} layout="vertical">
+            <CartesianGrid strokeDasharray="3 3" stroke="#4a5568" />
+            <XAxis type="number" stroke="#cbd5e0" />
+            <YAxis type="category" dataKey="nombre" stroke="#cbd5e0" width={120} />
+            <Tooltip 
+              contentStyle={{ backgroundColor: '#2d3748', border: '1px solid #4a5568', borderRadius: '8px' }}
+              labelStyle={{ color: '#f7fafc' }}
+              formatter={(value) => [`${value} kg`, 'Volumen']}
+            />
+            <Bar dataKey="volumen" fill="#10b981" />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
 
-      <div className="workout-types">
-        <h4>Distribución de Entrenamientos</h4>
-        <div className="workout-distribution">
-          <div className="workout-type">
-            <div className="type-header">
-              <span className="type-icon"></span>
-              <span>Fuerza </span>
-              <span className="type-count">{statistics.fitness.strengthWorkouts}</span>
-            </div>
-            <div className="type-bar">
-              <div 
-                className="type-fill strength"
-                style={{ 
-                  width: `${(statistics.fitness.strengthWorkouts / statistics.overview.totalWorkouts) * 100}%`
-                }}
-              />
-            </div>
-          </div>
-          <div className="workout-type">
-            <div className="type-header">
-              <span className="type-icon"></span>
-              <span>Cardio </span>
-              <span className="type-count">{statistics.fitness.cardioWorkouts}</span>
-            </div>
-            <div className="type-bar">
-              <div 
-                className="type-fill cardio"
-                style={{ 
-                  width: `${(statistics.fitness.cardioWorkouts / statistics.overview.totalWorkouts) * 100}%`
-                }}
-              />
-            </div>
-          </div>
-          <div className="workout-type">
-            <div className="type-header">
-              <span className="type-icon"></span>
-              <span>Flexibilidad </span>
-              <span className="type-count">{statistics.fitness.flexibilityWorkouts}</span>
-            </div>
-            <div className="type-bar">
-              <div 
-                className="type-fill flexibility"
-                style={{ 
-                  width: `${(statistics.fitness.flexibilityWorkouts / statistics.overview.totalWorkouts) * 100}%`
-                }}
-              />
-            </div>
-          </div>
-        </div>
+      {/* Gráfico de Distribución por Categoría */}
+      <div className="chart-section">
+        <h4>
+          <i className="bi bi-diagram-3-fill"></i>
+          Distribución por Categoría
+        </h4>
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={chartData.exerciseDistribution}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+              outerRadius={100}
+              fill="#8884d8"
+              dataKey="value"
+            >
+              {chartData.exerciseDistribution.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip 
+              contentStyle={{ backgroundColor: '#2d3748', border: '1px solid #4a5568', borderRadius: '8px' }}
+              labelStyle={{ color: '#f7fafc' }}
+              formatter={(value) => [`${value}%`, 'Porcentaje']}
+            />
+          </PieChart>
+        </ResponsiveContainer>
       </div>
-
-      <div className="calories-chart">
-        <h4>Calorías: Quemadas vs Consumidas</h4>
-        <div className="calories-bars">
-          {chartData.calories.map((day, index) => (
-            <div key={index} className="calorie-day">
-              <div className="calorie-bars-container">
-                <div 
-                  className="calorie-bar burned"
-                  style={{ height: `${(day.burned / 600) * 100}px` }}
-                  title={`Quemadas: ${day.burned} kcal`}
-                />
-                <div 
-                  className="calorie-bar consumed"
-                  style={{ height: `${(day.consumed / 2500) * 100}px` }}
-                  title={`Consumidas: ${day.consumed} kcal`}
-                />
-              </div>
-              <span className="calorie-day-label">{day.day}</span>
-            </div>
-          ))}
-        </div>
-        <div className="chart-legend">
-          <div className="legend-item">
-            <div className="legend-color burned"></div>
-            <span>Quemadas</span>
-          </div>
-          <div className="legend-item">
-            <div className="legend-color consumed"></div>
-            <span>Consumidas</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderWellnessTab = () => (
-    <div className="stats-wellness">
-      <div className="wellness-metrics">
-        <div className="wellness-card">
-          <div className="wellness-icon"></div>
-          <div className="wellness-content">
-            <h5>Sueño promedio</h5>
-            <p className="wellness-value">{statistics.wellness.avgSleep}h</p>
-            <p className="wellness-status good">Excelente</p>
-          </div>
-        </div>
-
-        <div className="wellness-card">
-          <div className="wellness-icon"></div>
-          <div className="wellness-content">
-            <h5>Hidratación</h5>
-            <p className="wellness-value">{statistics.wellness.waterIntakeAvg}/8 vasos</p>
-            <p className="wellness-status good">Buena</p>
-          </div>
-        </div>
-
-        <div className="wellness-card">
-          <div className="wellness-icon"></div>
-          <div className="wellness-content">
-            <h5>Nivel de estrés</h5>
-            <p className="wellness-value">{statistics.wellness.stressLevel}/10</p>
-            <p className="wellness-status moderate">Moderado</p>
-          </div>
-        </div>
-
-        <div className="wellness-card">
-          <div className="wellness-icon"></div>
-          <div className="wellness-content">
-            <h5>Energía</h5>
-            <p className="wellness-value">{statistics.wellness.energyLevel}/10</p>
-            <p className="wellness-status good">Alta</p>
-          </div>
-        </div>
-
-        <div className="wellness-card">
-          <div className="wellness-icon"></div>
-          <div className="wellness-content">
-            <h5>Estado de ánimo</h5>
-            <p className="wellness-value">{statistics.wellness.moodScore}/10</p>
-            <p className="wellness-status excellent">Excelente</p>
-          </div>
-        </div>
-
-        <div className="wellness-card">
-          <div className="wellness-icon"></div>
-          <div className="wellness-content">
-            <h5>Días con lesiones</h5>
-            <p className="wellness-value">{statistics.wellness.injuryDays}</p>
-            <p className="wellness-status good">Pocos</p>
-          </div>
-        </div>
-      </div>
-
     </div>
   );
 
   const renderNutritionTab = () => (
     <div className="stats-nutrition">
-      <div className="nutrition-summary">
-        <div className="summary-card">
-          <h5>Promedio diario</h5>
-          <div className="nutrition-values">
-            <div className="nutrition-item">
-              <span className="nutrition-icon"></span>
-              <span>{statistics.nutrition.avgCalories} kcal</span>
-            </div>
-            <div className="nutrition-item">
-              <span className="nutrition-icon"></span>
-              <span>{statistics.nutrition.avgProtein}g proteína</span>
-            </div>
-            <div className="nutrition-item">
-              <span className="nutrition-icon"></span>
-              <span>{statistics.nutrition.avgCarbs}g carbohidratos</span>
-            </div>
-            <div className="nutrition-item">
-              <span className="nutrition-icon"></span>
-              <span>{statistics.nutrition.avgFat}g grasas</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="summary-card">
-          <h5>Registro de comidas</h5>
-          <div className="registration-stats">
-            <div className="stat-row">
-              <span>Comidas registradas</span>
-              <span className="stat-value">{statistics.nutrition.mealsLogged}</span>
-            </div>
-            <div className="stat-row">
-              <span>Días con objetivos cumplidos</span>
-              <span className="stat-value">{statistics.nutrition.targetDaysReached}/30</span>
-            </div>
-            <div className="stat-row">
-              <span>Tasa de cumplimiento</span>
-              <span className="stat-value">
-                {Math.round((statistics.nutrition.targetDaysReached / 30) * 100)}%
-              </span>
-            </div>
-          </div>
-        </div>
+      {/* Gráfico de Macros Diarios */}
+      <div className="chart-section">
+        <h4>
+          <i className="bi bi-bar-chart-line-fill"></i>
+          Macros Diarios (gramos)
+        </h4>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={chartData.macrosWeek}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#4a5568" />
+            <XAxis dataKey="dia" stroke="#cbd5e0" />
+            <YAxis stroke="#cbd5e0" />
+            <Tooltip 
+              contentStyle={{ backgroundColor: '#2d3748', border: '1px solid #4a5568', borderRadius: '8px' }}
+              labelStyle={{ color: '#f7fafc' }}
+            />
+            <Legend />
+            <Bar dataKey="proteinas" fill="#ef4444" name="Proteínas" />
+            <Bar dataKey="carbohidratos" fill="#f59e0b" name="Carbohidratos" />
+            <Bar dataKey="grasas" fill="#8b5cf6" name="Grasas" />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
 
-      <div className="nutrition-breakdown">
-        <h4>Distribución de Macronutrientes</h4>
-        <div className="macro-chart">
-          <div className="macro-item protein">
-            <div className="macro-bar" style={{ width: '30%' }}></div>
-            <span className="macro-label">Proteína (30%)</span>
-          </div>
-          <div className="macro-item carbs">
-            <div className="macro-bar" style={{ width: '45%' }}></div>
-            <span className="macro-label">Carbohidratos (45%)</span>
-          </div>
-          <div className="macro-item fat">
-            <div className="macro-bar" style={{ width: '25%' }}></div>
-            <span className="macro-label">Grasas (25%)</span>
-          </div>
-        </div>
+      {/* Gráfico de Calorías Consumidas vs Quemadas */}
+      <div className="chart-section">
+        <h4>
+          <i className="bi bi-fire"></i>
+          Calorías: Consumidas vs Quemadas
+        </h4>
+        <ResponsiveContainer width="100%" height={300}>
+          <AreaChart data={chartData.caloriesWeek}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#4a5568" />
+            <XAxis dataKey="dia" stroke="#cbd5e0" />
+            <YAxis stroke="#cbd5e0" />
+            <Tooltip 
+              contentStyle={{ backgroundColor: '#2d3748', border: '1px solid #4a5568', borderRadius: '8px' }}
+              labelStyle={{ color: '#f7fafc' }}
+            />
+            <Legend />
+            <Area 
+              type="monotone" 
+              dataKey="consumidas" 
+              stroke="#3b82f6" 
+              fill="#3b82f6" 
+              fillOpacity={0.6}
+              name="Consumidas"
+            />
+            <Area 
+              type="monotone" 
+              dataKey="quemadas" 
+              stroke="#ef4444" 
+              fill="#ef4444" 
+              fillOpacity={0.6}
+              name="Quemadas"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
@@ -479,76 +282,73 @@ const UserStatistics = ({ onBack }) => {
   return (
     <div className="user-statistics">
       {/* Header */}
-      <header className="section-header">
-        <button 
-          onClick={onBack}
-          className="back-button"
-          aria-label="Volver al centro de bienestar"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5m7-7l-7 7 7 7"/>
-          </svg>
-          Volver
-        </button>
-        <div>
-          <h2>Estadísticas y Progreso</h2>
-          <p>Analiza tu rendimiento y progreso a lo largo del tiempo</p>
+      <header className="component-header">
+        <div className="header-top">
+          <button 
+            onClick={onBack} 
+            className="btn btn-secondary btn-icon"
+            aria-label="Volver"
+          >
+            <i className="bi bi-arrow-left"></i>
+          </button>
+          <h2>
+            <i className="bi bi-graph-up-arrow"></i>
+            Estadísticas
+          </h2>
+          <div className="header-actions">
+            <select 
+              value={timeRange}
+              onChange={(e) => setTimeRange(e.target.value)}
+              className="time-range-select"
+            >
+              <option value="7days">Última semana</option>
+              <option value="30days">Último mes</option>
+              <option value="90days">Últimos 3 meses</option>
+              <option value="year">Este año</option>
+            </select>
+          </div>
         </div>
+        <p className="header-subtitle">
+          Visualiza tu progreso y rendimiento
+        </p>
       </header>
 
-      {/* Time Range Selector */}
-      <div className="time-controls">
-        <select 
-          value={timeRange}
-          onChange={(e) => setTimeRange(e.target.value)}
-          className="time-selector"
-        >
-          <option value="7days">Últimos 7 días</option>
-          <option value="30days">Últimos 30 días</option>
-          <option value="90days">Últimos 3 meses</option>
-          <option value="1year">Último año</option>
-        </select>
-      </div>
-
-      {/* Tabs */}
+      {/* Tabs de navegación */}
       <div className="stats-tabs">
-        <button 
+        <button
+          className={`stats-tab ${activeTab === 'overview' ? 'active' : ''}`}
           onClick={() => setActiveTab('overview')}
-          className={`tab-button ${activeTab === 'overview' ? 'active' : ''}`}
         >
-          Resumen
+          <i className="bi bi-speedometer2"></i>
+          General
         </button>
-        <button 
+        <button
+          className={`stats-tab ${activeTab === 'fitness' ? 'active' : ''}`}
           onClick={() => setActiveTab('fitness')}
-          className={`tab-button ${activeTab === 'fitness' ? 'active' : ''}`}
         >
+          <i className="bi bi-bicycle"></i>
           Fitness
         </button>
-        <button 
-          onClick={() => setActiveTab('wellness')}
-          className={`tab-button ${activeTab === 'wellness' ? 'active' : ''}`}
-        >
-          Bienestar
-        </button>
-        <button 
+        <button
+          className={`stats-tab ${activeTab === 'nutrition' ? 'active' : ''}`}
           onClick={() => setActiveTab('nutrition')}
-          className={`tab-button ${activeTab === 'nutrition' ? 'active' : ''}`}
         >
+          <i className="bi bi-egg-fried"></i>
           Nutrición
         </button>
       </div>
 
-      {/* Tab Content */}
-      <div className="tab-content">
+      {/* Contenido según tab activo */}
+      <div className="stats-content">
         {loading ? (
-          <div className="loading-stats">
+          <div className="loading-state">
+            <i className="bi bi-arrow-repeat spin-icon"></i>
             <p>Cargando estadísticas...</p>
           </div>
         ) : (
           <>
             {activeTab === 'overview' && renderOverviewTab()}
             {activeTab === 'fitness' && renderFitnessTab()}
-            {activeTab === 'wellness' && renderWellnessTab()}
             {activeTab === 'nutrition' && renderNutritionTab()}
           </>
         )}

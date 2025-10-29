@@ -251,7 +251,7 @@ const ProfileSettings = () => {
       <div className="logout-section">
         <button 
           onClick={handleLogout} 
-          className="settings-button logout-button"
+          className="btn btn-danger btn-lg"
           type="button"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -324,7 +324,7 @@ const ProfileSettings = () => {
 
             <button
               type="submit"
-              className="settings-button primary"
+              className="btn btn-primary"
               disabled={loading.username}
             >
               {loading.username ? (
@@ -489,7 +489,7 @@ const ProfileSettings = () => {
 
             <button
               type="submit"
-              className="settings-button primary"
+              className="btn btn-primary"
               disabled={loading.password}
             >
               {loading.password ? (
@@ -531,7 +531,7 @@ const ProfileSettings = () => {
               
               <button
                 type="button"
-                className="settings-button danger"
+                className="btn btn-danger"
                 onClick={() => setShowDeleteConfirm(true)}
               >
                 Proceder a Borrar Cuenta
@@ -614,7 +614,7 @@ const ProfileSettings = () => {
               <div className="form-actions">
                 <button
                   type="button"
-                  className="settings-button secondary"
+                  className="btn btn-secondary"
                   onClick={() => {
                     setShowDeleteConfirm(false);
                     setDeleteData({ confirmPassword: '', confirmText: '' });
@@ -626,7 +626,7 @@ const ProfileSettings = () => {
                 
                 <button
                   type="submit"
-                  className="settings-button danger"
+                  className="btn btn-danger"
                   disabled={loading.delete}
                 >
                   {loading.delete ? (

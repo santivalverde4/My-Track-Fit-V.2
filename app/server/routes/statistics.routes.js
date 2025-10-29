@@ -143,4 +143,182 @@ router.put('/files/:fileType', authMiddleware, async (req, res) => {
   }
 });
 
+// ==================== ESTADÍSTICAS PARA GRÁFICOS ====================
+
+/**
+ * GET /api/statistics
+ * Obtener estadísticas generales para el dashboard
+ */
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const { timeRange = '7d' } = req.query;
+    const result = await StatisticsService.getStatistics(req.user.userId, timeRange);
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
+/**
+ * GET /api/statistics/weight-progress
+ * Obtener progreso de peso en el tiempo
+ */
+router.get('/weight-progress', authMiddleware, async (req, res) => {
+  try {
+    const { days = 30 } = req.query;
+    const result = await StatisticsService.getWeightProgress(req.user.userId, parseInt(days));
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
+/**
+ * GET /api/statistics/weekly-activity
+ * Obtener actividad semanal de entrenamientos
+ */
+router.get('/weekly-activity', authMiddleware, async (req, res) => {
+  try {
+    const { weeks = 4 } = req.query;
+    const result = await StatisticsService.getWeeklyActivity(req.user.userId, parseInt(weeks));
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
+/**
+ * GET /api/statistics/top-exercises
+ * Obtener ejercicios más realizados
+ */
+router.get('/top-exercises', authMiddleware, async (req, res) => {
+  try {
+    const { limit = 5, days = 30 } = req.query;
+    const result = await StatisticsService.getTopExercises(req.user.userId, parseInt(limit), parseInt(days));
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
+/**
+ * GET /api/statistics/exercise-distribution
+ * Obtener distribución de ejercicios por grupo muscular
+ */
+router.get('/exercise-distribution', authMiddleware, async (req, res) => {
+  try {
+    const { days = 30 } = req.query;
+    const result = await StatisticsService.getExerciseDistribution(req.user.userId, parseInt(days));
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
+/**
+ * GET /api/statistics/weekly-macros
+ * Obtener distribución de macronutrientes semanal
+ */
+router.get('/weekly-macros', authMiddleware, async (req, res) => {
+  try {
+    const { weeks = 4 } = req.query;
+    const result = await StatisticsService.getWeeklyMacros(req.user.userId, parseInt(weeks));
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
+/**
+ * GET /api/statistics/weekly-calories
+ * Obtener calorías semanales (consumidas vs quemadas)
+ */
+router.get('/weekly-calories', authMiddleware, async (req, res) => {
+  try {
+    const { weeks = 4 } = req.query;
+    const result = await StatisticsService.getWeeklyCalories(req.user.userId, parseInt(weeks));
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
+/**
+ * GET /api/statistics/wellness-metrics
+ * Obtener métricas de bienestar (energía, estrés, sueño)
+ */
+router.get('/wellness-metrics', authMiddleware, async (req, res) => {
+  try {
+    const { days = 7 } = req.query;
+    const result = await StatisticsService.getWellnessMetrics(req.user.userId, parseInt(days));
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
 export default router;

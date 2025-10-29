@@ -242,7 +242,7 @@ const Routines = () => {
         <div className="header-title">
           <h2>Rutinas</h2>
           <button
-            className="add-routine-btn"
+            className="btn btn-success btn-icon"
             onClick={() => setShowAddRoutineModal(true)}
             aria-label="Agregar nueva rutina"
             title="Crear nueva rutina"
@@ -261,7 +261,7 @@ const Routines = () => {
       {/* Botón agregar ejercicios */}
       <div className="action-buttons">
         <button
-          className="add-exercise-btn"
+          className="btn btn-success btn-lg"
           onClick={() => setShowAddExerciseModal(true)}
           disabled={routines.length === 0}
           title={routines.length === 0 ? 'Crea una rutina primero' : 'Agregar ejercicio a rutina'}
@@ -276,7 +276,11 @@ const Routines = () => {
       </div>
 
       {/* Lista de rutinas */}
-      <div className="routines-list">
+      <div 
+        className="routines-list"
+        role={routines.length > 0 ? "list" : undefined}
+        aria-label={routines.length > 0 ? `${routines.length} rutinas disponibles` : undefined}
+      >
         {loading && routines.length === 0 ? (
           <div className="loading-state">
             <div className="loading-spinner"></div>
@@ -287,7 +291,7 @@ const Routines = () => {
             <h3>No tienes rutinas creadas</h3>
             <p>Comienza creando tu primera rutina de entrenamiento</p>
             <button
-              className="create-first-routine-btn"
+              className="btn btn-primary btn-lg"
               onClick={() => setShowAddRoutineModal(true)}
             >
               Crear Mi Primera Rutina
@@ -299,6 +303,15 @@ const Routines = () => {
               key={routine.id} 
               className="routine-card"
               onClick={() => handleRoutineClick(routine)}
+              role="listitem"
+              tabIndex={0}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleRoutineClick(routine);
+                }
+              }}
+              aria-label={`Rutina ${routine.name}`}
             >
               <h3 className="routine-name">{routine.name}</h3>
             </div>
@@ -309,9 +322,15 @@ const Routines = () => {
       {/* Modal Crear Rutina */}
       {showAddRoutineModal && (
         <div className="modal-overlay" onClick={() => setShowAddRoutineModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div 
+            className="modal-content" 
+            onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title-crear-rutina"
+          >
             <div className="modal-header">
-              <h3>Crear Nueva Rutina</h3>
+              <h3 id="modal-title-crear-rutina">Crear Nueva Rutina</h3>
               <button
                 className="modal-close"
                 onClick={() => setShowAddRoutineModal(false)}
@@ -353,14 +372,14 @@ const Routines = () => {
               <div className="modal-actions">
                 <button
                   type="button"
-                  className="modal-btn secondary"
+                  className="btn btn-secondary"
                   onClick={() => setShowAddRoutineModal(false)}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="modal-btn primary"
+                  className="btn btn-success"
                   disabled={loading}
                 >
                   {loading ? 'Creando...' : 'Crear Rutina'}
@@ -374,9 +393,15 @@ const Routines = () => {
       {/* Modal Agregar Ejercicio */}
       {showAddExerciseModal && (
         <div className="modal-overlay" onClick={() => setShowAddExerciseModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div 
+            className="modal-content" 
+            onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title-agregar-ejercicio"
+          >
             <div className="modal-header">
-              <h3>
+              <h3 id="modal-title-agregar-ejercicio">
                 Agregar Ejercicio
                 {selectedRoutine && (
                   <span className="modal-subtitle">a "{selectedRoutine.name}"</span>
@@ -548,14 +573,14 @@ const Routines = () => {
               <div className="modal-actions">
                 <button
                   type="button"
-                  className="modal-btn secondary"
+                  className="btn btn-secondary"
                   onClick={() => setShowAddExerciseModal(false)}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="modal-btn primary"
+                  className="btn btn-success"
                   disabled={loading || !selectedRoutine}
                 >
                   {loading ? 'Agregando...' : 'Agregar Ejercicio'}

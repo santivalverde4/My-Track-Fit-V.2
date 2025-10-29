@@ -183,7 +183,7 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
           <h2>Ejercicios - {workoutName}</h2>
           <div className="header-buttons">
             <button 
-              className="back-btn"
+              className="btn btn-secondary btn-icon"
               onClick={onBack}
               aria-label="Volver a entrenamientos"
             >
@@ -193,7 +193,7 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
               </svg>
             </button>
             <button
-              className="add-exercise-btn"
+              className="btn btn-success btn-icon"
               onClick={() => setShowAddExerciseModal(true)}
               aria-label="Agregar nuevo ejercicio"
               title="Crear nuevo ejercicio"
@@ -222,7 +222,7 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
             <h3>No hay ejercicios agregados</h3>
             <p>Comienza agregando tu primer ejercicio a este entrenamiento</p>
             <button
-              className="create-first-exercise-btn"
+              className="btn btn-primary btn-lg"
               onClick={() => setShowAddExerciseModal(true)}
             >
               Agregar Mi Primer Ejercicio
@@ -244,9 +244,15 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
       {/* Modal Crear Ejercicio */}
       {showAddExerciseModal && (
         <div className="modal-overlay" onClick={() => setShowAddExerciseModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div 
+            className="modal-content" 
+            onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title-agregar-ejercicio"
+          >
             <div className="modal-header">
-              <h3>Agregar Nuevo Ejercicio</h3>
+              <h3 id="modal-title-agregar-ejercicio">Agregar Nuevo Ejercicio</h3>
               <button
                 className="modal-close"
                 onClick={() => setShowAddExerciseModal(false)}
@@ -289,14 +295,14 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
               <div className="modal-actions">
                 <button
                   type="button"
-                  className="modal-btn secondary"
+                  className="btn btn-secondary"
                   onClick={() => setShowAddExerciseModal(false)}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="modal-btn primary"
+                  className="btn btn-success"
                   disabled={loading}
                 >
                   {loading ? 'Agregando...' : 'Agregar Ejercicio'}
@@ -310,9 +316,15 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
       {/* Modal Editar Ejercicio */}
       {showEditExerciseModal && selectedExercise && (
         <div className="modal-overlay" onClick={() => setShowEditExerciseModal(false)}>
-          <div className="modal-content exercise-modal" onClick={e => e.stopPropagation()}>
+          <div 
+            className="modal-content exercise-modal" 
+            onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title-editar-ejercicio"
+          >
             <div className="modal-header">
-              <h3>Editar Sets - {selectedExercise.name}</h3>
+              <h3 id="modal-title-editar-ejercicio">Editar Sets - {selectedExercise.name}</h3>
               <button
                 className="modal-close"
                 onClick={() => setShowEditExerciseModal(false)}
@@ -340,7 +352,7 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
                       {exerciseSets.length > 1 && (
                         <button
                           type="button"
-                          className="remove-set-btn"
+                          className="btn btn-danger btn-sm"
                           onClick={() => removeSet(index)}
                           aria-label={`Eliminar set ${index + 1}`}
                         >
@@ -426,7 +438,7 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
               <div className="sets-actions">
                 <button
                   type="button"
-                  className="add-set-btn"
+                  className="btn btn-primary"
                   onClick={addNewSet}
                 >
                   + Agregar Set
@@ -436,14 +448,14 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
               <div className="modal-actions">
                 <button
                   type="button"
-                  className="modal-btn secondary"
+                  className="btn btn-secondary"
                   onClick={() => setShowEditExerciseModal(false)}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="modal-btn primary"
+                  className="btn btn-success"
                   disabled={loading}
                 >
                   {loading ? 'Guardando...' : 'Guardar Sets'}

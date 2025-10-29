@@ -111,9 +111,19 @@ const SmartTrainer = () => {
       </div>
 
       {/* Área de mensajes */}
-      <div className="chat-messages">
+      <div 
+        className="chat-messages"
+        role="log"
+        aria-live="polite"
+        aria-label="Historial de conversación con Smart Trainer"
+      >
         {messages.map((message) => (
-          <div key={message.id} className={`message ${message.type}`}>
+          <div 
+            key={message.id} 
+            className={`message ${message.type}`}
+            role="article"
+            aria-label={`${message.type === 'user' ? 'Tú' : 'Smart Trainer'} a las ${message.timestamp}`}
+          >
             <div className="message-content">
               <div className="message-text">
                 <ReactMarkdown>{message.text}</ReactMarkdown>
@@ -145,8 +155,14 @@ const SmartTrainer = () => {
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Escribe tu mensaje..."
             className="message-input"
+            aria-label="Escribir mensaje para Smart Trainer"
           />
-          <button type="submit" className="send-button" disabled={!newMessage.trim()}>
+          <button 
+            type="submit" 
+            className="send-button" 
+            disabled={!newMessage.trim()}
+            aria-label="Enviar mensaje"
+          >
             <span>📤</span>
           </button>
         </div>
@@ -156,13 +172,25 @@ const SmartTrainer = () => {
       <div className="quick-suggestions">
         <p>Sugerencias:</p>
         <div className="suggestions-list">
-          <button className="suggestion-btn" onClick={() => setNewMessage('¿Puedes crear una rutina para principiantes?')}>
+          <button 
+            className="suggestion-btn" 
+            onClick={() => setNewMessage('¿Puedes crear una rutina para principiantes?')}
+            aria-label="Usar sugerencia: Rutina para principiantes"
+          >
             Rutina principiante
           </button>
-          <button className="suggestion-btn" onClick={() => setNewMessage('Necesito consejos de nutrición')}>
+          <button 
+            className="suggestion-btn" 
+            onClick={() => setNewMessage('Necesito consejos de nutrición')}
+            aria-label="Usar sugerencia: Consejos de nutrición"
+          >
             Consejos nutrición
           </button>
-          <button className="suggestion-btn" onClick={() => setNewMessage('¿Cómo puedo mejorar mi resistencia?')}>
+          <button 
+            className="suggestion-btn" 
+            onClick={() => setNewMessage('¿Cómo puedo mejorar mi resistencia?')}
+            aria-label="Usar sugerencia: Mejorar resistencia"
+          >
             Mejorar resistencia
           </button>
         </div>
