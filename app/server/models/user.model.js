@@ -28,6 +28,19 @@ export const UserModel = {
   },
 
   /**
+   * Buscar usuario por email
+   */
+  async findByEmail(email) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('correo', email)
+      .single();
+    
+    return { data, error };
+  },
+
+  /**
    * Crear nuevo usuario
    */
   async create(userData) {

@@ -10,16 +10,16 @@ const router = express.Router();
  */
 router.post('/register', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
 
-    if (!username || !password) {
+    if (!username || !password || !email) {
       return res.status(400).json({
         success: false,
-        error: 'Usuario y contraseña son requeridos'
+        error: 'Usuario, contraseña y email son requeridos'
       });
     }
 
-    const result = await AuthService.register(username, password);
+    const result = await AuthService.register(username, password, email);
 
     if (!result.success) {
       return res.status(400).json(result);
@@ -31,6 +31,116 @@ router.post('/register', async (req, res) => {
       success: false,
       error: 'Error en el servidor'
     });
+  }
+});
+
+/**
+ * GET /api/auth/confirm/:token
+ * Confirmar cuenta con token del email
+ */
+router.get('/confirm/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+    const result = await AuthService.confirmAccount(token);
+
+    if (!result.success) {
+      // Token inválido o expirado
+      return res.send(`
+        <html>
+          <head>
+            <title>Token inválido</title>
+            <style>
+              body { background: #f7f7f7; font-family: Arial, sans-serif; }
+              .container {
+                background: #fff;
+                max-width: 400px;
+                margin: 80px auto;
+                padding: 32px 24px;
+                border-radius: 10px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+                text-align: center;
+              }
+              .icon { font-size: 48px; color: #d32f2f; margin-bottom: 16px; }
+              h2 { color: #d32f2f; margin-bottom: 8px; }
+              p { color: #444; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="icon">❌</div>
+              <h2>Token inválido o expirado</h2>
+              <p>El enlace de confirmación no es válido o ya fue utilizado.</p>
+            </div>
+          </body>
+        </html>
+      `);
+    }
+
+    // Cuenta confirmada exitosamente
+    return res.send(`
+      <html>
+        <head>
+          <title>Cuenta confirmada</title>
+          <style>
+            body { background: #f7f7f7; font-family: Arial, sans-serif; }
+            .container {
+              background: #fff;
+              max-width: 400px;
+              margin: 80px auto;
+              padding: 32px 24px;
+              border-radius: 10px;
+              box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+              text-align: center;
+            }
+            .icon {
+              font-size: 48px;
+              color: #43a047;
+              margin-bottom: 16px;
+            }
+            h2 { color: #1976d2; margin-bottom: 8px; }
+            p { color: #444; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="icon">✅</div>
+            <h2>¡Cuenta confirmada!</h2>
+            <p>Tu cuenta ha sido creada exitosamente.<br>Puedes iniciar sesión en la app.</p>
+          </div>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    // Error en el servidor
+    return res.status(500).send(`
+      <html>
+        <head>
+          <title>Error</title>
+          <style>
+            body { background: #f7f7f7; font-family: Arial, sans-serif; }
+            .container {
+              background: #fff;
+              max-width: 400px;
+              margin: 80px auto;
+              padding: 32px 24px;
+              border-radius: 10px;
+              box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+              text-align: center;
+            }
+            .icon { font-size: 48px; color: #d32f2f; margin-bottom: 16px; }
+            h2 { color: #d32f2f; margin-bottom: 8px; }
+            p { color: #444; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="icon">❌</div>
+            <h2>Error</h2>
+            <p>Ocurrió un error al confirmar tu cuenta. Intenta de nuevo.</p>
+          </div>
+        </body>
+      </html>
+    `);
   }
 });
 

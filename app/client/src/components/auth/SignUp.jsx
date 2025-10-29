@@ -7,6 +7,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
+    email: '',
     password: '',
     confirmPassword: ''
   });
@@ -44,6 +45,13 @@ const SignUp = () => {
       newErrors.username = 'El nombre de usuario debe tener al menos 3 caracteres';
     } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
       newErrors.username = 'Solo se permiten letras, números y guiones bajos';
+    }
+
+    // Validación del email
+    if (!formData.email.trim()) {
+      newErrors.email = 'El email es requerido';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'El email no es válido. Debe tener formato correo@ejemplo.com';
     }
 
     // Validación de la contraseña
@@ -85,6 +93,7 @@ const SignUp = () => {
       // Preparar datos para el backend
       const registrationData = {
         username: formData.username.trim(),
+        email: formData.email.trim(),
         password: formData.password
       };
 
@@ -92,13 +101,13 @@ const SignUp = () => {
       const response = await authService.register(registrationData);
       
       // Registro exitoso
-      console.log('Usuario registrado:', response);
+      console.log('Registro iniciado:', response);
       
       // Mostrar mensaje de éxito
-      alert('¡Cuenta creada exitosamente!');
+      alert('¡Revisa tu correo electrónico! Te hemos enviado un link para confirmar tu cuenta.');
       
-      // Redirigir al dashboard o página principal
-      navigate('/dashboard');
+      // Redirigir al login
+      navigate('/login');
       
     } catch (error) {
       console.error('Error en el registro:', error);
@@ -184,6 +193,42 @@ const SignUp = () => {
                 aria-live="polite"
               >
                 {errors.username}
+              </div>
+            )}
+          </div>
+
+          {/* Campo Email */}
+          <div className="form-group">
+            <label 
+              htmlFor="email" 
+              className="form-label"
+            >
+              Email *
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={`form-input ${errors.email ? 'error' : ''}`}
+              placeholder="correo@ejemplo.com"
+              aria-required="true"
+              aria-invalid={errors.email ? 'true' : 'false'}
+              aria-describedby={errors.email ? 'email-error' : 'email-help'}
+              autoComplete="email"
+            />
+            <div id="email-help" className="form-help">
+              Recibirás un link de confirmación. Revisa tu bandeja de entrada.
+            </div>
+            {errors.email && (
+              <div 
+                id="email-error" 
+                className="error-message" 
+                role="alert"
+                aria-live="polite"
+              >
+                {errors.email}
               </div>
             )}
           </div>

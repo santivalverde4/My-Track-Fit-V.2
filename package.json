@@ -22,7 +22,10 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.7",
+    "resend": "^6.3.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
