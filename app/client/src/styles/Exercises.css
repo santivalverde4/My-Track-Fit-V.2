@@ -1,9 +1,9 @@
 /* Exercises.css - Estilos para la sección de ejercicios */
 
-/* Variables específicas - IGUALES A WORKOUTS */
+/* Variables específicas */
 :root {
-  --exercise-primary: #2563eb;
-  --exercise-hover: #1d4ed8;
+  --exercise-primary: #7c3aed;
+  --exercise-hover: #6d28d9;
   --exercise-secondary: #10b981;
   --exercise-secondary-hover: #059669;
 }
@@ -20,7 +20,7 @@
 }
 
 /* ========================================
-   Header Section - COPIADO EXACTO DE WORKOUTS
+   Header Section
    ======================================== */
 
 .exercises-header {
@@ -28,14 +28,14 @@
   margin-bottom: 3rem;
 }
 
-.exercises-header .header-title {
+.header-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
 
-.exercises-header .header-title h2 {
+.header-title h2 {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -44,19 +44,18 @@
   flex: 1;
 }
 
-.exercises-header .header-buttons {
+.header-buttons {
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex-shrink: 0;
 }
 
-.exercises-header .back-btn {
+.back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   background: var(--exercise-secondary);
   color: white;
   border: none;
@@ -64,38 +63,36 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-  flex-shrink: 0;
 }
 
-.exercises-header .back-btn:hover {
+.back-btn:hover {
   background: var(--exercise-secondary-hover);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
 }
 
-.exercises-header .add-exercise-btn {
+.add-exercise-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   background: var(--exercise-primary);
   color: white;
   border: none;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
-.exercises-header .add-exercise-btn:hover {
+.add-exercise-btn:hover {
   background: var(--exercise-hover);
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
 }
 
-.exercises-header .header-description {
+.header-description {
   font-size: 1.1rem;
   color: var(--text-secondary);
   margin: 0;
@@ -424,7 +421,7 @@
 }
 
 /* ========================================
-   Responsive Design - COPIADO EXACTO DE WORKOUTS
+   Responsive Design
    ======================================== */
 
 @media (max-width: 768px) {
@@ -432,23 +429,23 @@
     padding: 1rem;
   }
 
-  .exercises-header .header-title h2 {
+  .header-title h2 {
     font-size: 2rem;
   }
 
-  .exercises-header .header-buttons {
+  .header-buttons {
     gap: 0.75rem;
   }
 
-  .exercises-header .back-btn,
-  .exercises-header .add-exercise-btn {
-    width: 44px;
-    height: 44px;
+  .back-btn,
+  .add-exercise-btn {
+    width: 60px;
+    height: 60px;
   }
 
   .exercises-list {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
   }
 }
 
@@ -457,33 +454,32 @@
     padding: 0.75rem;
   }
 
-  .exercises-header .header-title h2 {
+  .header-title h2 {
     font-size: 1.75rem;
   }
 
-  .exercises-header .header-buttons {
+  .header-buttons {
     gap: 0.5rem;
   }
 
-  .exercises-header .back-btn,
-  .exercises-header .add-exercise-btn {
-    width: 40px;
-    height: 40px;
+  .back-btn,
+  .add-exercise-btn {
+    width: 56px;
+    height: 56px;
   }
 
-  .exercises-header .back-btn svg,
-  .exercises-header .add-exercise-btn svg {
-    width: 20px;
-    height: 20px;
+  .exercises-list {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
   }
 
   .exercise-card {
     padding: 0.75rem;
-    min-height: 70px;
+    min-height: 60px;
   }
 
   .exercise-name {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .modal-overlay {
@@ -513,8 +509,8 @@
    ======================================== */
 
 :root {
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
+  --primary-color: #3182ce;
+  --primary-hover: #2c5aa0;
   --success-color: #48bb78;
   --success-hover: #38a169;
   --error-color: #e53e3e;
