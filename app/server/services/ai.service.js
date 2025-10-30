@@ -40,7 +40,7 @@ export const AIService = {
    */
   async chat(userMessage, conversationHistory = []) {
     try {
-      console.log('🤖 Usuario pregunta:', userMessage);
+      console.log(' Usuario pregunta:', userMessage);
 
       // Construir el historial de mensajes
       const messages = [
@@ -66,7 +66,7 @@ export const AIService = {
       });
 
       const responseText = response.message.content;
-      console.log('🤖 SmartTrainer responde:', responseText);
+      console.log(' SmartTrainer responde:', responseText);
 
       return {
         success: true,
@@ -74,7 +74,7 @@ export const AIService = {
         timestamp: new Date().toISOString()
       };
     } catch (error) {
-      console.error('❌ Error en AI Service:', error.message);
+      console.error(' Error en AI Service:', error.message);
       return {
         success: false,
         error: 'Error al procesar tu pregunta. Asegúrate de que Ollama esté corriendo.',
@@ -121,7 +121,7 @@ Sé específico y práctico.`;
         timestamp: new Date().toISOString()
       };
     } catch (error) {
-      console.error('❌ Error generando rutina:', error.message);
+      console.error(' Error generando rutina:', error.message);
       return {
         success: false,
         error: 'Error al generar la rutina'
@@ -168,7 +168,7 @@ Sé específico con números y porciones.`;
         timestamp: new Date().toISOString()
       };
     } catch (error) {
-      console.error('❌ Error generando plan nutricional:', error.message);
+      console.error(' Error generando plan nutricional:', error.message);
       return {
         success: false,
         error: 'Error al generar el plan nutricional'
@@ -209,7 +209,7 @@ Sé claro y educativo.`;
         timestamp: new Date().toISOString()
       };
     } catch (error) {
-      console.error('❌ Error analizando ejercicio:', error.message);
+      console.error(' Error analizando ejercicio:', error.message);
       return {
         success: false,
         error: 'Error al analizar el ejercicio'
@@ -250,7 +250,7 @@ IMPORTANTE: Recuerda que no eres médico, solo das información general. Siempre
         timestamp: new Date().toISOString()
       };
     } catch (error) {
-      console.error('❌ Error obteniendo consejos:', error.message);
+      console.error(' Error obteniendo consejos:', error.message);
       return {
         success: false,
         error: 'Error al obtener consejos'

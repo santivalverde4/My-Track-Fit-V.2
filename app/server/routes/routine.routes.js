@@ -306,14 +306,18 @@ router.put('/exercises/:instanceId', authMiddleware, async (req, res) => {
   try {
     const { instanceId } = req.params;
     const instanceData = req.body;
+    console.log('PUT /exercises/:instanceId - instanceId:', instanceId, 'data:', instanceData);
     const result = await ExerciseInstanceService.updateExerciseInstance(instanceId, instanceData);
 
     if (!result.success) {
+      console.log('PUT /exercises/:instanceId - Error:', result.error);
       return res.status(400).json(result);
     }
 
+    console.log('PUT /exercises/:instanceId - Éxito:', result.data);
     return res.status(200).json(result);
   } catch (error) {
+    console.error('PUT /exercises/:instanceId - Error en servidor:', error);
     return res.status(500).json({
       success: false,
       error: 'Error en el servidor'

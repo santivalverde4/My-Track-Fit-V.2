@@ -94,22 +94,22 @@ app.use((err, req, res, next) => {
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log('='.repeat(50));
-  console.log(`🚀 Servidor iniciado correctamente`);
-  console.log(`📍 Puerto: ${PORT}`);
-  console.log(`🌍 Entorno: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔗 URL: http://localhost:${PORT}`);
-  console.log(`📊 Supabase URL: ${process.env.SUPABASE_URL}`);
+  console.log(` Servidor iniciado correctamente`);
+  console.log(` Puerto: ${PORT}`);
+  console.log(` Entorno: ${process.env.NODE_ENV || 'development'}`);
+  console.log(` URL: http://localhost:${PORT}`);
+  console.log(` Supabase URL: ${process.env.SUPABASE_URL}`);
   console.log('='.repeat(50));
 });
 
 // Manejo de errores no capturados
 process.on('unhandledRejection', (err) => {
-  console.error('❌ Unhandled Rejection:', err);
+  console.error(' Unhandled Rejection:', err);
   process.exit(1);
 });
 
 process.on('uncaughtException', (err) => {
-  console.error('❌ Uncaught Exception:', err);
+  console.error(' Uncaught Exception:', err);
   process.exit(1);
 });
 

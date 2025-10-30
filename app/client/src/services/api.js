@@ -79,17 +79,12 @@ api.interceptors.response.use(
       // Error del servidor
       const { status, data } = error.response;
       
-      console.log('🚨 Error Response Status:', status);
-      console.log('🚨 Error Response Data:', data);
+      console.log('Error Response Status:', status);
+      console.log(' Error Response Data:', data);
       
       switch (status) {
         case 401:
           // Token expirado o inválido
-          console.error('❌ ERROR 401: Token inválido o expirado');
-          console.error('❌ Data:', data);
-          // TEMPORALMENTE COMENTADO PARA DEBUG
-          // localStorage.removeItem('authToken');
-          // window.location.href = '/login';
           break;
         case 403:
           console.error('Acceso denegado');
@@ -145,16 +140,16 @@ export const authService = {
     try {
       const response = await api.post('/api/auth/login', credentials);
       
-      console.log('📥 Respuesta completa del login:', response);
+      console.log(' Respuesta completa del login:', response);
       
       // Guardar token (puede estar en response.token o response.data.token)
       const token = response.token || response.data?.token;
       
       if (token) {
         localStorage.setItem('authToken', token);
-        console.log('✅ Token guardado en localStorage');
+        console.log(' Token guardado en localStorage');
       } else {
-        console.error('❌ No se encontró token en la respuesta:', response);
+        console.error(' No se encontró token en la respuesta:', response);
       }
       
       return response;
@@ -784,6 +779,19 @@ export const exerciseService = {
       const response = await api.delete(`/api/routines/exercises/${exerciseId}`);
       return response;
     } catch (error) {
+      throw error;
+    }
+  },
+
+  // Actualizar ejercicio (instance)
+  updateExercise: async (exerciseId, exerciseData) => {
+    try {
+      console.log('API Service - Actualizando ejercicio:', exerciseId, exerciseData);
+      const response = await api.put(`/api/routines/exercises/${exerciseId}`, exerciseData);
+      console.log('API Service - Respuesta recibida:', response);
+      return response;
+    } catch (error) {
+      console.error('API Service - Error en updateExercise:', error);
       throw error;
     }
   }

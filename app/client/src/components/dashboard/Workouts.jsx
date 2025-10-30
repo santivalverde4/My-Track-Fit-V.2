@@ -30,7 +30,7 @@ const Workouts = ({ routineId, routineName, onBack }) => {
     try {
       setLoading(true);
       const response = await workoutService.getWorkoutsByRoutine(routineId);
-      console.log('📋 Workouts Response:', response);
+      console.log('Workouts Response:', response);
       setWorkouts(response.data || response.workouts || []);
     } catch (error) {
       console.error('Error cargando entrenamientos:', error);

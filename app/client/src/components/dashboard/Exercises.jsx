@@ -42,8 +42,6 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
     try {
       setLoading(true);
       const response = await exerciseService.getExercisesByWorkout(routineId, workoutId);
-      console.log('📋 Ejercicios cargados:', response.data);
-      console.log('📋 Primer ejercicio:', response.data?.[0]);
       setExercises(response.data || []);
     } catch (error) {
       console.error('Error cargando ejercicios:', error);
@@ -149,11 +147,50 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
     }
   };
 
+  // Manejar eliminación de ejercicio del entrenamiento
+  const handleDeleteExercise = async () => {
+    if (!selectedExercise) return;
+    
+    const confirmDelete = window.confirm(
+      `¿Estás seguro de que quieres eliminar "${selectedExercise.exercises?.name || 'este ejercicio'}" del entrenamiento?`
+    );
+    
+    if (!confirmDelete) return;
+
+    try {
+      setLoading(true);
+      await exerciseService.deleteExercise(routineId, workoutId, selectedExercise.id);
+      
+      alert('Ejercicio eliminado exitosamente');
+      setShowEditExerciseModal(false);
+      setSelectedExercise(null);
+      
+      // Recargar ejercicios
+      await loadExercises();
+    } catch (error) {
+      setErrors({ general: error.message || 'Error al eliminar el ejercicio' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Manejar click en ejercicio para abrir submenú de edición
   const handleExerciseClick = (exercise) => {
     setSelectedExercise(exercise);
-    // Cargar sets existentes del ejercicio o inicializar con uno vacío
-    const existingSets = exercise.sets || [{ weight: '', reps: '', difficulty: 5 }];
+    // Cargar sets existentes del ejercicio desde notas (JSON) o inicializar con uno vacío
+    let existingSets = [{ weight: '', reps: '', difficulty: 5 }];
+    
+    if (exercise.notas) {
+      try {
+        const parsedSets = JSON.parse(exercise.notas);
+        if (Array.isArray(parsedSets) && parsedSets.length > 0) {
+          existingSets = parsedSets;
+        }
+      } catch (error) {
+        console.error('Error parseando sets guardados:', error);
+      }
+    }
+    
     setExerciseSets(existingSets);
     setShowEditExerciseModal(true);
   };
@@ -195,11 +232,18 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
     setErrors({});
 
     try {
-      // Aquí se actualizarían los sets del ejercicio
-      console.log('Updating exercise sets:', {
-        exerciseId: selectedExercise.id,
-        sets: exerciseSets
-      });
+      // Preparar los datos del ejercicio actualizado
+      const exerciseData = {
+        series: exerciseSets.length,
+        repeticiones: exerciseSets[0]?.reps || 10,
+        peso: exerciseSets[0]?.weight || 0,
+        descanso: 60,
+        notas: JSON.stringify(exerciseSets) // Guardamos todos los sets como JSON en notas
+      };
+
+      console.log('Guardando sets para ejercicio:', selectedExercise.id, exerciseData);
+      const response = await exerciseService.updateExercise(selectedExercise.id, exerciseData);
+      console.log('Respuesta del servidor:', response);
       
       alert('Sets del ejercicio actualizados exitosamente');
       setShowEditExerciseModal(false);
@@ -209,7 +253,9 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
       await loadExercises();
       
     } catch (error) {
+      console.error('Error al actualizar sets:', error);
       setErrors({ general: error.message || 'Error al actualizar el ejercicio' });
+      alert('Error al actualizar el ejercicio: ' + (error.message || 'Error desconocido'));
     } finally {
       setLoading(false);
     }
@@ -291,16 +337,31 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
           </div>
         ) : (
           exercises.map(exercise => {
-            console.log('🏋️ Ejercicio individual:', exercise);
             return (
               <div 
                 key={exercise.id} 
                 className="exercise-card"
-                onClick={() => handleExerciseClick(exercise)}
               >
-                <h3 className="exercise-name">
-                  {exercise.exercise_name || exercise.nombre || exercise.name || 'Ejercicio sin nombre'}
-                </h3>
+                <div onClick={() => handleExerciseClick(exercise)} style={{ flex: 1, cursor: 'pointer' }}>
+                  <h3 className="exercise-name">
+                    {exercise.exercises?.name || exercise.exercises?.nombre || exercise.exercise_name || exercise.nombre || exercise.name || 'Ejercicio sin nombre'}
+                  </h3>
+                </div>
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedExercise(exercise);
+                    handleDeleteExercise();
+                  }}
+                  aria-label="Eliminar ejercicio"
+                  title="Eliminar ejercicio"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
               </div>
             );
           })
@@ -430,7 +491,7 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
           >
             <div className="modal-header">
               <h3 id="modal-title-editar-ejercicio">
-                Editar Sets - {selectedExercise.exercise_name || selectedExercise.nombre || selectedExercise.name || 'Ejercicio'}
+                Editar Sets - {selectedExercise.exercises?.name || selectedExercise.exercises?.nombre || selectedExercise.exercise_name || selectedExercise.nombre || selectedExercise.name || 'Ejercicio'}
               </h3>
               <button
                 className="modal-close"

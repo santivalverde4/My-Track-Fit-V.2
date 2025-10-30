@@ -255,8 +255,8 @@ export const EmailService = {
 
       const info = await transporter.sendMail(mailOptions);
       
-      console.log('📧 Email enviado exitosamente a:', email);
-      console.log('📧 Message ID:', info.messageId);
+      console.log(' Email enviado exitosamente a:', email);
+      console.log(' Message ID:', info.messageId);
       
       return {
         success: true,
@@ -264,7 +264,7 @@ export const EmailService = {
         message: 'Email de confirmación enviado exitosamente'
       };
     } catch (error) {
-      console.error('❌ Error al enviar email:', error.message);
+      console.error(' Error al enviar email:', error.message);
       return {
         success: false,
         error: error.message || 'Error al enviar el email'
@@ -522,8 +522,8 @@ export const EmailService = {
 
       const info = await transporter.sendMail(mailOptions);
       
-      console.log('📧 Email de recuperación enviado a:', email);
-      console.log('📧 Message ID:', info.messageId);
+      console.log(' Email de recuperación enviado a:', email);
+      console.log(' Message ID:', info.messageId);
       
       return {
         success: true,
@@ -531,7 +531,7 @@ export const EmailService = {
         message: 'Email de recuperación enviado exitosamente'
       };
     } catch (error) {
-      console.error('❌ Error al enviar email de recuperación:', error.message);
+      console.error(' Error al enviar email de recuperación:', error.message);
       return {
         success: false,
         error: error.message || 'Error al enviar el email'

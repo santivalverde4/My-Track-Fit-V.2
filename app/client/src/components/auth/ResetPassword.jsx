@@ -21,13 +21,13 @@ const ResetPassword = () => {
     // Verificar si el token es válido
     const checkToken = async () => {
       try {
-        console.log('🔍 Verificando token:', token);
+        console.log(' Verificando token:', token);
         const response = await fetch(`${API_BASE_URL}/api/auth/check-reset-token/${token}`);
         const data = await response.json();
-        console.log('✅ Token válido:', data.valid);
+        console.log(' Token válido:', data.valid);
         setIsValidToken(data.valid);
       } catch (error) {
-        console.error('❌ Error verificando token:', error);
+        console.error(' Error verificando token:', error);
         setIsValidToken(false);
       }
     };
@@ -69,7 +69,7 @@ const ResetPassword = () => {
     setIsLoading(true);
 
     try {
-      console.log('🔐 Restableciendo contraseña con token:', token);
+      console.log(' Restableciendo contraseña con token:', token);
       const response = await fetch(`${API_BASE_URL}/api/auth/reset-password/${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -77,11 +77,11 @@ const ResetPassword = () => {
       });
 
       const data = await response.json();
-      console.log('📦 Response:', data);
+      console.log(' Response:', data);
 
       if (data.success) {
         setSuccess(true);
-        console.log('✅ Contraseña restablecida, redirigiendo...');
+        console.log(' Contraseña restablecida, redirigiendo...');
         setTimeout(() => {
           navigate('/login');
         }, 3000);
@@ -89,7 +89,7 @@ const ResetPassword = () => {
         setError((data.error || 'Error al cambiar la contraseña'));
       }
     } catch (error) {
-      console.error('❌ Error:', error);
+      console.error(' Error:', error);
       setError('Error de conexión con el servidor. Verifica que el backend esté corriendo.');
     } finally {
       setIsLoading(false);

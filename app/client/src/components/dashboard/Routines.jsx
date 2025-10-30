@@ -39,8 +39,8 @@ const Routines = () => {
     try {
       setLoading(true);
       const response = await routineService.getRoutines();
-      console.log('📋 Response completa:', response);
-      console.log('📋 Rutinas:', response.data);
+      console.log(' Response completa:', response);
+      console.log(' Rutinas:', response.data);
       setRoutines(response.data || []);
     } catch (error) {
       console.error('Error cargando rutinas:', error);
@@ -53,7 +53,7 @@ const Routines = () => {
   const loadExercises = async () => {
     try {
       const response = await exerciseService.getAllExercises();
-      console.log('💪 Ejercicios cargados:', response.data);
+      console.log(' Ejercicios cargados:', response.data);
       setAllExercises(response.data || []);
     } catch (error) {
       console.error('Error cargando ejercicios:', error);

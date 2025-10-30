@@ -57,20 +57,20 @@ export const AuthService = {
       };
 
       // Enviar email con link de confirmación
-      console.log('📧 Enviando email de confirmación a:', email);
+      console.log(' Enviando email de confirmación a:', email);
       const emailResult = await EmailService.sendConfirmationEmail(email, username, token);
       
       if (!emailResult.success) {
         // Si el email no se pudo enviar, eliminar usuario pendiente
         delete pendingUsers[token];
-        console.error('❌ Email NO enviado. Cuenta NO se creará.');
+        console.error(' Email NO enviado. Cuenta NO se creará.');
         return {
           success: false,
           error: 'No se pudo enviar el email de confirmación. Verifica que el correo sea válido.'
         };
       }
 
-      console.log('✅ Email de confirmación enviado. Usuario debe confirmar para completar registro.');
+      console.log(' Email de confirmación enviado. Usuario debe confirmar para completar registro.');
       
       return {
         success: true,
@@ -116,7 +116,7 @@ export const AuthService = {
       // Eliminar usuario pendiente
       delete pendingUsers[token];
 
-      console.log('✅ Cuenta confirmada exitosamente para:', userData.username);
+      console.log(' Cuenta confirmada exitosamente para:', userData.username);
 
       return {
         success: true,
@@ -293,18 +293,18 @@ export const AuthService = {
       passwordResetTokens[token] = email;
 
       // Enviar email de recuperación
-      console.log('📧 Enviando email de recuperación a:', email);
+      console.log(' Enviando email de recuperación a:', email);
       const emailResult = await EmailService.sendPasswordResetEmail(email, user.username, token);
       
       if (!emailResult.success) {
-        console.error('❌ Error enviando email de recuperación');
+        console.error(' Error enviando email de recuperación');
         return {
           success: false,
           error: 'Error enviando correo de recuperación'
         };
       }
 
-      console.log('✅ Email de recuperación enviado');
+      console.log(' Email de recuperación enviado');
       return {
         success: true,
         message: 'Correo de recuperación enviado exitosamente'
@@ -354,7 +354,7 @@ export const AuthService = {
       // Eliminar token usado
       delete passwordResetTokens[token];
 
-      console.log('✅ Contraseña actualizada para:', email);
+      console.log(' Contraseña actualizada para:', email);
 
       return {
         success: true,
