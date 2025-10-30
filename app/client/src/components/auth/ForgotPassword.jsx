@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../../styles/Auth.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -21,13 +23,23 @@ const ForgotPassword = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/request-password-reset', {
+      console.log('📧 Enviando solicitud de recuperación para:', email);
+      console.log('🔗 API URL:', `${API_BASE_URL}/api/auth/request-password-reset`);
+      
+      const response = await fetch(`${API_BASE_URL}/api/auth/request-password-reset`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
 
+      console.log('📡 Response status:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
+      console.log('📦 Response data:', data);
 
       if (data.success) {
         setMessage({ 
@@ -42,9 +54,10 @@ const ForgotPassword = () => {
         });
       }
     } catch (error) {
+      console.error('❌ Error completo:', error);
       setMessage({ 
         type: 'error', 
-        text: '✗ Error de conexión. Por favor, intenta de nuevo.' 
+        text: `✗ Error de conexión con el servidor. Verifica que el backend esté corriendo en http://localhost:5000` 
       });
     } finally {
       setIsLoading(false);

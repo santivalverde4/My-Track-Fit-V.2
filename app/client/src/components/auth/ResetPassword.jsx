@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../styles/Auth.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const ResetPassword = () => {
   const { token } = useParams();
   const navigate = useNavigate();
@@ -18,10 +20,13 @@ const ResetPassword = () => {
     // Verificar si el token es válido
     const checkToken = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/auth/check-reset-token/${token}`);
+        console.log('🔍 Verificando token:', token);
+        const response = await fetch(`${API_BASE_URL}/api/auth/check-reset-token/${token}`);
         const data = await response.json();
+        console.log('✅ Token válido:', data.valid);
         setIsValidToken(data.valid);
       } catch (error) {
+        console.error('❌ Error verificando token:', error);
         setIsValidToken(false);
       }
     };
@@ -63,16 +68,19 @@ const ResetPassword = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/reset-password/${token}`, {
+      console.log('🔐 Restableciendo contraseña con token:', token);
+      const response = await fetch(`${API_BASE_URL}/api/auth/reset-password/${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: formData.password })
       });
 
       const data = await response.json();
+      console.log('📦 Response:', data);
 
       if (data.success) {
         setSuccess(true);
+        console.log('✅ Contraseña restablecida, redirigiendo...');
         setTimeout(() => {
           navigate('/login');
         }, 3000);
@@ -80,7 +88,8 @@ const ResetPassword = () => {
         setError('❌ ' + (data.error || 'Error al cambiar la contraseña'));
       }
     } catch (error) {
-      setError('❌ Error de conexión. Por favor, intenta de nuevo.');
+      console.error('❌ Error:', error);
+      setError('❌ Error de conexión con el servidor. Verifica que el backend esté corriendo.');
     } finally {
       setIsLoading(false);
     }

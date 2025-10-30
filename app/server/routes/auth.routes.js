@@ -46,99 +46,341 @@ router.get('/confirm/:token', async (req, res) => {
     if (!result.success) {
       // Token inválido o expirado
       return res.send(`
-        <html>
-          <head>
-            <title>Token inválido</title>
-            <style>
-              body { background: #f7f7f7; font-family: Arial, sans-serif; }
-              .container {
-                background: #fff;
-                max-width: 400px;
-                margin: 80px auto;
-                padding: 32px 24px;
-                border-radius: 10px;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-                text-align: center;
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Token Inválido - My Track Fit</title>
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+          <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            body { 
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+              background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+              min-height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 20px;
+            }
+            .container {
+              background: #ffffff;
+              border-radius: 20px;
+              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+              max-width: 500px;
+              width: 100%;
+              text-align: center;
+              padding: 60px 40px;
+              animation: slideIn 0.4s ease;
+            }
+            @keyframes slideIn {
+              from {
+                opacity: 0;
+                transform: translateY(-30px);
               }
-              .icon { font-size: 48px; color: #d32f2f; margin-bottom: 16px; }
-              h2 { color: #d32f2f; margin-bottom: 8px; }
-              p { color: #444; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="icon">❌</div>
-              <h2>Token inválido o expirado</h2>
-              <p>El enlace de confirmación no es válido o ya fue utilizado.</p>
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+            .icon { 
+              font-size: 80px; 
+              margin-bottom: 24px;
+              animation: shake 0.5s ease;
+            }
+            @keyframes shake {
+              0%, 100% { transform: rotate(0deg); }
+              25% { transform: rotate(-10deg); }
+              75% { transform: rotate(10deg); }
+            }
+            h1 { 
+              color: #dc2626;
+              margin-bottom: 16px;
+              font-size: 28px;
+              font-weight: 700;
+              letter-spacing: -0.5px;
+            }
+            p { 
+              color: #64748b;
+              line-height: 1.7;
+              font-size: 16px;
+              margin-bottom: 32px;
+            }
+            .btn-primary {
+              display: inline-block;
+              padding: 14px 32px;
+              background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+              color: white;
+              text-decoration: none;
+              border-radius: 12px;
+              font-weight: 600;
+              font-size: 16px;
+              transition: all 0.3s ease;
+              box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+            }
+            .btn-primary:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 15px 35px rgba(37, 99, 235, 0.35);
+            }
+            .info-box {
+              background: #f1f5f9;
+              padding: 20px;
+              border-radius: 12px;
+              margin-top: 24px;
+              border-left: 4px solid #dc2626;
+            }
+            .info-box p {
+              color: #475569;
+              font-size: 14px;
+              margin: 0;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="icon">⚠️</div>
+            <h1>Enlace Inválido o Expirado</h1>
+            <p>El enlace de confirmación no es válido, ya fue utilizado o ha expirado.</p>
+            <div class="info-box">
+              <p>💡 Los enlaces de confirmación expiran después de 24 horas por razones de seguridad.</p>
             </div>
-          </body>
+            <a href="http://localhost:5173/login" class="btn-primary">Volver al Inicio</a>
+          </div>
+        </body>
         </html>
       `);
     }
 
     // Cuenta confirmada exitosamente
     return res.send(`
-      <html>
-        <head>
-          <title>Cuenta confirmada</title>
-          <style>
-            body { background: #f7f7f7; font-family: Arial, sans-serif; }
-            .container {
-              background: #fff;
-              max-width: 400px;
-              margin: 80px auto;
-              padding: 32px 24px;
-              border-radius: 10px;
-              box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-              text-align: center;
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cuenta Confirmada - My Track Fit</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+          }
+          .container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            padding: 60px 40px;
+            animation: slideIn 0.4s ease;
+          }
+          @keyframes slideIn {
+            from {
+              opacity: 0;
+              transform: translateY(-30px);
             }
-            .icon {
-              font-size: 48px;
-              color: #43a047;
-              margin-bottom: 16px;
+            to {
+              opacity: 1;
+              transform: translateY(0);
             }
-            h2 { color: #1976d2; margin-bottom: 8px; }
-            p { color: #444; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="icon">✅</div>
-            <h2>¡Cuenta confirmada!</h2>
-            <p>Tu cuenta ha sido creada exitosamente.<br>Puedes iniciar sesión en la app.</p>
+          }
+          .icon { 
+            font-size: 80px; 
+            margin-bottom: 24px;
+            animation: checkmark 0.6s ease-in-out;
+          }
+          @keyframes checkmark {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+          }
+          h1 { 
+            color: #10b981;
+            margin-bottom: 16px;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+          }
+          p { 
+            color: #64748b;
+            line-height: 1.7;
+            font-size: 16px;
+            margin-bottom: 32px;
+          }
+          .btn-primary {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+          }
+          .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.35);
+          }
+          .features-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            border-left: 4px solid #2563eb;
+          }
+          .features-box h3 {
+            color: #1e293b;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+          }
+          .features-box ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+          }
+          .features-box li {
+            color: #475569;
+            padding: 6px 0 6px 28px;
+            position: relative;
+            font-size: 14px;
+            line-height: 1.6;
+          }
+          .features-box li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 18px;
+          }
+          .redirect-text {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 20px;
+          }
+        </style>
+        <script>
+          setTimeout(function() {
+            window.location.href = 'http://localhost:5173/login';
+          }, 5000);
+        </script>
+      </head>
+      <body>
+        <div class="container">
+          <div class="icon">🎉</div>
+          <h1>¡Cuenta Confirmada!</h1>
+          <p>Tu cuenta ha sido activada exitosamente.<br>Ya puedes comenzar a usar My Track Fit.</p>
+          
+          <div class="features-box">
+            <h3>🚀 Ahora puedes:</h3>
+            <ul>
+              <li>Crear rutinas personalizadas</li>
+              <li>Registrar tu progreso</li>
+              <li>Consultar con nuestro Smart Trainer</li>
+              <li>Alcanzar tus metas de fitness</li>
+            </ul>
           </div>
-        </body>
+          
+          <a href="http://localhost:5173/login" class="btn-primary">Iniciar Sesión</a>
+          <p class="redirect-text">Redirigiendo automáticamente en 5 segundos...</p>
+        </div>
+      </body>
       </html>
     `);
   } catch (error) {
     // Error en el servidor
     return res.status(500).send(`
-      <html>
-        <head>
-          <title>Error</title>
-          <style>
-            body { background: #f7f7f7; font-family: Arial, sans-serif; }
-            .container {
-              background: #fff;
-              max-width: 400px;
-              margin: 80px auto;
-              padding: 32px 24px;
-              border-radius: 10px;
-              box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-              text-align: center;
-            }
-            .icon { font-size: 48px; color: #d32f2f; margin-bottom: 16px; }
-            h2 { color: #d32f2f; margin-bottom: 8px; }
-            p { color: #444; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="icon">❌</div>
-            <h2>Error</h2>
-            <p>Ocurrió un error al confirmar tu cuenta. Intenta de nuevo.</p>
-          </div>
-        </body>
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Error - My Track Fit</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+          }
+          .container {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            padding: 60px 40px;
+          }
+          .icon { 
+            font-size: 80px; 
+            margin-bottom: 24px;
+          }
+          h1 { 
+            color: #dc2626;
+            margin-bottom: 16px;
+            font-size: 28px;
+            font-weight: 700;
+          }
+          p { 
+            color: #64748b;
+            line-height: 1.7;
+            font-size: 16px;
+            margin-bottom: 32px;
+          }
+          .btn-primary {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+          }
+          .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.35);
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="icon">❌</div>
+          <h1>Error del Servidor</h1>
+          <p>Ocurrió un error al procesar tu solicitud.<br>Por favor, intenta de nuevo más tarde.</p>
+          <a href="http://localhost:5173/login" class="btn-primary">Volver al Inicio</a>
+        </div>
+      </body>
       </html>
     `);
   }
