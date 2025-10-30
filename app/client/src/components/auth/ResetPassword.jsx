@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { MdLock, MdCheckCircle, MdError, MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import '../../styles/Auth.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -51,17 +52,17 @@ const ResetPassword = () => {
     setError('');
 
     if (!formData.password) {
-      setError('❌ La contraseña es requerida');
+      setError('La contraseña es requerida');
       return;
     }
 
     if (formData.password !== formData.password2) {
-      setError('❌ Las contraseñas no coinciden');
+      setError('Las contraseñas no coinciden');
       return;
     }
 
     if (!validatePassword(formData.password)) {
-      setError('❌ La contraseña no cumple con los requisitos mínimos');
+      setError('La contraseña no cumple con los requisitos mínimos');
       return;
     }
 
@@ -85,11 +86,11 @@ const ResetPassword = () => {
           navigate('/login');
         }, 3000);
       } else {
-        setError('❌ ' + (data.error || 'Error al cambiar la contraseña'));
+        setError((data.error || 'Error al cambiar la contraseña'));
       }
     } catch (error) {
       console.error('❌ Error:', error);
-      setError('❌ Error de conexión con el servidor. Verifica que el backend esté corriendo.');
+      setError('Error de conexión con el servidor. Verifica que el backend esté corriendo.');
     } finally {
       setIsLoading(false);
     }
@@ -100,7 +101,9 @@ const ResetPassword = () => {
     return (
       <div className="auth-container">
         <div className="auth-card" style={{ textAlign: 'center', padding: '60px 40px' }}>
-          <div style={{ fontSize: '5rem', marginBottom: '24px' }}>❌</div>
+          <div style={{ fontSize: '5rem', marginBottom: '24px', color: '#dc2626' }}>
+            <MdError size={80} />
+          </div>
           <h2 style={{ color: '#dc2626', marginBottom: '16px', fontSize: '1.8rem', fontWeight: 700 }}>
             Enlace Inválido o Expirado
           </h2>
@@ -126,9 +129,10 @@ const ResetPassword = () => {
           <div style={{ 
             fontSize: '5rem', 
             marginBottom: '24px',
+            color: '#10b981',
             animation: 'checkmark 0.6s ease-in-out'
           }}>
-            ✅
+            <MdCheckCircle size={80} />
           </div>
           <h2 style={{ color: '#10b981', marginBottom: '16px', fontSize: '1.8rem', fontWeight: 700 }}>
             ¡Contraseña Actualizada!
@@ -167,7 +171,9 @@ const ResetPassword = () => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <div className="auth-logo">🔒</div>
+          <div className="auth-logo">
+            <MdLock size={48} />
+          </div>
           <h1 className="auth-title">Nueva Contraseña</h1>
           <p className="auth-subtitle">Crea una contraseña segura</p>
         </div>

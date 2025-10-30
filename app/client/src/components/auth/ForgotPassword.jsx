@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { MdLock, MdCheckCircle, MdError } from 'react-icons/md';
 import '../../styles/Auth.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -44,13 +45,13 @@ const ForgotPassword = () => {
       if (data.success) {
         setMessage({ 
           type: 'success', 
-          text: '✓ ' + data.message + ' Revisa tu correo electrónico.' 
+          text: data.message + ' Revisa tu correo electrónico.' 
         });
         setEmail('');
       } else {
         setMessage({ 
           type: 'error', 
-          text: '✗ ' + (data.error || 'Error al enviar el correo') 
+          text: (data.error || 'Error al enviar el correo') 
         });
       }
     } catch (error) {
@@ -68,7 +69,9 @@ const ForgotPassword = () => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <div className="auth-logo">🔐</div>
+          <div className="auth-logo">
+            <MdLock size={48} />
+          </div>
           <h1 className="auth-title">Recuperar Contraseña</h1>
           <p className="auth-subtitle">Ingresa tu correo electrónico</p>
         </div>
@@ -77,27 +80,39 @@ const ForgotPassword = () => {
           Te enviaremos un enlace a tu correo electrónico para que puedas restablecer tu contraseña de forma segura.
         </p>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <form className="auth-form" onSubmit={handleSubmit} noValidate aria-label="Formulario de recuperación de contraseña">
+          {/* Campo Correo Electrónico */}
           <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              Correo Electrónico
+            <label 
+              htmlFor="email" 
+              className="form-label"
+            >
+              Correo Electrónico *
             </label>
             <input
               type="email"
               id="email"
               name="email"
-              className="auth-input"
-              placeholder="tu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
+              className="form-input"
+              placeholder="tu@email.com"
+              aria-required="true"
+              aria-describedby="email-help"
               autoComplete="email"
               autoFocus
             />
+            <div id="email-help" className="form-help">
+              Ingresa el correo electrónico asociado a tu cuenta.
+            </div>
           </div>
 
           {message.text && (
-            <div className={`auth-message ${message.type}`}>
+            <div 
+              className={`auth-message ${message.type}`}
+              role="alert"
+              aria-live="polite"
+            >
               {message.text}
             </div>
           )}
@@ -106,6 +121,7 @@ const ForgotPassword = () => {
             type="submit" 
             className="auth-button primary"
             disabled={isLoading}
+            aria-busy={isLoading}
           >
             {isLoading ? (
               <>

@@ -23,7 +23,7 @@ export const EmailService = {
       const mailOptions = {
         from: '"My Track Fit" <mytrackfit@gmail.com>',
         to: email,
-        subject: '✅ Confirma tu cuenta - My Track Fit',
+        subject: 'Confirma tu cuenta - My Track Fit',
         html: `
           <!DOCTYPE html>
           <html lang="es">
@@ -198,7 +198,12 @@ export const EmailService = {
           <body>
             <div class="email-wrapper">
               <div class="header">
-                <span class="header-icon">🎯</span>
+                <span class="header-icon" style="font-size: 64px; color: white;">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                  </svg>
+                </span>
                 <h1>¡Bienvenido a My Track Fit!</h1>
                 <p>Confirma tu cuenta para empezar</p>
               </div>
@@ -224,7 +229,7 @@ export const EmailService = {
                 </div>
 
                 <div class="features">
-                  <p class="features-title">🚀 Una vez confirmada tu cuenta podrás:</p>
+                  <p class="features-title"><strong>Una vez confirmada tu cuenta podrás:</strong></p>
                   <ul>
                     <li>Crear rutinas de entrenamiento personalizadas</li>
                     <li>Registrar y monitorear tu progreso nutricional</li>
@@ -239,7 +244,7 @@ export const EmailService = {
               <div class="footer">
                 <p>Si no creaste esta cuenta, puedes ignorar este correo de forma segura.</p>
                 <p>Este enlace de confirmación es válido por 24 horas.</p>
-                <p class="footer-logo">💪 My Track Fit - Tu compañero de entrenamiento personal</p>
+                <p class="footer-logo"><strong>My Track Fit</strong> - Tu compañero de entrenamiento personal</p>
                 <p>&copy; 2025 My Track Fit. Todos los derechos reservados.</p>
               </div>
             </div>
@@ -286,7 +291,7 @@ export const EmailService = {
       const mailOptions = {
         from: '"My Track Fit" <mytrackfit@gmail.com>',
         to: email,
-        subject: '🔒 Recuperación de Contraseña - My Track Fit',
+        subject: 'Recuperación de Contraseña - My Track Fit',
         html: `
           <!DOCTYPE html>
           <html lang="es">
@@ -456,7 +461,12 @@ export const EmailService = {
           <body>
             <div class="email-wrapper">
               <div class="header">
-                <span class="header-icon">🔐</span>
+                <span class="header-icon" style="font-size: 64px; color: white;">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </span>
                 <h1>Recuperación de Contraseña</h1>
                 <p>Restablece tu contraseña de forma segura</p>
               </div>
@@ -483,13 +493,16 @@ export const EmailService = {
 
                 <div class="warning-box">
                   <p class="warning-title">
-                    ⚠️ <span>Importante - Por tu seguridad</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 8px;">
+                      <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                    </svg>
+                    <span>Importante - Por tu seguridad</span>
                   </p>
                   <ul>
                     <li>📍 Este enlace expirará en <strong>1 hora</strong></li>
-                    <li>🔒 Solo se puede usar una vez</li>
+                    <li>Solo se puede usar una vez</li>
                     <li>🚫 Si no solicitaste este cambio, ignora este correo</li>
-                    <li>🔐 Tu contraseña actual permanecerá sin cambios</li>
+                    <li>Tu contraseña actual permanecerá sin cambios</li>
                     <li>⛔ Nunca compartas este enlace con nadie</li>
                   </ul>
                 </div>
@@ -498,7 +511,7 @@ export const EmailService = {
               <div class="footer">
                 <p>Si no solicitaste restablecer tu contraseña, puedes ignorar este correo de forma segura.</p>
                 <p>Tu cuenta permanece protegida y no se realizarán cambios sin tu confirmación.</p>
-                <p class="footer-logo">💪 My Track Fit - Tu compañero de entrenamiento personal</p>
+                <p class="footer-logo"><strong>My Track Fit</strong> - Tu compañero de entrenamiento personal</p>
                 <p>&copy; 2025 My Track Fit. Todos los derechos reservados.</p>
               </div>
             </div>

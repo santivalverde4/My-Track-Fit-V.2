@@ -143,11 +143,21 @@ router.get('/confirm/:token', async (req, res) => {
         </head>
         <body>
           <div class="container">
-            <div class="icon">⚠️</div>
+            <div class="icon" style="color: #f59e0b;">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+              </svg>
+            </div>
             <h1>Enlace Inválido o Expirado</h1>
             <p>El enlace de confirmación no es válido, ya fue utilizado o ha expirado.</p>
             <div class="info-box">
-              <p>💡 Los enlaces de confirmación expiran después de 24 horas por razones de seguridad.</p>
+              <p style="display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4M12 8h.01" stroke="white" stroke-width="2"/>
+                </svg>
+                Los enlaces de confirmación expiran después de 24 horas por razones de seguridad.
+              </p>
             </div>
             <a href="http://localhost:5173/login" class="btn-primary">Volver al Inicio</a>
           </div>
@@ -286,12 +296,16 @@ router.get('/confirm/:token', async (req, res) => {
       </head>
       <body>
         <div class="container">
-          <div class="icon">🎉</div>
+          <div class="icon" style="color: #10b981;">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+          </div>
           <h1>¡Cuenta Confirmada!</h1>
           <p>Tu cuenta ha sido activada exitosamente.<br>Ya puedes comenzar a usar My Track Fit.</p>
           
           <div class="features-box">
-            <h3>🚀 Ahora puedes:</h3>
+            <h3>Ahora puedes:</h3>
             <ul>
               <li>Crear rutinas personalizadas</li>
               <li>Registrar tu progreso</li>
@@ -375,7 +389,11 @@ router.get('/confirm/:token', async (req, res) => {
       </head>
       <body>
         <div class="container">
-          <div class="icon">❌</div>
+          <div class="icon" style="color: #dc2626;">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </div>
           <h1>Error del Servidor</h1>
           <p>Ocurrió un error al procesar tu solicitud.<br>Por favor, intenta de nuevo más tarde.</p>
           <a href="http://localhost:5173/login" class="btn-primary">Volver al Inicio</a>

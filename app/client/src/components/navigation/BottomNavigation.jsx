@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { RiRobot2Line } from 'react-icons/ri';
+import { CgGym } from 'react-icons/cg';
+import { MdOutlineHealthAndSafety } from 'react-icons/md';
 import '../../styles/Navigation.css';
 
 const BottomNavigation = ({ activeSection, onSectionChange }) => {
@@ -9,22 +12,7 @@ const BottomNavigation = ({ activeSection, onSectionChange }) => {
       id: 'workouts',
       label: 'Rutinas',
       icon: (isActive) => (
-        <svg 
-          width="24" 
-          height="24" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-          className={`nav-icon ${isActive ? 'active' : ''}`}
-        >
-          <path d="M6.5 6.5h11"/>
-          <path d="M6.5 17.5h11"/>
-          <path d="M9.5 6.5L8 12l1.5 5.5"/>
-          <path d="M14.5 6.5L16 12l-1.5 5.5"/>
-        </svg>
+        <CgGym className={`nav-icon ${isActive ? 'active' : ''}`} size={24} />
       ),
       ariaLabel: 'Ir a rutinas de entrenamiento'
     },
@@ -32,22 +20,7 @@ const BottomNavigation = ({ activeSection, onSectionChange }) => {
       id: 'wellness',
       label: 'Bienestar',
       icon: (isActive) => (
-        <svg 
-          width="24" 
-          height="24" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-          className={`nav-icon ${isActive ? 'active' : ''}`}
-        >
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-          <line x1="9" y1="9" x2="9.01" y2="9"/>
-          <line x1="15" y1="9" x2="15.01" y2="9"/>
-        </svg>
+        <MdOutlineHealthAndSafety className={`nav-icon ${isActive ? 'active' : ''}`} size={24} />
       ),
       ariaLabel: 'Ir a bienestar'
     },
@@ -55,30 +28,7 @@ const BottomNavigation = ({ activeSection, onSectionChange }) => {
       id: 'help',
       label: 'Smart Trainer',
       icon: (isActive) => (
-        <svg 
-          width="24" 
-          height="24" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-          className={`nav-icon ${isActive ? 'active' : ''}`}
-        >
-          <rect x="7" y="3" width="10" height="12" rx="2"/>
-          <circle cx="9.5" cy="7.5" r="1"/>
-          <circle cx="14.5" cy="7.5" r="1"/>
-          <path d="M10 11h4"/>
-          <rect x="5" y="8" width="2" height="3" rx="1"/>
-          <rect x="17" y="8" width="2" height="3" rx="1"/>
-          <path d="M8 15v3"/>
-          <path d="M16 15v3"/>
-          <path d="M6 18h3"/>
-          <path d="M15 18h3"/>
-          <circle cx="12" cy="3" r="1"/>
-          <path d="M12 2v1"/>
-        </svg>
+        <RiRobot2Line className={`nav-icon ${isActive ? 'active' : ''}`} size={24} />
       ),
       ariaLabel: 'Ir a Smart Trainer'
     },

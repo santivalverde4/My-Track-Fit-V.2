@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { RiRobot2Line } from 'react-icons/ri';
+import { IoArrowUpCircle } from 'react-icons/io5';
 import { smarttrainerService } from '../../services/api';
 import '../../styles/SmartTrainer.css';
 
@@ -101,7 +103,7 @@ const SmartTrainer = () => {
       <div className="chat-header">
         <div className="trainer-info">
           <div className="trainer-avatar">
-            <span>🤖</span>
+            <RiRobot2Line size={32} />
           </div>
           <div className="trainer-details">
             <h3>Smart Trainer</h3>
@@ -163,7 +165,7 @@ const SmartTrainer = () => {
             disabled={!newMessage.trim()}
             aria-label="Enviar mensaje"
           >
-            <span>📤</span>
+            <IoArrowUpCircle size={28} />
           </button>
         </div>
       </form>

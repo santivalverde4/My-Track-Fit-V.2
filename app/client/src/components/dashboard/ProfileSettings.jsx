@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MdWarning } from 'react-icons/md';
 import { userService, authService } from '../../services/api';
 import '../../styles/ProfileSettings.css';
 
@@ -211,7 +212,7 @@ const ProfileSettings = () => {
     }
 
     const confirmDelete = window.confirm(
-      '⚠️ ATENCIÓN: Esta acción NO se puede deshacer.\n\n' +
+      'ATENCIÓN: Esta acción NO se puede deshacer.\n\n' +
       'Se eliminará permanentemente:\n' +
       '• Tu cuenta y perfil\n' +
       '• Todos tus entrenamientos\n' +
@@ -510,7 +511,9 @@ const ProfileSettings = () => {
         <section className="settings-section danger-section">
           <div className="section-header">
             <h3>Zona Peligrosa</h3>
-            <p>⚠️ Las acciones aquí son irreversibles</p>
+            <p style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <MdWarning size={20} /> Las acciones aquí son irreversibles
+            </p>
           </div>
 
           {!showDeleteConfirm ? (
