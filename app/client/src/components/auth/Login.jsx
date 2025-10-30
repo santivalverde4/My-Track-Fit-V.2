@@ -13,27 +13,22 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
 
   // Manejo de cambios en inputs
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     
-    if (type === 'checkbox') {
-      setRememberMe(checked);
-    } else {
-      setFormData(prev => ({
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    
+    // Limpiar error del campo cuando el usuario empiece a escribir
+    if (errors[name]) {
+      setErrors(prev => ({
         ...prev,
-        [name]: value
+        [name]: ''
       }));
-      
-      // Limpiar error del campo cuando el usuario empiece a escribir
-      if (errors[name]) {
-        setErrors(prev => ({
-          ...prev,
-          [name]: ''
-        }));
-      }
     }
   };
 
@@ -78,8 +73,7 @@ const Login = () => {
       // Preparar datos para el backend
       const loginData = {
         username: formData.username.trim(),
-        password: formData.password,
-        rememberMe: rememberMe
+        password: formData.password
       };
 
       // Llamar al servicio de login
@@ -97,11 +91,14 @@ const Login = () => {
     } catch (error) {
       console.error('Error en el login:', error);
       
-      // Manejar diferentes tipos de errores
+      // Manejar diferentes tipos de errores con mensajes específicos
       if (error.code === 'NETWORK_ERROR') {
         setErrors({ 
           submit: 'Error de conexión. Verifica que el servidor esté funcionando.' 
         });
+      } else if (error.error) {
+        // Error específico del backend
+        setErrors({ submit: error.error });
       } else if (error.status === 401) {
         setErrors({ 
           submit: 'Usuario o contraseña incorrectos. Verifica tus credenciales.' 
@@ -239,36 +236,6 @@ const Login = () => {
                 {errors.password}
               </div>
             )}
-          </div>
-
-          {/* Opciones adicionales */}
-          <div className="form-options">
-            {/* Recordar sesión */}
-            <div className="checkbox-group">
-              <input
-                type="checkbox"
-                id="rememberMe"
-                name="rememberMe"
-                checked={rememberMe}
-                onChange={handleChange}
-                className="form-checkbox"
-              />
-              <label 
-                htmlFor="rememberMe" 
-                className="checkbox-label"
-              >
-                Recordar sesión
-              </label>
-            </div>
-
-            {/* Olvidé mi contraseña */}
-            <Link 
-              to="/forgot-password" 
-              className="forgot-password-link"
-              aria-label="Recuperar contraseña olvidada"
-            >
-              ¿Olvidaste tu contraseña?
-            </Link>
           </div>
 
           {/* Botón de envío */}

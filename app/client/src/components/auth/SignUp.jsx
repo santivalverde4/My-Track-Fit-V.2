@@ -112,15 +112,19 @@ const SignUp = () => {
     } catch (error) {
       console.error('Error en el registro:', error);
       
-      // Manejar diferentes tipos de errores
+      // Manejar diferentes tipos de errores con mensajes específicos
       if (error.code === 'NETWORK_ERROR') {
         setErrors({ 
           submit: 'Error de conexión. Verifica que el servidor esté funcionando.' 
         });
+      } else if (error.error) {
+        // Error específico del backend (ej: "El usuario ya existe", "El email ya está registrado")
+        setErrors({ submit: error.error });
       } else if (error.message) {
+        // Error con mensaje general
         setErrors({ submit: error.message });
       } else if (error.errors) {
-        // Errores de validación del backend
+        // Errores de validación múltiples del backend
         setErrors(error.errors);
       } else {
         setErrors({ 
