@@ -388,7 +388,7 @@ const NutritionManagement = ({ onBack }) => {
           <div className="btn-group justify-center">
             <button 
               onClick={removeWaterGlass} 
-              className="btn btn-secondary btn-sm" 
+              className="btn btn-danger btn-sm" 
               disabled={dailyTotals.water === 0}
               aria-label="Quitar un vaso de agua"
             >
@@ -583,7 +583,7 @@ const NutritionManagement = ({ onBack }) => {
               <button
                 type="button"
                 onClick={() => setShowAddMeal(false)}
-                className="btn btn-secondary"
+                className="btn btn-danger"
               >
                 <i className="bi bi-x-circle"></i>
                 Cancelar

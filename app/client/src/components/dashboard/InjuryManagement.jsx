@@ -336,7 +336,7 @@ const InjuryManagement = ({ onBack }) => {
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="btn btn-secondary"
+                className="btn btn-danger"
                 disabled={loading}
               >
                 <i className="bi bi-x-circle"></i>
