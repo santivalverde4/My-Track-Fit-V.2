@@ -81,53 +81,6 @@ const Wellness = () => {
                 </div>
               ))}
             </div>
-
-            <div className="wellness-summary">
-              <h3>
-                <i className="bi bi-calendar-day"></i> Resumen de Hoy
-              </h3>
-              <div className="summary-cards">
-                <div className="summary-card">
-                  <div className="summary-icon">
-                    <i className="bi bi-egg-fried" style={{ color: '#059669' }}></i>
-                  </div>
-                  <div>
-                    <div className="summary-value">1,847</div>
-                    <div className="summary-label">Calorías consumidas</div>
-                  </div>
-                </div>
-
-                <div className="summary-card">
-                  <div className="summary-icon">
-                    <i className="bi bi-droplet-fill" style={{ color: '#0891b2' }}></i>
-                  </div>
-                  <div>
-                    <div className="summary-value">6/8</div>
-                    <div className="summary-label">Vasos de agua</div>
-                  </div>
-                </div>
-
-                <div className="summary-card">
-                  <div className="summary-icon">
-                    <i className="bi bi-moon-stars-fill" style={{ color: '#6366f1' }}></i>
-                  </div>
-                  <div>
-                    <div className="summary-value">7.5h</div>
-                    <div className="summary-label">Horas de sueño</div>
-                  </div>
-                </div>
-
-                <div className="summary-card">
-                  <div className="summary-icon">
-                    <i className="bi bi-fire" style={{ color: '#f97316' }}></i>
-                  </div>
-                  <div>
-                    <div className="summary-value">450</div>
-                    <div className="summary-label">Kcal quemadas</div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </>
         );
     }

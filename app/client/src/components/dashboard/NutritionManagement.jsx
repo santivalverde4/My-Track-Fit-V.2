@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { nutritionService } from '../../services/api';
 import '../../styles/GlobalStyles.css';
 import '../../styles/WellnessComponents.css';
@@ -8,6 +8,7 @@ const NutritionManagement = ({ onBack }) => {
   const [todayMeals, setTodayMeals] = useState([]);
   const [showAddMeal, setShowAddMeal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const addMealFormRef = useRef(null); // Referencia al formulario
   
   const [nutritionGoals, setNutritionGoals] = useState({
     calories: 2000,
@@ -77,10 +78,21 @@ const NutritionManagement = ({ onBack }) => {
     setLoading(true);
     try {
       const response = await nutritionService.getTodayMeals();
-      setTodayMeals(response.meals || []);
       
-      if (response.totals) {
-        setDailyTotals(response.totals);
+      // El backend ahora devuelve { data: { meals, water, metrics } }
+      if (response.data) {
+        setTodayMeals(response.data.meals || []);
+        
+        // Actualizar vasos de agua si vienen en la respuesta
+        if (response.data.water !== undefined) {
+          setDailyTotals(prev => ({ ...prev, water: response.data.water }));
+        }
+      } else {
+        // Fallback por si viene en formato antiguo
+        setTodayMeals(response.meals || []);
+        if (response.totals) {
+          setDailyTotals(response.totals);
+        }
       }
     } catch (error) {
       console.error('Error al cargar comidas:', error);
@@ -137,7 +149,7 @@ const NutritionManagement = ({ onBack }) => {
       const response = await nutritionService.addMeal(mealData);
       
       // Agregar la nueva comida a la lista
-      setTodayMeals(prev => [...prev, response.meal]);
+      setTodayMeals(prev => [...prev, response.data]);
       
       // Resetear formulario
       setMealForm({
@@ -224,6 +236,19 @@ const NutritionManagement = ({ onBack }) => {
     }
   };
 
+  const handleAddMealClick = () => {
+    setShowAddMeal(true);
+    // Esperar un momento para que el DOM se actualice y luego hacer scroll
+    setTimeout(() => {
+      if (addMealFormRef.current) {
+        addMealFormRef.current.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }
+    }, 100);
+  };
+
   const getProgressPercentage = (current, goal) => {
     return Math.min((current / goal) * 100, 100);
   };
@@ -250,7 +275,7 @@ const NutritionManagement = ({ onBack }) => {
             Nutrición
           </h2>
           <button
-            onClick={() => setShowAddMeal(!showAddMeal)}
+            onClick={() => showAddMeal ? setShowAddMeal(false) : handleAddMealClick()}
             className="btn btn-success btn-icon"
             aria-label="Agregar comida"
           >
@@ -384,7 +409,7 @@ const NutritionManagement = ({ onBack }) => {
 
       {/* Formulario para agregar comida */}
       {showAddMeal && (
-        <div className="add-meal-form">
+        <div className="add-meal-form" ref={addMealFormRef}>
           <h3>
             <i className="bi bi-plus-circle"></i>
             Registrar Comida
@@ -524,16 +549,18 @@ const NutritionManagement = ({ onBack }) => {
 
             <div className="form-group">
               <label htmlFor="portion" className="form-label">
-                Porción
+                Porción (gramos)
               </label>
               <input
-                type="text"
+                type="number"
                 id="portion"
                 name="portion"
                 className="form-input"
                 value={mealForm.portion}
                 onChange={handleInputChange}
-                placeholder="Ej: 1 plato, 200g, 1 taza"
+                placeholder="Ej: 100, 200, 250"
+                min="0"
+                step="1"
               />
             </div>
 

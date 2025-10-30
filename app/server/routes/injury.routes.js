@@ -128,16 +128,16 @@ router.put('/:id', authMiddleware, async (req, res) => {
 router.patch('/:id/status', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
-    const { estado } = req.body;
+    const { status } = req.body; // Recibir 'status' del frontend (inglés)
 
-    if (!estado) {
+    if (!status) {
       return res.status(400).json({
         success: false,
         error: 'Estado es requerido'
       });
     }
 
-    const result = await InjuryService.updateInjuryStatus(id, estado);
+    const result = await InjuryService.updateInjuryStatus(id, status);
 
     if (!result.success) {
       return res.status(400).json(result);

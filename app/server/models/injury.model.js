@@ -6,7 +6,7 @@ export const InjuryModel = {
    */
   async getUserInjuries(userId) {
     const { data, error } = await supabase
-      .from('LesionesTemporales')
+      .from('lesionestemporales')
       .select('*')
       .eq('usuario_id', userId)
       .order('fecha_lesion', { ascending: false });
@@ -19,7 +19,7 @@ export const InjuryModel = {
    */
   async getActiveInjuries(userId) {
     const { data, error } = await supabase
-      .from('LesionesTemporales')
+      .from('lesionestemporales')
       .select('*')
       .eq('usuario_id', userId)
       .eq('estado', 'activa')
@@ -33,7 +33,7 @@ export const InjuryModel = {
    */
   async findById(id) {
     const { data, error } = await supabase
-      .from('LesionesTemporales')
+      .from('lesionestemporales')
       .select('*')
       .eq('id', id)
       .single();
@@ -46,7 +46,7 @@ export const InjuryModel = {
    */
   async create(injuryData) {
     const { data, error } = await supabase
-      .from('LesionesTemporales')
+      .from('lesionestemporales')
       .insert([injuryData])
       .select()
       .single();
@@ -64,7 +64,7 @@ export const InjuryModel = {
     };
 
     const { data, error } = await supabase
-      .from('LesionesTemporales')
+      .from('lesionestemporales')
       .update(updatedData)
       .eq('id', id)
       .select()
@@ -78,7 +78,7 @@ export const InjuryModel = {
    */
   async delete(id) {
     const { data, error } = await supabase
-      .from('LesionesTemporales')
+      .from('lesionestemporales')
       .delete()
       .eq('id', id);
     
@@ -90,7 +90,7 @@ export const InjuryModel = {
    */
   async updateStatus(id, estado) {
     const { data, error } = await supabase
-      .from('LesionesTemporales')
+      .from('lesionestemporales')
       .update({ 
         estado,
         updated_at: new Date().toISOString()
@@ -107,7 +107,7 @@ export const InjuryModel = {
    */
   async getByBodyPart(userId, parteCuerpo) {
     const { data, error } = await supabase
-      .from('LesionesTemporales')
+      .from('lesionestemporales')
       .select('*')
       .eq('usuario_id', userId)
       .eq('parte_cuerpo', parteCuerpo)

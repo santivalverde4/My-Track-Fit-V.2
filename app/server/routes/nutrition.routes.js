@@ -275,4 +275,60 @@ router.put('/goals', authMiddleware, async (req, res) => {
   }
 });
 
+// ==================== RUTAS ADICIONALES ====================
+
+/**
+ * GET /api/nutrition/today
+ * Obtener comidas y métricas del día de hoy
+ */
+router.get('/today', authMiddleware, async (req, res) => {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const result = await NutritionService.getTodayData(req.user.userId, today);
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
+/**
+ * POST /api/nutrition/water
+ * Actualizar consumo de agua
+ */
+router.post('/water', authMiddleware, async (req, res) => {
+  try {
+    const { glasses } = req.body; // Recibir 'glasses' del frontend (inglés)
+    const today = new Date().toISOString().split('T')[0];
+    
+    if (glasses === undefined) {
+      return res.status(400).json({
+        success: false,
+        error: 'Campo glasses es requerido'
+      });
+    }
+
+    // Actualizar métricas diarias con el consumo de agua
+    const result = await NutritionService.updateWaterIntake(req.user.userId, today, glasses);
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
 export default router;
