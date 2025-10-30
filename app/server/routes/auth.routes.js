@@ -261,4 +261,63 @@ router.post('/request-password-reset', async (req, res) => {
   }
 });
 
+/**
+ * GET /api/auth/check-reset-token/:token
+ * Verificar si un token de recuperación es válido
+ */
+router.get('/check-reset-token/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+    
+    if (!token) {
+      return res.status(400).json({
+        valid: false,
+        error: 'Token es requerido'
+      });
+    }
+
+    const isValid = await AuthService.isResetTokenValid(token);
+    
+    return res.status(200).json({
+      valid: isValid
+    });
+  } catch (error) {
+    return res.status(500).json({
+      valid: false,
+      error: 'Error al verificar el token'
+    });
+  }
+});
+
+/**
+ * POST /api/auth/reset-password/:token
+ * Restablecer contraseña con token
+ */
+router.post('/reset-password/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({
+        success: false,
+        error: 'Token y nueva contraseña son requeridos'
+      });
+    }
+
+    const result = await AuthService.resetPassword(token, password);
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
 export default router;

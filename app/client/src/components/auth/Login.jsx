@@ -262,13 +262,13 @@ const Login = () => {
             </div>
 
             {/* Olvidé mi contraseña */}
-            <a 
-              href="http://localhost:5000/forgot-password" 
+            <Link 
+              to="/forgot-password" 
               className="forgot-password-link"
               aria-label="Recuperar contraseña olvidada"
             >
               ¿Olvidaste tu contraseña?
-            </a>
+            </Link>
           </div>
 
           {/* Botón de envío */}

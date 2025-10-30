@@ -41,12 +41,21 @@
   /* Sombras de color para elementos interactivos */
   --shadow-primary: 0 4px 14px 0 rgba(37, 99, 235, 0.15);
   --shadow-primary-lg: 0 10px 25px -5px rgba(37, 99, 235, 0.25);
+  --shadow-primary-hover: 0 10px 25px rgba(37, 99, 235, 0.3);
   --shadow-error: 0 0 0 3px rgba(220, 38, 38, 0.1);
   --shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.1), 0 0 0 1px rgba(37, 99, 235, 0.3);
   
   /* Sombras internas para profundidad */
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
   --shadow-inner-lg: inset 0 4px 8px 0 rgba(0, 0, 0, 0.08);
+  
+  /* Gradiente principal */
+  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  
+  /* Tamaños y espaciado */
+  --border-radius: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 20px;
   
   /* Espaciado */
   --spacing-xs: 0.25rem;
@@ -105,7 +114,7 @@ html {
   align-items: center;
   justify-content: center;
   padding: var(--spacing-lg);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   font-family: var(--font-family);
   position: relative;
 }
@@ -426,7 +435,7 @@ html {
 .auth-button.primary:hover:not(:disabled) {
   background-color: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-primary-lg);
+  box-shadow: var(--shadow-primary-hover);
 }
 
 .auth-button.primary:active:not(:disabled) {
@@ -436,7 +445,7 @@ html {
 
 .auth-button.primary:focus {
   outline: none;
-  box-shadow: var(--shadow-primary-lg), 0 0 0 4px rgba(37, 99, 235, 0.2);
+  box-shadow: var(--shadow-primary-hover), 0 0 0 4px rgba(37, 99, 235, 0.2);
 }
 
 .auth-button:disabled {
@@ -946,4 +955,83 @@ html {
 
 .skip-to-main:focus {
   top: 0;
+}
+
+/* ========================================
+   PASSWORD REQUIREMENTS (Reset Password)
+   ======================================== */
+
+.password-requirements {
+  background: #f1f5f9;
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 20px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.password-requirements strong {
+  display: block;
+  color: #334155;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.password-requirements ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.password-requirements li {
+  color: #64748b;
+  margin: 6px 0;
+  padding-left: 24px;
+  position: relative;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.password-requirements li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #10b981;
+  font-weight: 700;
+}
+
+/* ========================================
+   SPINNER / LOADING
+   ======================================== */
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes checkmark {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ========================================
+   SUBTITLE (Forgot Password)
+   ======================================== */
+
+.subtitle {
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 30px;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }

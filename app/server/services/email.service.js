@@ -133,7 +133,7 @@ export const EmailService = {
   async sendPasswordResetEmail(email, username, token) {
     try {
       const transporter = createTransporter();
-      const resetUrl = `http://localhost:5000/reset-password/${token}`;
+      const resetUrl = `http://localhost:5173/reset-password/${token}`;
 
       const mailOptions = {
         from: 'mytrackfit@gmail.com',
@@ -153,7 +153,7 @@ export const EmailService = {
                 padding: 20px;
               }
               .header {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
                 color: white;
                 padding: 30px;
                 text-align: center;
@@ -167,7 +167,7 @@ export const EmailService = {
               .button {
                 display: inline-block;
                 padding: 12px 30px;
-                background: #1976d2;
+                background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
                 color: white;
                 text-decoration: none;
                 border-radius: 5px;
@@ -194,7 +194,7 @@ export const EmailService = {
               </p>
 
               <p>O copia y pega este enlace en tu navegador:</p>
-              <p style="color: #1976d2; word-break: break-all;">${resetUrl}</p>
+              <p style="color: #2563eb; word-break: break-all;">${resetUrl}</p>
 
               <p><strong>Nota de seguridad:</strong></p>
               <ul>

@@ -805,8 +805,8 @@
    ======================================== */
 
 :root {
-  --primary-color: #3182ce;
-  --primary-hover: #2c5aa0;
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
   --success-color: #48bb78;
   --success-hover: #38a169;
   --error-color: #e53e3e;

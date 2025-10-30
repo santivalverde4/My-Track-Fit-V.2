@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import SignUp from './components/auth/SignUp';
 import Login from './components/auth/Login';
+import ForgotPassword from './components/auth/ForgotPassword';
+import ResetPassword from './components/auth/ResetPassword';
 import Dashboard from './components/dashboard/Dashboard';
 import './App.css';
 
@@ -15,10 +17,11 @@ function App() {
           {/* Rutas de autenticación */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           
-          {/* Rutas futuras */}
+          {/* Dashboard */}
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/forgot-password" element={<div>Recuperar Contraseña - Próximamente</div>} />
           
           {/* Ruta 404 */}
           <Route path="*" element={<Navigate to="/login" replace />} />

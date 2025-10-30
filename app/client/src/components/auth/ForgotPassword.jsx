@@ -1,0 +1,118 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import '../../styles/Auth.css';
+
+const ForgotPassword = () => {
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMessage({ type: 'error', text: 'Por favor ingresa un email válido' });
+      return;
+    }
+
+    setIsLoading(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/request-password-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setMessage({ 
+          type: 'success', 
+          text: '✓ ' + data.message + ' Revisa tu correo electrónico.' 
+        });
+        setEmail('');
+      } else {
+        setMessage({ 
+          type: 'error', 
+          text: '✗ ' + (data.error || 'Error al enviar el correo') 
+        });
+      }
+    } catch (error) {
+      setMessage({ 
+        type: 'error', 
+        text: '✗ Error de conexión. Por favor, intenta de nuevo.' 
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-header">
+          <div className="auth-logo">🔐</div>
+          <h1 className="auth-title">Recuperar Contraseña</h1>
+          <p className="auth-subtitle">Ingresa tu correo electrónico</p>
+        </div>
+
+        <p className="subtitle" style={{ textAlign: 'center', color: '#64748b', marginBottom: '30px', fontSize: '0.95rem', lineHeight: 1.6 }}>
+          Te enviaremos un enlace a tu correo electrónico para que puedas restablecer tu contraseña de forma segura.
+        </p>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">
+              Correo Electrónico
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              className="auth-input"
+              placeholder="tu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              autoFocus
+            />
+          </div>
+
+          {message.text && (
+            <div className={`auth-message ${message.type}`}>
+              {message.text}
+            </div>
+          )}
+
+          <button 
+            type="submit" 
+            className="auth-button primary"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <span className="spinner"></span>
+                Enviando...
+              </>
+            ) : (
+              'Enviar Enlace de Recuperación'
+            )}
+          </button>
+
+          <div className="auth-footer">
+            <Link to="/login" className="auth-link">
+              ← Volver al inicio de sesión
+            </Link>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default ForgotPassword;

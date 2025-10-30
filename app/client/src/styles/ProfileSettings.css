@@ -50,7 +50,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -58,18 +58,18 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
 }
 
 .logout-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 6px 12px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
 }
 
 .logout-button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
 }
 
 .logout-button svg {
@@ -519,8 +519,8 @@
    ======================================== */
 
 :root {
-  --primary-color: #3182ce;
-  --primary-hover: #2c5aa0;
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
   --danger-color: #e53e3e;
   --danger-hover: #c53030;
   --danger-bg: #fef5e7;

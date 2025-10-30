@@ -19,7 +19,7 @@
    ======================================== */
 
 .chat-header {
-  background: linear-gradient(135deg, var(--primary-color, #3182ce), #2c5aa0);
+  background: linear-gradient(135deg, var(--primary-color, #2563eb), #1d4ed8);
   color: white;
   padding: 1rem;
   border-bottom: 1px solid var(--border-color, #e2e8f0);
@@ -177,7 +177,7 @@
 }
 
 .send-button:hover:not(:disabled) {
-  background: #2c5aa0;
+  background: #1d4ed8;
   transform: scale(1.05);
 }
 
@@ -372,8 +372,8 @@
    ======================================== */
 
 :root {
-  --primary-color: #3182ce;
-  --primary-hover: #2c5aa0;
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
   --text-primary: #1a202c;
   --text-secondary: #718096;
   --surface-color: #ffffff;
