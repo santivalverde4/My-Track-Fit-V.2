@@ -183,22 +183,22 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
           <h2>Ejercicios - {workoutName}</h2>
           <div className="header-buttons">
             <button 
-              className="back-btn"
+              className="btn btn-secondary btn-icon"
               onClick={onBack}
               aria-label="Volver a entrenamientos"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M19 12H5"/>
                 <path d="M12 19l-7-7 7-7"/>
               </svg>
             </button>
             <button
-              className="add-exercise-btn"
+              className="btn btn-success btn-icon"
               onClick={() => setShowAddExerciseModal(true)}
               aria-label="Agregar nuevo ejercicio"
               title="Crear nuevo ejercicio"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19"/>
                 <line x1="5" y1="12" x2="19" y2="12"/>
               </svg>
