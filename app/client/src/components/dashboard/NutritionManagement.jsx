@@ -84,32 +84,7 @@ const NutritionManagement = ({ onBack }) => {
       }
     } catch (error) {
       console.error('Error al cargar comidas:', error);
-      // Si falla, usar datos mock para desarrollo
-      const mockMeals = [
-        {
-          id: 1,
-          type: 'breakfast',
-          name: 'Avena con frutas',
-          calories: 350,
-          protein: 12,
-          carbs: 65,
-          fat: 8,
-          portion: '1 tazón',
-          time: '08:30'
-        },
-        {
-          id: 2,
-          type: 'lunch',
-          name: 'Pollo con arroz y ensalada',
-          calories: 520,
-          protein: 45,
-          carbs: 60,
-          fat: 12,
-          portion: '1 plato',
-          time: '13:00'
-        }
-      ];
-      setTodayMeals(mockMeals);
+      setTodayMeals([]);
     } finally {
       setLoading(false);
     }

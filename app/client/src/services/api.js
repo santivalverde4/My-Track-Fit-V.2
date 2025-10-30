@@ -263,25 +263,8 @@ export const routineService = {
   // Obtener todas las rutinas
   getRoutines: async () => {
     try {
-      // Mock data simple - solo nombres de rutinas
-      const mockRoutines = {
-        success: true,
-        routines: [
-          {
-            id: 1,
-            name: "Rutina 1"
-          },
-          {
-            id: 2,
-            name: "Rutina 2"
-          }
-        ]
-      };
-
-      // Simular delay de red
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      return mockRoutines;
+      const response = await api.get('/api/routines');
+      return response;
     } catch (error) {
       throw error;
     }
@@ -715,35 +698,8 @@ export const workoutService = {
   // Obtener entrenamientos de una rutina específica
   getWorkoutsByRoutine: async (routineId) => {
     try {
-      // Mock data - entrenamientos por rutina
-      const mockWorkouts = {
-        success: true,
-        routineId: routineId,
-        routineName: routineId === 1 ? "Rutina 1" : "Rutina 2",
-        workouts: [
-          {
-            id: 1,
-            name: "Entrenamiento 1"
-          },
-          {
-            id: 2,
-            name: "Entrenamiento 2"
-          },
-          {
-            id: 3,
-            name: "Entrenamiento 3"
-          },
-          {
-            id: 4,
-            name: "Entrenamiento 4"
-          }
-        ]
-      };
-
-      // Simular delay de red
-      await new Promise(resolve => setTimeout(resolve, 400));
-      
-      return mockWorkouts;
+      const response = await api.get(`/api/routines/${routineId}/workouts`);
+      return response;
     } catch (error) {
       throw error;
     }
@@ -762,68 +718,51 @@ export const workoutService = {
   // Eliminar entrenamiento
   deleteWorkout: async (routineId, workoutId) => {
     try {
-      const response = await api.delete(`/api/routines/${routineId}/workouts/${workoutId}`);
+      const response = await api.delete(`/api/routines/workouts/${workoutId}`);
       return response;
     } catch (error) {
       throw error;
     }
-  }
+  },
 };
 
 // Servicios de ejercicios
 export const exerciseService = {
+  // Obtener todos los ejercicios de la biblioteca
+  getAllExercises: async () => {
+    try {
+      const response = await api.get('/api/exercises');
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Crear ejercicio en la biblioteca
+  createExerciseInLibrary: async (exerciseData) => {
+    try {
+      const response = await api.post('/api/exercises', exerciseData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Buscar ejercicios
+  searchExercises: async (query) => {
+    try {
+      const response = await api.get(`/api/exercises/search?q=${encodeURIComponent(query)}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   // Obtener ejercicios de un entrenamiento específico
   getExercisesByWorkout: async (routineId, workoutId) => {
     try {
-      // Mock data - ejercicios por entrenamiento
-      const mockExercises = {
-        success: true,
-        routineId: routineId,
-        workoutId: workoutId,
-        workoutName: `Entrenamiento ${workoutId}`,
-        exercises: [
-          {
-            id: 1,
-            name: "Press de Banca",
-            weight: 80,
-            reps: 10,
-            difficulty: 7
-          },
-          {
-            id: 2,
-            name: "Sentadillas",
-            weight: 100,
-            reps: 12,
-            difficulty: 6
-          },
-          {
-            id: 3,
-            name: "Peso Muerto",
-            weight: 120,
-            reps: 8,
-            difficulty: 9
-          },
-          {
-            id: 4,
-            name: "Press Militar",
-            weight: 50,
-            reps: 10,
-            difficulty: 5
-          },
-          {
-            id: 5,
-            name: "Dominadas",
-            weight: 0,
-            reps: 8,
-            difficulty: 8
-          }
-        ]
-      };
-
-      // Simular delay de red
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      return mockExercises;
+      const response = await api.get(`/api/routines/workouts/${workoutId}/exercises`);
+      return response;
     } catch (error) {
       throw error;
     }
@@ -832,7 +771,7 @@ export const exerciseService = {
   // Crear nuevo ejercicio
   createExercise: async (routineId, workoutId, exerciseData) => {
     try {
-      const response = await api.post(`/api/routines/${routineId}/workouts/${workoutId}/exercises`, exerciseData);
+      const response = await api.post(`/api/routines/workouts/${workoutId}/exercises`, exerciseData);
       return response;
     } catch (error) {
       throw error;
@@ -842,7 +781,7 @@ export const exerciseService = {
   // Eliminar ejercicio
   deleteExercise: async (routineId, workoutId, exerciseId) => {
     try {
-      const response = await api.delete(`/api/routines/${routineId}/workouts/${workoutId}/exercises/${exerciseId}`);
+      const response = await api.delete(`/api/routines/exercises/${exerciseId}`);
       return response;
     } catch (error) {
       throw error;

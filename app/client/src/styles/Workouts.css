@@ -122,8 +122,9 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 80px;
+  position: relative;
 }
 
 .workout-card:hover {
@@ -137,7 +138,41 @@
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
-  text-align: center;
+  text-align: left;
+}
+
+.btn-delete-workout {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  background: var(--error-color, #e53e3e);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.3rem;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+}
+
+.btn-delete-workout svg {
+  width: 14px;
+  height: 14px;
+}
+
+.btn-delete-workout:hover {
+  background: var(--error-dark, #c53030);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.btn-delete-workout:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
 /* ========================================

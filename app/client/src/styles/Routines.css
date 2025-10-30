@@ -5,9 +5,8 @@
 .routines-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem;
-  background: var(--surface-color, #ffffff);
-  min-height: 100vh;
+  padding: 2rem;
+  min-height: calc(100vh - var(--bottom-nav-height));
 }
 
 /* ========================================
@@ -25,6 +24,50 @@
   justify-content: center;
   gap: 1rem;
   margin-bottom: 0.5rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-secondary {
+  background: var(--secondary-color, #718096);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.btn-secondary:hover {
+  background: var(--secondary-hover, #4a5568);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(113, 128, 150, 0.3);
+}
+
+.btn-text {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .btn-text {
+    display: none;
+  }
+  
+  .header-actions .btn-secondary {
+    padding: 0.625rem;
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+  }
 }
 
 .header-title h2 {
@@ -192,8 +235,9 @@
 
 .routines-list {
   display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 /* ========================================
@@ -201,95 +245,66 @@
    ======================================== */
 
 .routine-card {
-  background: var(--card-bg, #f8fafc);
-  border: 1px solid var(--border-color, #e2e8f0);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  position: relative;
+  padding: 1rem;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 80px;
+  position: relative;
 }
 
 .routine-card:hover {
-  border-color: var(--primary-color, #3182ce);
+  transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(49, 130, 206, 0.15);
-  transform: translateY(-2px);
+  border-color: var(--primary-color, #3182ce);
+}
+
+.routine-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  text-align: left;
 }
 
 .btn-delete-routine {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
   background: var(--error-color, #e53e3e);
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 0.5rem;
+  border-radius: 5px;
+  padding: 0.3rem;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 1;
-  transform: scale(1);
+}
+
+.btn-delete-routine svg {
+  width: 14px;
+  height: 14px;
 }
 
 .btn-delete-routine:hover {
   background: var(--error-dark, #c53030);
-  transform: scale(1.1);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .btn-delete-routine:active {
-  transform: scale(0.95);
-}
-
-.routine-header {
-  margin-bottom: 1.5rem;
-}
-
-.routine-title-section {
-  margin-bottom: 1rem;
-}
-
-.routine-category {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--primary-color, #3182ce);
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  text-transform: capitalize;
-}
-
-.category-text {
-  font-weight: 500;
-}
-
-.routine-name {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-primary, #1a202c);
-  margin: 0 0 0.5rem 0;
-  line-height: 1.3;
-}
-
-.routine-description {
-  font-size: 1rem;
-  color: var(--text-secondary, #718096);
-  margin: 0;
-  line-height: 1.5;
-}
-
-.routine-metadata {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding: 1rem;
-  background: var(--surface-color, #ffffff);
-  border-radius: 8px;
-  border: 1px solid var(--border-light, #f1f5f9);
+  transform: translateY(-50%) scale(0.95);
 }
 
 .metadata-item {

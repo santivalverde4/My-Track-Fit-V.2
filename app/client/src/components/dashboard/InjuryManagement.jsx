@@ -52,32 +52,7 @@ const InjuryManagement = ({ onBack }) => {
       setInjuries(response.injuries || []);
     } catch (error) {
       console.error('Error al cargar lesiones:', error);
-      // Si falla la API, usar datos mock para desarrollo
-      const mockInjuries = [
-        {
-          id: 1,
-          name: 'Tendinitis Aquiles',
-          type: 'Tendinitis',
-          severity: 'moderate',
-          bodyPart: 'Tobillo',
-          dateOccurred: '2024-01-15',
-          description: 'Dolor en tendón de Aquiles después de correr',
-          status: 'recovering',
-          recoveryDays: 14
-        },
-        {
-          id: 2,
-          name: 'Distensión Isquiotibial',
-          type: 'Distensión muscular',
-          severity: 'mild',
-          bodyPart: 'Muslo',
-          dateOccurred: '2024-01-20',
-          description: 'Molestia leve en parte posterior del muslo',
-          status: 'active',
-          recoveryDays: 7
-        }
-      ];
-      setInjuries(mockInjuries);
+      setInjuries([]);
     } finally {
       setLoading(false);
     }

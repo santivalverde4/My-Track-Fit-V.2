@@ -11,70 +11,19 @@ const UserStatistics = ({ onBack }) => {
 
   const [chartData, setChartData] = useState({
     // Progreso de peso corporal (MetricasDiarias.peso)
-    weightProgress: [
-      { fecha: '22 Oct', peso: 75.2 },
-      { fecha: '23 Oct', peso: 75.0 },
-      { fecha: '24 Oct', peso: 74.8 },
-      { fecha: '25 Oct', peso: 74.7 },
-      { fecha: '26 Oct', peso: 74.5 },
-      { fecha: '27 Oct', peso: 74.3 },
-      { fecha: '28 Oct', peso: 74.1 }
-    ],
+    weightProgress: [],
     // Entrenamientos por día (Entrenamientos + Instancias_Ejercicios)
-    workoutsWeek: [
-      { dia: 'Lun', entrenamientos: 1, ejercicios: 8 },
-      { dia: 'Mar', entrenamientos: 1, ejercicios: 6 },
-      { dia: 'Mié', entrenamientos: 0, ejercicios: 0 },
-      { dia: 'Jue', entrenamientos: 1, ejercicios: 7 },
-      { dia: 'Vie', entrenamientos: 1, ejercicios: 5 },
-      { dia: 'Sáb', entrenamientos: 1, ejercicios: 9 },
-      { dia: 'Dom', entrenamientos: 0, ejercicios: 0 }
-    ],
+    workoutsWeek: [],
     // Volumen total por ejercicio (Instancias_Ejercicios)
-    topExercises: [
-      { nombre: 'Sentadillas', volumen: 2850 },
-      { nombre: 'Press Banca', volumen: 2240 },
-      { nombre: 'Peso Muerto', volumen: 3120 },
-      { nombre: 'Dominadas', volumen: 1680 },
-      { nombre: 'Press Militar', volumen: 1450 }
-    ],
+    topExercises: [],
     // Distribución por categoría (Ejercicios.categoria)
-    exerciseDistribution: [
-      { name: 'Fuerza', value: 45, color: '#3b82f6' },
-      { name: 'Cardio', value: 30, color: '#10b981' },
-      { name: 'Flexibilidad', value: 15, color: '#f59e0b' },
-      { name: 'Movilidad', value: 10, color: '#8b5cf6' }
-    ],
+    exerciseDistribution: [],
     // Macros diarios (NutricionTemporal)
-    macrosWeek: [
-      { dia: 'Lun', proteinas: 142, carbohidratos: 235, grasas: 68 },
-      { dia: 'Mar', proteinas: 138, carbohidratos: 242, grasas: 72 },
-      { dia: 'Mié', proteinas: 145, carbohidratos: 228, grasas: 65 },
-      { dia: 'Jue', proteinas: 150, carbohidratos: 240, grasas: 70 },
-      { dia: 'Vie', proteinas: 135, carbohidratos: 250, grasas: 75 },
-      { dia: 'Sáb', proteinas: 148, carbohidratos: 260, grasas: 78 },
-      { dia: 'Dom', proteinas: 140, carbohidratos: 245, grasas: 68 }
-    ],
+    macrosWeek: [],
     // Calorías consumidas vs quemadas
-    caloriesWeek: [
-      { dia: 'Lun', consumidas: 1920, quemadas: 450 },
-      { dia: 'Mar', consumidas: 1950, quemadas: 380 },
-      { dia: 'Mié', consumidas: 2100, quemadas: 250 },
-      { dia: 'Jue', consumidas: 1880, quemadas: 520 },
-      { dia: 'Vie', consumidas: 2050, quemadas: 410 },
-      { dia: 'Sáb', consumidas: 2200, quemadas: 380 },
-      { dia: 'Dom', consumidas: 2000, quemadas: 200 }
-    ],
+    caloriesWeek: [],
     // Métricas de bienestar (MetricasDiarias)
-    wellnessMetrics: [
-      { dia: 'Lun', energia: 8, estres: 4, sueno: 7.5, agua: 8 },
-      { dia: 'Mar', energia: 7, estres: 5, sueno: 7.0, agua: 7 },
-      { dia: 'Mié', energia: 6, estres: 6, sueno: 6.5, agua: 6 },
-      { dia: 'Jue', energia: 8, estres: 3, sueno: 8.0, agua: 8 },
-      { dia: 'Vie', energia: 9, estres: 3, sueno: 8.0, agua: 9 },
-      { dia: 'Sáb', energia: 8, estres: 4, sueno: 7.5, agua: 7 },
-      { dia: 'Dom', energia: 7, estres: 5, sueno: 7.0, agua: 8 }
-    ]
+    wellnessMetrics: []
   });
 
   useEffect(() => {
@@ -101,7 +50,6 @@ const UserStatistics = ({ onBack }) => {
       console.log('Estadísticas cargadas exitosamente');
     } catch (error) {
       console.error('Error al cargar estadísticas:', error);
-      // Mantener datos mock si falla la API
     } finally {
       setLoading(false);
     }

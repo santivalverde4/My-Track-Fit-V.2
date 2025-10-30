@@ -1,31 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
+import { useState } from 'react';
 import { RiRobot2Line } from 'react-icons/ri';
 import { IoArrowUpCircle } from 'react-icons/io5';
 import { smarttrainerService } from '../../services/api';
 import '../../styles/SmartTrainer.css';
 
 const SmartTrainer = () => {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      type: 'trainer',
-      text: '¡Hola! Soy SmartTrainer, tu entrenador personal de IA. Estoy aquí para ayudarte con entrenamientos, nutrición, lesiones y bienestar. ¿En qué puedo ayudarte hoy?',
-      timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
-    }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef(null);
-
-  // Auto-scroll al último mensaje
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -43,51 +25,21 @@ const SmartTrainer = () => {
       setIsLoading(true);
       
       try {
-        // Debug: verificar token
-        const token = localStorage.getItem('authToken');
-        console.log('🔑 Token existe:', !!token);
-        console.log('🔑 Token:', token ? token.substring(0, 20) + '...' : 'No token');
-
-        // Preparar historial de conversación para la IA
-        const conversationHistory = messages.map(msg => ({
-          role: msg.type === 'user' ? 'user' : 'model',
-          content: msg.text
-        }));
-
-        console.log('📤 Enviando mensaje a SmartTrainer:', currentMessage);
-
-        // Enviar mensaje a la IA
-        const response = await smarttrainerService.chat(currentMessage, conversationHistory);
+        const response = await smarttrainerService.chat(currentMessage, messages);
         
-        console.log('📥 Respuesta recibida:', response);
-        
-        if (response.success) {
-          const trainerResponse = {
-            id: messages.length + 2,
-            type: 'trainer',
-            text: response.message,
-            timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
-          };
-          setMessages(prev => [...prev, trainerResponse]);
-        } else {
-          const errorMessage = {
-            id: messages.length + 2,
-            type: 'trainer',
-            text: 'Lo siento, tuve un problema al procesar tu mensaje. Por favor, intenta de nuevo.',
-            timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
-          };
-          setMessages(prev => [...prev, errorMessage]);
-        }
+        const trainerResponse = {
+          id: messages.length + 2,
+          type: 'trainer',
+          text: response.message || 'Lo siento, no pude procesar tu mensaje.',
+          timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+        };
+        setMessages(prev => [...prev, trainerResponse]);
       } catch (error) {
-        console.error('❌ Error al enviar mensaje:', error);
-        console.error('❌ Error completo:', JSON.stringify(error, null, 2));
-        console.error('❌ Error.response:', error.response);
-        console.error('❌ Error.message:', error.message);
-        
+        console.error('Error al obtener respuesta del trainer:', error);
         const errorMessage = {
           id: messages.length + 2,
           type: 'trainer',
-          text: `Error: ${error.message || 'Error de conexión'}. Verifica tu conexión a internet e intenta de nuevo.`,
+          text: 'Lo siento, ocurrió un error al procesar tu mensaje. Por favor, intenta de nuevo.',
           timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
         };
         setMessages(prev => [...prev, errorMessage]);
@@ -127,25 +79,11 @@ const SmartTrainer = () => {
             aria-label={`${message.type === 'user' ? 'Tú' : 'Smart Trainer'} a las ${message.timestamp}`}
           >
             <div className="message-content">
-              <div className="message-text">
-                <ReactMarkdown>{message.text}</ReactMarkdown>
-              </div>
+              <p>{message.text}</p>
               <span className="message-time">{message.timestamp}</span>
             </div>
           </div>
         ))}
-        {isLoading && (
-          <div className="message trainer">
-            <div className="message-content">
-              <div className="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input para nuevo mensaje */}
@@ -162,7 +100,7 @@ const SmartTrainer = () => {
           <button 
             type="submit" 
             className="send-button" 
-            disabled={!newMessage.trim()}
+            disabled={!newMessage.trim() || isLoading}
             aria-label="Enviar mensaje"
           >
             <IoArrowUpCircle size={28} />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { routineService } from '../../services/api';
+import { routineService, exerciseService } from '../../services/api';
 import Workouts from './Workouts';
 import '../../styles/Routines.css';
 
@@ -7,46 +7,56 @@ const Routines = () => {
   // Estados principales
   const [routines, setRoutines] = useState([]);
   const [showAddRoutineModal, setShowAddRoutineModal] = useState(false);
-  const [showAddExerciseModal, setShowAddExerciseModal] = useState(false);
-  const [selectedRoutine, setSelectedRoutine] = useState(null);
+  const [showExerciseLibraryModal, setShowExerciseLibraryModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [allExercises, setAllExercises] = useState([]); // Lista de todos los ejercicios existentes
   
   // Estado para navegación a entrenamientos
   const [currentView, setCurrentView] = useState('routines'); // 'routines' | 'workouts'
   const [selectedRoutineForWorkouts, setSelectedRoutineForWorkouts] = useState(null);
 
-  // Estados para nuevo rutina (simplificado - solo nombre)
+  // Estados para nuevo rutina (solo campos que existen en BD)
   const [newRoutine, setNewRoutine] = useState({
-    name: ''
+    nombre: '',
+    descripcion: ''
   });
 
-  // Estados para nuevo ejercicio
+  // Estados para nuevo ejercicio en biblioteca
   const [newExercise, setNewExercise] = useState({
     name: '',
-    description: '',
-    sets: 3,
-    reps: 12,
-    weight: 0,
-    restTime: 60,
-    notes: ''
+    descripcion: '',
+    categoria: ''
   });
 
-  // Cargar rutinas al montar el componente
+  // Cargar rutinas y ejercicios al montar el componente
   useEffect(() => {
     loadRoutines();
+    loadExercises();
   }, []);
 
   const loadRoutines = async () => {
     try {
       setLoading(true);
       const response = await routineService.getRoutines();
-      setRoutines(response.routines || []);
+      console.log('📋 Response completa:', response);
+      console.log('📋 Rutinas:', response.data);
+      setRoutines(response.data || []);
     } catch (error) {
       console.error('Error cargando rutinas:', error);
       setErrors({ general: 'Error al cargar las rutinas' });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadExercises = async () => {
+    try {
+      const response = await exerciseService.getAllExercises();
+      console.log('💪 Ejercicios cargados:', response.data);
+      setAllExercises(response.data || []);
+    } catch (error) {
+      console.error('Error cargando ejercicios:', error);
     }
   };
 
@@ -64,19 +74,18 @@ const Routines = () => {
     setErrors({});
 
     try {
-      // Rutina con valores por defecto
       const routineData = {
-        name: newRoutine.name.trim(),
-        description: `Rutina de entrenamiento: ${newRoutine.name}`,
-        difficulty: 'intermedio',
-        estimatedTime: 30,
-        category: 'fuerza'
+        nombre: newRoutine.nombre.trim(),
+        descripcion: newRoutine.descripcion.trim() || `Rutina de entrenamiento: ${newRoutine.nombre}`
       };
 
       const response = await routineService.createRoutine(routineData);
       
       alert('Rutina creada exitosamente');
-      setNewRoutine({ name: '' });
+      setNewRoutine({ 
+        nombre: '',
+        descripcion: ''
+      });
       setShowAddRoutineModal(false);
       
       // Recargar rutinas
@@ -123,124 +132,13 @@ const Routines = () => {
   const validateRoutine = () => {
     const newErrors = {};
     
-    if (!newRoutine.name.trim()) {
-      newErrors.name = 'El nombre es requerido';
-    } else if (newRoutine.name.trim().length < 3) {
-      newErrors.name = 'Debe tener al menos 3 caracteres';
+    if (!newRoutine.nombre.trim()) {
+      newErrors.nombre = 'El nombre es requerido';
+    } else if (newRoutine.nombre.trim().length < 3) {
+      newErrors.nombre = 'Debe tener al menos 3 caracteres';
     }
     
     return newErrors;
-  };
-
-  // Manejar agregar ejercicio
-  const handleAddExercise = async (e) => {
-    e.preventDefault();
-    
-    if (!selectedRoutine) {
-      setErrors({ exercise: 'Selecciona una rutina primero' });
-      return;
-    }
-
-    const validationErrors = validateExercise();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    setLoading(true);
-    setErrors({});
-
-    try {
-      await routineService.addExercise(selectedRoutine.id, newExercise);
-      
-      alert('Ejercicio agregado exitosamente');
-      setNewExercise({
-        name: '',
-        description: '',
-        sets: 3,
-        reps: 12,
-        weight: 0,
-        restTime: 60,
-        notes: ''
-      });
-      setShowAddExerciseModal(false);
-      setSelectedRoutine(null);
-      
-      // Recargar rutinas
-      await loadRoutines();
-      
-    } catch (error) {
-      setErrors({ exercise: error.message || 'Error al agregar el ejercicio' });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const validateExercise = () => {
-    const errors = {};
-    if (!newExercise.name.trim()) {
-      errors.exerciseName = 'El nombre del ejercicio es requerido';
-    }
-    if (newExercise.sets < 1 || newExercise.sets > 10) {
-      errors.sets = 'Las series deben estar entre 1 y 10';
-    }
-    if (newExercise.reps < 1 || newExercise.reps > 100) {
-      errors.reps = 'Las repeticiones deben estar entre 1 y 100';
-    }
-    if (newExercise.restTime < 0 || newExercise.restTime > 600) {
-      errors.restTime = 'El descanso debe estar entre 0 y 600 segundos';
-    }
-    return errors;
-  };
-
-  // Funciones auxiliares
-  const formatTime = (minutes) => {
-    if (minutes < 60) return `${minutes} min`;
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours}h ${mins > 0 ? mins + 'm' : ''}`;
-  };
-
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case 'principiante': return 'var(--success-color, #48bb78)';
-      case 'intermedio': return 'var(--warning-color, #ed8936)';
-      case 'avanzado': return 'var(--error-color, #e53e3e)';
-      default: return 'var(--text-secondary, #718096)';
-    }
-  };
-
-  const getCategoryIcon = (category) => {
-    switch (category) {
-      case 'fuerza':
-        return (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6.5 6.5h11v11h-11z"/>
-            <path d="M6 2h12v4H6z"/>
-            <path d="M6 18h12v4H6z"/>
-          </svg>
-        );
-      case 'cardio':
-        return (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-          </svg>
-        );
-      case 'flexibilidad':
-        return (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
-        );
-      default:
-        return (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="16"/>
-            <line x1="8" y1="12" x2="16" y2="12"/>
-          </svg>
-        );
-    }
   };
 
   // Funciones de navegación
@@ -254,12 +152,74 @@ const Routines = () => {
     setSelectedRoutineForWorkouts(null);
   };
 
+  // Manejar creación de ejercicio en biblioteca
+  const handleCreateExercise = async (e) => {
+    e.preventDefault();
+    setErrors({});
+    
+    // Validaciones
+    const newErrors = validateExercise();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const exerciseData = {
+        name: newExercise.name.trim(),
+        descripcion: newExercise.descripcion.trim(),
+        categoria: newExercise.categoria.trim()
+      };
+
+      await exerciseService.createExerciseInLibrary(exerciseData);
+      
+      // Recargar la lista de ejercicios después de crear uno nuevo
+      await loadExercises();
+      
+      alert('Ejercicio creado exitosamente');
+      setNewExercise({
+        name: '',
+        descripcion: '',
+        categoria: ''
+      });
+      setShowExerciseLibraryModal(false);
+    } catch (error) {
+      setErrors({ general: error.message || 'Error al crear el ejercicio' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const validateExercise = () => {
+    const newErrors = {};
+    
+    if (!newExercise.name.trim()) {
+      newErrors.name = 'El nombre del ejercicio es requerido';
+    } else {
+      // Verificar si ya existe un ejercicio con exactamente el mismo nombre
+      const exerciseExists = allExercises.some(
+        exercise => exercise.name.toLowerCase() === newExercise.name.trim().toLowerCase()
+      );
+      
+      if (exerciseExists) {
+        newErrors.name = 'Ya existe un ejercicio con este nombre';
+      }
+    }
+    
+    if (!newExercise.categoria) {
+      newErrors.categoria = 'La categoría es requerida';
+    }
+    
+    return newErrors;
+  };
+
   // Renderizado condicional según la vista actual
   if (currentView === 'workouts' && selectedRoutineForWorkouts) {
     return (
       <Workouts 
         routineId={selectedRoutineForWorkouts.id}
-        routineName={selectedRoutineForWorkouts.name}
+        routineName={selectedRoutineForWorkouts.nombre}
         onBack={handleBackToRoutines}
       />
     );
@@ -271,38 +231,37 @@ const Routines = () => {
       <div className="routines-header">
         <div className="header-title">
           <h2>Rutinas</h2>
-          <button
-            className="btn btn-success btn-icon"
-            onClick={() => setShowAddRoutineModal(true)}
-            aria-label="Agregar nueva rutina"
-            title="Crear nueva rutina"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-          </button>
+          <div className="header-actions">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowExerciseLibraryModal(true)}
+              aria-label="Crear Ejercicios"
+              title="Crear Ejercicios"
+              style={{ 
+                padding: '0.75rem 1.75rem', 
+                whiteSpace: 'nowrap',
+                fontSize: '0.95rem',
+                minWidth: 'fit-content'
+              }}
+            >
+              Crear ejercicios
+            </button>
+            <button
+              className="btn btn-success btn-icon"
+              onClick={() => setShowAddRoutineModal(true)}
+              aria-label="Agregar nueva rutina"
+              title="Crear nueva rutina"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+          </div>
         </div>
         <p className="header-description">
           Crea y gestiona tus rutinas de entrenamiento personalizadas
         </p>
-      </div>
-
-      {/* Botón agregar ejercicios */}
-      <div className="action-buttons">
-        <button
-          className="btn btn-success btn-lg"
-          onClick={() => setShowAddExerciseModal(true)}
-          disabled={routines.length === 0}
-          title={routines.length === 0 ? 'Crea una rutina primero' : 'Agregar ejercicio a rutina'}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="16"/>
-            <line x1="8" y1="12" x2="16" y2="12"/>
-          </svg>
-          Agregar Ejercicios
-        </button>
       </div>
 
       {/* Lista de rutinas */}
@@ -341,13 +300,13 @@ const Routines = () => {
                   handleRoutineClick(routine);
                 }
               }}
-              aria-label={`Rutina ${routine.name}`}
+              aria-label={`Rutina ${routine.nombre}`}
             >
-              <h3 className="routine-name">{routine.name}</h3>
+              <h3 className="routine-name">{routine.nombre}</h3>
               <button
                 className="btn-delete-routine"
-                onClick={(e) => handleDeleteRoutine(routine.id, routine.name, e)}
-                aria-label={`Eliminar rutina ${routine.name}`}
+                onClick={(e) => handleDeleteRoutine(routine.id, routine.nombre, e)}
+                aria-label={`Eliminar rutina ${routine.nombre}`}
                 title="Eliminar rutina"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -400,16 +359,30 @@ const Routines = () => {
                 <input
                   type="text"
                   id="routineName"
-                  value={newRoutine.name}
-                  onChange={(e) => setNewRoutine({ name: e.target.value })}
-                  className={`form-input ${errors.name ? 'error' : ''}`}
+                  value={newRoutine.nombre}
+                  onChange={(e) => setNewRoutine({...newRoutine, nombre: e.target.value})}
+                  className={`form-input ${errors.nombre ? 'error' : ''}`}
                   placeholder="Ej: Rutina de Fuerza, Cardio Matutino..."
                   aria-required="true"
                   autoFocus
                 />
-                {errors.name && (
-                  <div className="error-message" role="alert">{errors.name}</div>
+                {errors.nombre && (
+                  <div className="error-message" role="alert">{errors.nombre}</div>
                 )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="routineDescription" className="form-label">
+                  Descripción
+                </label>
+                <textarea
+                  id="routineDescription"
+                  value={newRoutine.descripcion}
+                  onChange={(e) => setNewRoutine({...newRoutine, descripcion: e.target.value})}
+                  className="form-input"
+                  placeholder="Describe tu rutina..."
+                  rows="3"
+                />
               </div>
 
               <div className="modal-actions">
@@ -433,26 +406,20 @@ const Routines = () => {
         </div>
       )}
 
-      {/* Modal Agregar Ejercicio */}
-      {showAddExerciseModal && (
-        <div className="modal-overlay" onClick={() => setShowAddExerciseModal(false)}>
+      {/* Modal Biblioteca de Ejercicios */}
+      {showExerciseLibraryModal && (
+        <div className="modal-overlay" onClick={() => setShowExerciseLibraryModal(false)}>
           <div 
             className="modal-content" 
             onClick={e => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
-            aria-labelledby="modal-title-agregar-ejercicio"
           >
             <div className="modal-header">
-              <h3 id="modal-title-agregar-ejercicio">
-                Agregar Ejercicio
-                {selectedRoutine && (
-                  <span className="modal-subtitle">a "{selectedRoutine.name}"</span>
-                )}
-              </h3>
+              <h3>Crear Nuevo Ejercicio</h3>
               <button
                 className="modal-close"
-                onClick={() => setShowAddExerciseModal(false)}
+                onClick={() => setShowExerciseLibraryModal(false)}
                 aria-label="Cerrar modal"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -462,174 +429,90 @@ const Routines = () => {
               </button>
             </div>
 
-            <form onSubmit={handleAddExercise} className="modal-form">
-              {errors.exercise && (
-                <div className="error-message global-error" role="alert">
-                  {errors.exercise}
-                </div>
-              )}
+            <div className="modal-body">
+              <form onSubmit={handleCreateExercise} className="modal-form">
+                {errors.general && (
+                  <div className="error-message global-error">
+                    {errors.general}
+                  </div>
+                )}
 
-              {!selectedRoutine && (
                 <div className="form-group">
-                  <label htmlFor="selectRoutine" className="form-label">
-                    Seleccionar Rutina *
+                  <label htmlFor="exerciseName" className="form-label">
+                    Nombre del Ejercicio *
+                  </label>
+                  <input
+                    type="text"
+                    id="exerciseName"
+                    value={newExercise.name}
+                    onChange={(e) => setNewExercise({...newExercise, name: e.target.value})}
+                    className={`form-input ${errors.name ? 'error' : ''}`}
+                    placeholder="Ej: Press de Banca, Sentadillas..."
+                    autoFocus
+                  />
+                  {errors.name && (
+                    <span className="error-message">{errors.name}</span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="exerciseDescription" className="form-label">
+                    Descripción
+                  </label>
+                  <textarea
+                    id="exerciseDescription"
+                    value={newExercise.descripcion}
+                    onChange={(e) => setNewExercise({...newExercise, descripcion: e.target.value})}
+                    className="form-input"
+                    placeholder="Describe el ejercicio..."
+                    rows="3"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="categoria" className="form-label">
+                    Categoría *
                   </label>
                   <select
-                    id="selectRoutine"
-                    onChange={(e) => {
-                      const routine = routines.find(r => r.id === parseInt(e.target.value));
-                      setSelectedRoutine(routine || null);
-                    }}
-                    className="form-input"
-                    aria-required="true"
+                    id="categoria"
+                    value={newExercise.categoria}
+                    onChange={(e) => setNewExercise({...newExercise, categoria: e.target.value})}
+                    className={`form-input ${errors.categoria ? 'error' : ''}`}
                   >
-                    <option value="">Selecciona una rutina...</option>
-                    {routines.map(routine => (
-                      <option key={routine.id} value={routine.id}>
-                        {routine.name}
-                      </option>
-                    ))}
+                    <option value="">Selecciona una categoría...</option>
+                    <option value="Espalda">Espalda</option>
+                    <option value="Biceps">Bíceps</option>
+                    <option value="Triceps">Tríceps</option>
+                    <option value="Pecho">Pecho</option>
+                    <option value="Abdominales">Abdominales</option>
+                    <option value="Gluteos">Glúteos</option>
+                    <option value="Cuádriceps">Cuádriceps</option>
+                    <option value="Isquiotibiales">Isquiotibiales</option>
+                    <option value="Pantorillas">Pantorillas</option>
                   </select>
-                </div>
-              )}
-
-              <div className="form-group">
-                <label htmlFor="exerciseName" className="form-label">
-                  Nombre del Ejercicio *
-                </label>
-                <input
-                  type="text"
-                  id="exerciseName"
-                  value={newExercise.name}
-                  onChange={(e) => setNewExercise(prev => ({ ...prev, name: e.target.value }))}
-                  className={`form-input ${errors.exerciseName ? 'error' : ''}`}
-                  placeholder="Ej: Sentadillas, Press de banca, Flexiones..."
-                  aria-required="true"
-                />
-                {errors.exerciseName && (
-                  <div className="error-message" role="alert">{errors.exerciseName}</div>
-                )}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="exerciseDescription" className="form-label">
-                  Descripción o Técnica
-                </label>
-                <textarea
-                  id="exerciseDescription"
-                  value={newExercise.description}
-                  onChange={(e) => setNewExercise(prev => ({ ...prev, description: e.target.value }))}
-                  className="form-input"
-                  placeholder="Describe la técnica correcta del ejercicio..."
-                  rows="2"
-                />
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="sets" className="form-label">
-                    Series
-                  </label>
-                  <input
-                    type="number"
-                    id="sets"
-                    value={newExercise.sets}
-                    onChange={(e) => setNewExercise(prev => ({ ...prev, sets: parseInt(e.target.value) || 1 }))}
-                    className={`form-input ${errors.sets ? 'error' : ''}`}
-                    min="1"
-                    max="10"
-                  />
-                  {errors.sets && (
-                    <div className="error-message" role="alert">{errors.sets}</div>
+                  {errors.categoria && (
+                    <span className="error-message">{errors.categoria}</span>
                   )}
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="reps" className="form-label">
-                    Repeticiones
-                  </label>
-                  <input
-                    type="number"
-                    id="reps"
-                    value={newExercise.reps}
-                    onChange={(e) => setNewExercise(prev => ({ ...prev, reps: parseInt(e.target.value) || 1 }))}
-                    className={`form-input ${errors.reps ? 'error' : ''}`}
-                    min="1"
-                    max="100"
-                  />
-                  {errors.reps && (
-                    <div className="error-message" role="alert">{errors.reps}</div>
-                  )}
+                <div className="modal-actions">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setShowExerciseLibraryModal(false)}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    disabled={loading}
+                  >
+                    {loading ? 'Creando...' : 'Crear Ejercicio'}
+                  </button>
                 </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="weight" className="form-label">
-                    Peso (kg)
-                  </label>
-                  <input
-                    type="number"
-                    id="weight"
-                    value={newExercise.weight}
-                    onChange={(e) => setNewExercise(prev => ({ ...prev, weight: parseFloat(e.target.value) || 0 }))}
-                    className="form-input"
-                    min="0"
-                    step="0.5"
-                    placeholder="0 = Peso corporal"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="restTime" className="form-label">
-                    Descanso (seg)
-                  </label>
-                  <input
-                    type="number"
-                    id="restTime"
-                    value={newExercise.restTime}
-                    onChange={(e) => setNewExercise(prev => ({ ...prev, restTime: parseInt(e.target.value) || 60 }))}
-                    className={`form-input ${errors.restTime ? 'error' : ''}`}
-                    min="0"
-                    max="600"
-                  />
-                  {errors.restTime && (
-                    <div className="error-message" role="alert">{errors.restTime}</div>
-                  )}
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="notes" className="form-label">
-                  Notas Adicionales
-                </label>
-                <textarea
-                  id="notes"
-                  value={newExercise.notes}
-                  onChange={(e) => setNewExercise(prev => ({ ...prev, notes: e.target.value }))}
-                  className="form-input"
-                  placeholder="Consejos, modificaciones, observaciones..."
-                  rows="2"
-                />
-              </div>
-
-              <div className="modal-actions">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setShowAddExerciseModal(false)}
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-success"
-                  disabled={loading || !selectedRoutine}
-                >
-                  {loading ? 'Agregando...' : 'Agregar Ejercicio'}
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       )}

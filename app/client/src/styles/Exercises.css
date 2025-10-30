@@ -107,23 +107,24 @@
 
 .exercises-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .exercise-card {
   background: var(--surface-color);
   border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 0.875rem;
+  border-radius: 12px;
+  padding: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 70px;
+  justify-content: flex-start;
+  min-height: 80px;
+  position: relative;
 }
 
 .exercise-card:hover {
@@ -133,11 +134,11 @@
 }
 
 .exercise-name {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
-  text-align: center;
+  text-align: left;
 }
 
 /* ========================================
@@ -782,5 +783,171 @@
   .sets-container {
     padding: 12px;
     gap: 15px;
+  }
+}
+
+/* ========================================
+   Modal de Biblioteca de Ejercicios
+   ======================================== */
+
+.modal-library {
+  max-width: 700px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-library .modal-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.search-box svg {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.exercise-library-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  max-height: 300px;
+}
+
+.library-exercise-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--surface-color);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.library-exercise-card:hover {
+  border-color: var(--exercise-primary);
+  transform: translateX(4px);
+}
+
+.library-exercise-card.selected {
+  border-color: var(--exercise-primary);
+  background: rgba(124, 58, 237, 0.05);
+}
+
+.exercise-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+}
+
+.exercise-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0.25rem 0;
+}
+
+.exercise-tag {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: var(--exercise-primary);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.library-exercise-card svg {
+  color: var(--exercise-primary);
+  flex-shrink: 0;
+}
+
+.exercise-config {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+.exercise-config h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+}
+
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.config-grid .form-group {
+  margin-bottom: 0;
+}
+
+.config-grid label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.config-grid input,
+.exercise-config textarea {
+  width: 100%;
+  padding: 0.625rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.config-grid input:focus,
+.exercise-config textarea:focus {
+  outline: none;
+  border-color: var(--exercise-primary);
+}
+
+@media (max-width: 768px) {
+  .modal-library {
+    max-width: 95%;
+  }
+
+  .config-grid {
+    grid-template-columns: 1fr;
   }
 }

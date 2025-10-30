@@ -246,6 +246,28 @@ router.delete('/workouts/:workoutId', authMiddleware, async (req, res) => {
 // ==================== INSTANCIAS DE EJERCICIOS ====================
 
 /**
+ * GET /api/routines/workouts/:workoutId/exercises
+ * Obtener ejercicios de un entrenamiento
+ */
+router.get('/workouts/:workoutId/exercises', authMiddleware, async (req, res) => {
+  try {
+    const { workoutId } = req.params;
+    const result = await ExerciseInstanceService.getExercisesByWorkoutId(workoutId);
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
+/**
  * POST /api/routines/workouts/:workoutId/exercises
  * Agregar ejercicios a un entrenamiento
  */

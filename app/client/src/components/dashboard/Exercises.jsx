@@ -9,6 +9,11 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
+  // Estados para la biblioteca de ejercicios
+  const [availableExercises, setAvailableExercises] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loadingLibrary, setLoadingLibrary] = useState(false);
+
   // Estados para el submenú de edición de ejercicio
   const [showEditExerciseModal, setShowEditExerciseModal] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
@@ -18,7 +23,12 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
 
   // Estado para nuevo ejercicio
   const [newExercise, setNewExercise] = useState({
-    name: ''
+    exercise_id: '',
+    series: 3,
+    repeticiones: 10,
+    peso: 0,
+    descanso: 60,
+    notas: ''
   });
 
   // Cargar ejercicios al montar el componente
@@ -32,7 +42,9 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
     try {
       setLoading(true);
       const response = await exerciseService.getExercisesByWorkout(routineId, workoutId);
-      setExercises(response.exercises || []);
+      console.log('📋 Ejercicios cargados:', response.data);
+      console.log('📋 Primer ejercicio:', response.data?.[0]);
+      setExercises(response.data || []);
     } catch (error) {
       console.error('Error cargando ejercicios:', error);
       setErrors({ general: 'Error al cargar los ejercicios' });
@@ -41,13 +53,59 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
     }
   };
 
+  // Cargar biblioteca de ejercicios
+  const loadExerciseLibrary = async () => {
+    try {
+      setLoadingLibrary(true);
+      const response = await exerciseService.getAllExercises();
+      setAvailableExercises(response.data || []);
+    } catch (error) {
+      console.error('Error cargando biblioteca:', error);
+    } finally {
+      setLoadingLibrary(false);
+    }
+  };
+
+  // Buscar ejercicios en la biblioteca
+  const handleSearchExercises = async (query) => {
+    setSearchQuery(query);
+    if (!query.trim()) {
+      loadExerciseLibrary();
+      return;
+    }
+
+    try {
+      setLoadingLibrary(true);
+      const response = await exerciseService.searchExercises(query);
+      setAvailableExercises(response.data || []);
+    } catch (error) {
+      console.error('Error buscando ejercicios:', error);
+    } finally {
+      setLoadingLibrary(false);
+    }
+  };
+
+  // Abrir modal y cargar biblioteca
+  const handleOpenAddModal = () => {
+    setShowAddExerciseModal(true);
+    loadExerciseLibrary();
+  };
+
+  // Seleccionar ejercicio de la biblioteca
+  const handleSelectExercise = (exercise) => {
+    setNewExercise({
+      ...newExercise,
+      exercise_id: exercise.id
+    });
+  };
+
   // Manejar creación de ejercicio
   const handleCreateExercise = async (e) => {
     e.preventDefault();
     
-    const validationErrors = validateExercise();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+    // Validar que se haya seleccionado un ejercicio
+    if (!newExercise.exercise_id) {
+      setErrors({ general: 'Debes seleccionar un ejercicio' });
       return;
     }
 
@@ -56,13 +114,29 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
 
     try {
       const exerciseData = {
-        name: newExercise.name.trim()
+        exercises: [{
+          exercise_id: newExercise.exercise_id,
+          series: 3,
+          repeticiones: 10,
+          peso: 0,
+          descanso: 60,
+          notas: '',
+          orden: 1
+        }]
       };
 
       await exerciseService.createExercise(routineId, workoutId, exerciseData);
       
       alert('Ejercicio agregado exitosamente');
-      setNewExercise({ name: '' });
+      setNewExercise({
+        exercise_id: '',
+        series: 3,
+        repeticiones: 10,
+        peso: 0,
+        descanso: 60,
+        notas: ''
+      });
+      setSearchQuery('');
       setShowAddExerciseModal(false);
       
       // Recargar ejercicios
@@ -73,19 +147,6 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  // Validación para nuevo ejercicio
-  const validateExercise = () => {
-    const newErrors = {};
-    
-    if (!newExercise.name.trim()) {
-      newErrors.name = 'El nombre es requerido';
-    } else if (newExercise.name.trim().length < 3) {
-      newErrors.name = 'Debe tener al menos 3 caracteres';
-    }
-    
-    return newErrors;
   };
 
   // Manejar click en ejercicio para abrir submenú de edición
@@ -194,7 +255,7 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
             </button>
             <button
               className="btn btn-success btn-icon"
-              onClick={() => setShowAddExerciseModal(true)}
+              onClick={handleOpenAddModal}
               aria-label="Agregar nuevo ejercicio"
               title="Crear nuevo ejercicio"
             >
@@ -223,36 +284,41 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
             <p>Comienza agregando tu primer ejercicio a este entrenamiento</p>
             <button
               className="btn btn-primary btn-lg"
-              onClick={() => setShowAddExerciseModal(true)}
+              onClick={handleOpenAddModal}
             >
               Agregar Mi Primer Ejercicio
             </button>
           </div>
         ) : (
-          exercises.map(exercise => (
-            <div 
-              key={exercise.id} 
-              className="exercise-card"
-              onClick={() => handleExerciseClick(exercise)}
-            >
-              <h3 className="exercise-name">{exercise.name}</h3>
-            </div>
-          ))
+          exercises.map(exercise => {
+            console.log('🏋️ Ejercicio individual:', exercise);
+            return (
+              <div 
+                key={exercise.id} 
+                className="exercise-card"
+                onClick={() => handleExerciseClick(exercise)}
+              >
+                <h3 className="exercise-name">
+                  {exercise.exercise_name || exercise.nombre || exercise.name || 'Ejercicio sin nombre'}
+                </h3>
+              </div>
+            );
+          })
         )}
       </div>
 
-      {/* Modal Crear Ejercicio */}
+      {/* Modal Agregar Ejercicio desde Biblioteca */}
       {showAddExerciseModal && (
         <div className="modal-overlay" onClick={() => setShowAddExerciseModal(false)}>
           <div 
-            className="modal-content" 
+            className="modal-content modal-library" 
             onClick={e => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title-agregar-ejercicio"
           >
             <div className="modal-header">
-              <h3 id="modal-title-agregar-ejercicio">Agregar Nuevo Ejercicio</h3>
+              <h3 id="modal-title-agregar-ejercicio">Biblioteca de Ejercicios</h3>
               <button
                 className="modal-close"
                 onClick={() => setShowAddExerciseModal(false)}
@@ -265,50 +331,89 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
               </button>
             </div>
 
-            <form onSubmit={handleCreateExercise} className="modal-form">
+            <div className="modal-body">
+              {/* Buscador */}
+              <div className="search-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.35-4.35"/>
+                </svg>
+                <input
+                  type="text"
+                  className="search-input"
+                  placeholder="Buscar ejercicios..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearchExercises(e.target.value)}
+                />
+              </div>
+
+              {/* Lista de ejercicios */}
+              <div className="exercise-library-list">
+                {loadingLibrary ? (
+                  <div className="loading-state">
+                    <div className="loading-spinner"></div>
+                    <p>Cargando ejercicios...</p>
+                  </div>
+                ) : availableExercises.length === 0 ? (
+                  <div className="empty-state">
+                    <p>No se encontraron ejercicios</p>
+                  </div>
+                ) : (
+                  availableExercises.map(exercise => (
+                    <div
+                      key={exercise.id}
+                      className={`library-exercise-card ${newExercise.exercise_id === exercise.id ? 'selected' : ''}`}
+                      onClick={() => handleSelectExercise(exercise)}
+                    >
+                      <div className="exercise-info">
+                        <h4>{exercise.nombre || exercise.name}</h4>
+                      </div>
+                      {newExercise.exercise_id === exercise.id && (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Botones de acción */}
               {errors.general && (
                 <div className="error-message global-error" role="alert">
                   {errors.general}
                 </div>
               )}
 
-              <div className="form-group">
-                <label htmlFor="exerciseName" className="form-label">
-                  Nombre del Ejercicio
-                </label>
-                <input
-                  type="text"
-                  id="exerciseName"
-                  className={`form-input ${errors.name ? 'error' : ''}`}
-                  value={newExercise.name}
-                  onChange={(e) => setNewExercise({...newExercise, name: e.target.value})}
-                  placeholder="Ej: Press de Banca, Sentadillas"
-                  aria-describedby={errors.name ? 'name-error' : undefined}
-                />
-                {errors.name && (
-                  <span id="name-error" className="error-message" role="alert">
-                    {errors.name}
-                  </span>
-                )}
-              </div>
-
               <div className="modal-actions">
                 <button
                   type="button"
                   className="btn btn-secondary"
-                  onClick={() => setShowAddExerciseModal(false)}
+                  onClick={() => {
+                    setShowAddExerciseModal(false);
+                    setNewExercise({
+                      exercise_id: '',
+                      series: 3,
+                      repeticiones: 10,
+                      peso: 0,
+                      descanso: 60,
+                      notas: ''
+                    });
+                    setSearchQuery('');
+                  }}
                 >
                   Cancelar
                 </button>
                 <button
-                  type="submit"
+                  type="button"
                   className="btn btn-success"
-                  disabled={loading}
+                  onClick={handleCreateExercise}
+                  disabled={loading || !newExercise.exercise_id}
                 >
-                  {loading ? 'Agregando...' : 'Agregar Ejercicio'}
+                  {loading ? 'Agregando...' : 'Agregar al Entrenamiento'}
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
@@ -324,7 +429,9 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
             aria-labelledby="modal-title-editar-ejercicio"
           >
             <div className="modal-header">
-              <h3 id="modal-title-editar-ejercicio">Editar Sets - {selectedExercise.name}</h3>
+              <h3 id="modal-title-editar-ejercicio">
+                Editar Sets - {selectedExercise.exercise_name || selectedExercise.nombre || selectedExercise.name || 'Ejercicio'}
+              </h3>
               <button
                 className="modal-close"
                 onClick={() => setShowEditExerciseModal(false)}

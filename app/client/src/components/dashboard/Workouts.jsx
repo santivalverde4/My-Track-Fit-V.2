@@ -16,7 +16,7 @@ const Workouts = ({ routineId, routineName, onBack }) => {
 
   // Estado para nuevo entrenamiento
   const [newWorkout, setNewWorkout] = useState({
-    name: ''
+    nombre: ''
   });
 
   // Cargar entrenamientos al montar el componente
@@ -30,7 +30,8 @@ const Workouts = ({ routineId, routineName, onBack }) => {
     try {
       setLoading(true);
       const response = await workoutService.getWorkoutsByRoutine(routineId);
-      setWorkouts(response.workouts || []);
+      console.log('📋 Workouts Response:', response);
+      setWorkouts(response.data || response.workouts || []);
     } catch (error) {
       console.error('Error cargando entrenamientos:', error);
       setErrors({ general: 'Error al cargar los entrenamientos' });
@@ -54,13 +55,13 @@ const Workouts = ({ routineId, routineName, onBack }) => {
 
     try {
       const workoutData = {
-        name: newWorkout.name.trim()
+        nombre: newWorkout.nombre.trim()
       };
 
       await workoutService.createWorkout(routineId, workoutData);
       
       alert('Entrenamiento creado exitosamente');
-      setNewWorkout({ name: '' });
+      setNewWorkout({ nombre: '' });
       setShowAddWorkoutModal(false);
       
       // Recargar entrenamientos
@@ -77,13 +78,43 @@ const Workouts = ({ routineId, routineName, onBack }) => {
   const validateWorkout = () => {
     const newErrors = {};
     
-    if (!newWorkout.name.trim()) {
-      newErrors.name = 'El nombre es requerido';
-    } else if (newWorkout.name.trim().length < 3) {
-      newErrors.name = 'Debe tener al menos 3 caracteres';
+    if (!newWorkout.nombre.trim()) {
+      newErrors.nombre = 'El nombre es requerido';
+    } else if (newWorkout.nombre.trim().length < 3) {
+      newErrors.nombre = 'Debe tener al menos 3 caracteres';
     }
     
     return newErrors;
+  };
+
+  // Manejar eliminación de entrenamiento
+  const handleDeleteWorkout = async (workoutId, workoutName, e) => {
+    // Prevenir que se abra el entrenamiento al hacer clic en eliminar
+    e.stopPropagation();
+    
+    const confirmDelete = window.confirm(
+      `¿Estás seguro que deseas eliminar el entrenamiento "${workoutName}"?\n\nEsta acción no se puede deshacer.`
+    );
+    
+    if (!confirmDelete) return;
+
+    setLoading(true);
+    setErrors({});
+
+    try {
+      await workoutService.deleteWorkout(routineId, workoutId);
+      alert('Entrenamiento eliminado exitosamente');
+      
+      // Recargar entrenamientos
+      await loadWorkouts();
+      
+    } catch (error) {
+      console.error('Error eliminando entrenamiento:', error);
+      setErrors({ general: error.message || 'Error al eliminar el entrenamiento' });
+      alert('Error al eliminar el entrenamiento. Inténtalo de nuevo.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Manejar click en entrenamiento
@@ -104,7 +135,7 @@ const Workouts = ({ routineId, routineName, onBack }) => {
       <Exercises 
         routineId={routineId}
         workoutId={selectedWorkoutForExercises.id}
-        workoutName={selectedWorkoutForExercises.name}
+        workoutName={selectedWorkoutForExercises.nombre}
         onBack={handleBackToWorkouts}
       />
     );
@@ -170,7 +201,20 @@ const Workouts = ({ routineId, routineName, onBack }) => {
               className="workout-card"
               onClick={() => handleWorkoutClick(workout)}
             >
-              <h3 className="workout-name">{workout.name}</h3>
+              <h3 className="workout-name">{workout.nombre}</h3>
+              <button
+                className="btn-delete-workout"
+                onClick={(e) => handleDeleteWorkout(workout.id, workout.nombre, e)}
+                aria-label={`Eliminar entrenamiento ${workout.nombre}`}
+                title="Eliminar entrenamiento"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  <line x1="10" y1="11" x2="10" y2="17"/>
+                  <line x1="14" y1="11" x2="14" y2="17"/>
+                </svg>
+              </button>
             </div>
           ))
         )}
@@ -214,15 +258,15 @@ const Workouts = ({ routineId, routineName, onBack }) => {
                 <input
                   type="text"
                   id="workoutName"
-                  className={`form-input ${errors.name ? 'error' : ''}`}
-                  value={newWorkout.name}
-                  onChange={(e) => setNewWorkout({...newWorkout, name: e.target.value})}
+                  className={`form-input ${errors.nombre ? 'error' : ''}`}
+                  value={newWorkout.nombre}
+                  onChange={(e) => setNewWorkout({...newWorkout, nombre: e.target.value})}
                   placeholder="Ej: Día 1 - Pecho y Tríceps"
-                  aria-describedby={errors.name ? 'name-error' : undefined}
+                  aria-describedby={errors.nombre ? 'nombre-error' : undefined}
                 />
-                {errors.name && (
-                  <span id="name-error" className="error-message" role="alert">
-                    {errors.name}
+                {errors.nombre && (
+                  <span id="nombre-error" className="error-message" role="alert">
+                    {errors.nombre}
                   </span>
                 )}
               </div>

@@ -207,6 +207,26 @@ export const WorkoutService = {
 
 export const ExerciseInstanceService = {
   /**
+   * Obtener ejercicios de un entrenamiento
+   */
+  async getExercisesByWorkoutId(workoutId) {
+    try {
+      const { data, error } = await ExerciseInstanceModel.getByWorkoutId(workoutId);
+      
+      if (error) {
+        return { success: false, error: error.message };
+      }
+
+      return { 
+        success: true, 
+        data: data || []
+      };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  },
+
+  /**
    * Agregar ejercicios a un entrenamiento
    */
   async addExercisesToWorkout(workoutId, exercises) {
