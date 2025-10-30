@@ -48,14 +48,15 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
 .back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   background: var(--workout-secondary);
   color: white;
   border: none;
@@ -63,6 +64,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  flex-shrink: 0;
 }
 
 .back-btn:hover {
@@ -75,8 +77,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   background: var(--workout-primary);
   color: white;
   border: none;
@@ -84,6 +86,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  flex-shrink: 0;
 }
 
 .add-workout-btn:hover {
@@ -388,8 +391,8 @@
 
   .back-btn,
   .add-workout-btn {
-    width: 60px;
-    height: 60px;
+    width: 44px;
+    height: 44px;
   }
 
   .workouts-list {
@@ -413,8 +416,14 @@
 
   .back-btn,
   .add-workout-btn {
-    width: 56px;
-    height: 56px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-btn svg,
+  .add-workout-btn svg {
+    width: 20px;
+    height: 20px;
   }
 
   .workout-card {

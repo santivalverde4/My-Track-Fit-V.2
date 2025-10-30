@@ -207,12 +207,41 @@
   padding: 1.5rem;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: relative;
+  cursor: pointer;
 }
 
 .routine-card:hover {
   border-color: var(--primary-color, #3182ce);
   box-shadow: 0 8px 24px rgba(49, 130, 206, 0.15);
   transform: translateY(-2px);
+}
+
+.btn-delete-routine {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--error-color, #e53e3e);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.btn-delete-routine:hover {
+  background: var(--error-dark, #c53030);
+  transform: scale(1.1);
+}
+
+.btn-delete-routine:active {
+  transform: scale(0.95);
 }
 
 .routine-header {

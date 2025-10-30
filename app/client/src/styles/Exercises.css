@@ -1,9 +1,9 @@
 /* Exercises.css - Estilos para la sección de ejercicios */
 
-/* Variables específicas */
+/* Variables específicas - IGUALES A WORKOUTS */
 :root {
-  --exercise-primary: #7c3aed;
-  --exercise-hover: #6d28d9;
+  --exercise-primary: #2563eb;
+  --exercise-hover: #1d4ed8;
   --exercise-secondary: #10b981;
   --exercise-secondary-hover: #059669;
 }
@@ -20,7 +20,7 @@
 }
 
 /* ========================================
-   Header Section
+   Header Section - COPIADO EXACTO DE WORKOUTS
    ======================================== */
 
 .exercises-header {
@@ -28,14 +28,14 @@
   margin-bottom: 3rem;
 }
 
-.header-title {
+.exercises-header .header-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
 }
 
-.header-title h2 {
+.exercises-header .header-title h2 {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -44,18 +44,19 @@
   flex: 1;
 }
 
-.header-buttons {
+.exercises-header .header-buttons {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
-.back-btn {
+.exercises-header .back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   background: var(--exercise-secondary);
   color: white;
   border: none;
@@ -63,36 +64,38 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  flex-shrink: 0;
 }
 
-.back-btn:hover {
+.exercises-header .back-btn:hover {
   background: var(--exercise-secondary-hover);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
 }
 
-.add-exercise-btn {
+.exercises-header .add-exercise-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   background: var(--exercise-primary);
   color: white;
   border: none;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  flex-shrink: 0;
 }
 
-.add-exercise-btn:hover {
+.exercises-header .add-exercise-btn:hover {
   background: var(--exercise-hover);
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
 }
 
-.header-description {
+.exercises-header .header-description {
   font-size: 1.1rem;
   color: var(--text-secondary);
   margin: 0;
@@ -421,7 +424,7 @@
 }
 
 /* ========================================
-   Responsive Design
+   Responsive Design - COPIADO EXACTO DE WORKOUTS
    ======================================== */
 
 @media (max-width: 768px) {
@@ -429,23 +432,23 @@
     padding: 1rem;
   }
 
-  .header-title h2 {
+  .exercises-header .header-title h2 {
     font-size: 2rem;
   }
 
-  .header-buttons {
+  .exercises-header .header-buttons {
     gap: 0.75rem;
   }
 
-  .back-btn,
-  .add-exercise-btn {
-    width: 60px;
-    height: 60px;
+  .exercises-header .back-btn,
+  .exercises-header .add-exercise-btn {
+    width: 44px;
+    height: 44px;
   }
 
   .exercises-list {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
@@ -454,32 +457,33 @@
     padding: 0.75rem;
   }
 
-  .header-title h2 {
+  .exercises-header .header-title h2 {
     font-size: 1.75rem;
   }
 
-  .header-buttons {
+  .exercises-header .header-buttons {
     gap: 0.5rem;
   }
 
-  .back-btn,
-  .add-exercise-btn {
-    width: 56px;
-    height: 56px;
+  .exercises-header .back-btn,
+  .exercises-header .add-exercise-btn {
+    width: 40px;
+    height: 40px;
   }
 
-  .exercises-list {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 0.75rem;
+  .exercises-header .back-btn svg,
+  .exercises-header .add-exercise-btn svg {
+    width: 20px;
+    height: 20px;
   }
 
   .exercise-card {
     padding: 0.75rem;
-    min-height: 60px;
+    min-height: 70px;
   }
 
   .exercise-name {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .modal-overlay {
