@@ -28,19 +28,29 @@ export const AuthService = {
       // Verificar si el usuario ya existe
       const { data: existingUser } = await UserModel.findByUsername(username);
       if (existingUser) {
-        return { 
-          success: false, 
-          error: 'El usuario ya existe' 
-        };
+        // Si el usuario existe y está activo, no permitir registro
+        if (existingUser.activo) {
+          return { 
+            success: false, 
+            error: 'El usuario ya existe' 
+          };
+        }
+        // Si el usuario existe pero está inactivo, permitir crear nueva cuenta
+        // (la cuenta anterior quedará en la BD como inactiva)
       }
 
       // Verificar si el email ya existe
       const { data: existingEmail } = await UserModel.findByEmail(email);
       if (existingEmail) {
-        return { 
-          success: false, 
-          error: 'El email ya está registrado' 
-        };
+        // Si el email existe y está activo, no permitir registro
+        if (existingEmail.activo) {
+          return { 
+            success: false, 
+            error: 'El email ya está registrado' 
+          };
+        }
+        // Si el email existe pero está inactivo, permitir crear nueva cuenta
+        // (la cuenta anterior quedará en la BD como inactiva)
       }
 
       // Hash de la contraseña
@@ -98,12 +108,13 @@ export const AuthService = {
         };
       }
 
-      // Crear usuario en la base de datos
+      // Crear nuevo usuario en la base de datos
       const { data: newUser, error } = await UserModel.create({
         username: userData.username,
         password: userData.password,
         correo: userData.correo,
-        confirmed: true
+        confirmed: true,
+        activo: true
       });
 
       if (error) {
@@ -148,6 +159,14 @@ export const AuthService = {
         return { 
           success: false, 
           error: 'Usuario o contraseña incorrectos' 
+        };
+      }
+
+      // Verificar si la cuenta está activa
+      if (user.activo === false) {
+        return {
+          success: false,
+          error: 'Esta cuenta ha sido eliminada. Si deseas volver, puedes crear una nueva cuenta con el mismo correo.'
         };
       }
 
@@ -277,10 +296,15 @@ export const AuthService = {
    */
   async requestPasswordReset(email) {
     try {
-      // Buscar usuario por email
-      const { data: user } = await UserModel.findByEmail(email);
+      console.log('📧 Iniciando recuperación de contraseña para:', email);
       
-      if (!user) {
+      // Buscar usuario por email (sin importar si está activo o no)
+      const { data: user, error } = await UserModel.findByEmail(email);
+      
+      console.log('🔍 Resultado de búsqueda - User:', user, 'Error:', error);
+      
+      if (!user || error) {
+        console.log('⚠️ Usuario no encontrado para email:', email);
         // Por seguridad, no revelar si el email existe o no
         return {
           success: true,
@@ -288,28 +312,43 @@ export const AuthService = {
         };
       }
 
+      // Verificar si el usuario está activo
+      if (user.activo === false) {
+        console.log('⚠️ Usuario inactivo, no se puede restablecer contraseña');
+        return {
+          success: true,
+          message: 'Si el correo existe, recibirás un email para restablecer tu contraseña.'
+        };
+      }
+
+      console.log('✅ Usuario encontrado:', user.username, '- Activo:', user.activo);
+
       // Generar token único
       const token = uuidv4();
       passwordResetTokens[token] = email;
+      console.log('🔑 Token generado:', token);
 
       // Enviar email de recuperación
-      console.log(' Enviando email de recuperación a:', email);
+      console.log('📨 Enviando email de recuperación a:', email);
       const emailResult = await EmailService.sendPasswordResetEmail(email, user.username, token);
       
+      console.log('📬 Resultado del envío de email:', emailResult);
+      
       if (!emailResult.success) {
-        console.error(' Error enviando email de recuperación');
+        console.error('❌ Error enviando email de recuperación:', emailResult.error);
         return {
           success: false,
           error: 'Error enviando correo de recuperación'
         };
       }
 
-      console.log(' Email de recuperación enviado');
+      console.log('✅ Email de recuperación enviado exitosamente');
       return {
         success: true,
         message: 'Correo de recuperación enviado exitosamente'
       };
     } catch (error) {
+      console.error('❌ Error en requestPasswordReset:', error);
       return {
         success: false,
         error: 'Error en la solicitud de recuperación: ' + error.message
@@ -373,5 +412,36 @@ export const AuthService = {
    */
   isResetTokenValid(token) {
     return !!passwordResetTokens[token];
+  },
+
+  /**
+   * Desactivar cuenta (soft delete)
+   */
+  async deleteAccount(userId) {
+    try {
+      // Marcar cuenta como inactiva en lugar de eliminarla físicamente
+      const { data, error } = await UserModel.update(userId, {
+        activo: false
+      });
+
+      if (error) {
+        return {
+          success: false,
+          error: error.message
+        };
+      }
+
+      console.log(' Cuenta desactivada para usuario ID:', userId);
+
+      return {
+        success: true,
+        message: 'Cuenta eliminada exitosamente'
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: 'Error al eliminar cuenta: ' + error.message
+      };
+    }
   }
 };

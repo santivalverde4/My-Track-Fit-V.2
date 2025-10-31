@@ -274,6 +274,15 @@ const Login = () => {
               Crear Cuenta
             </Link>
           </p>
+          <p>
+            <Link 
+              to="/forgot-password" 
+              className="auth-link"
+              aria-label="Recuperar contraseña"
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </p>
         </footer>
       </div>
     </div>

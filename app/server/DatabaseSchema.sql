@@ -12,7 +12,8 @@ CREATE TABLE users (
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     correo VARCHAR(255) NOT NULL UNIQUE,
-    confirmed BOOLEAN DEFAULT FALSE
+    confirmed BOOLEAN DEFAULT FALSE,
+    activo BOOLEAN DEFAULT TRUE
 );
 
 -- Tabla de archivos de usuario con todas las extensiones

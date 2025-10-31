@@ -16,6 +16,8 @@ const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     // Verificar si el token es válido
@@ -37,7 +39,7 @@ const ResetPassword = () => {
 
   const validatePassword = (password) => {
     // Mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
     return passwordRegex.test(password);
   };
 
@@ -170,64 +172,117 @@ const ResetPassword = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <div className="auth-header">
+        <header className="auth-header">
           <div className="auth-logo">
             <MdLock size={48} />
           </div>
           <h1 className="auth-title">Nueva Contraseña</h1>
-          <p className="auth-subtitle">Crea una contraseña segura</p>
-        </div>
+          <p className="auth-subtitle">Crea una contraseña segura para tu cuenta</p>
+        </header>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <form className="auth-form" onSubmit={handleSubmit} noValidate>
+          {/* Campo Nueva Contraseña */}
           <div className="form-group">
-            <label htmlFor="password" className="form-label">
-              Nueva Contraseña
+            <label 
+              htmlFor="password" 
+              className="form-label"
+            >
+              Nueva Contraseña *
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="auth-input"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            <div className="password-container">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className={`form-input ${error && !formData.password ? 'error' : ''}`}
+                placeholder="Crea una contraseña segura"
+                aria-required="true"
+                aria-invalid={error ? 'true' : 'false'}
+                aria-describedby="password-help"
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                tabIndex="0"
+              >
+                {showPassword ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                )}
+              </button>
+            </div>
+            <div id="password-help" className="form-help">
+              Mínimo 8 caracteres con mayúscula, minúscula, número y carácter especial (@$!%*?&#).
+            </div>
           </div>
 
+          {/* Campo Confirmar Contraseña */}
           <div className="form-group">
-            <label htmlFor="password2" className="form-label">
-              Confirmar Contraseña
+            <label 
+              htmlFor="password2" 
+              className="form-label"
+            >
+              Confirmar Contraseña *
             </label>
-            <input
-              type="password"
-              id="password2"
-              name="password2"
-              className="auth-input"
-              placeholder="••••••••"
-              value={formData.password2}
-              onChange={handleChange}
-              required
-            />
+            <div className="password-container">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                id="password2"
+                name="password2"
+                value={formData.password2}
+                onChange={handleChange}
+                className={`form-input ${error && formData.password !== formData.password2 ? 'error' : ''}`}
+                placeholder="Repite tu contraseña"
+                aria-required="true"
+                aria-invalid={error ? 'true' : 'false'}
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label={showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                tabIndex="0"
+              >
+                {showConfirmPassword ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
 
-          <div className="password-requirements">
-            <strong>La contraseña debe contener:</strong>
-            <ul>
-              <li>Mínimo 8 caracteres</li>
-              <li>Una letra mayúscula</li>
-              <li>Una letra minúscula</li>
-              <li>Un número</li>
-              <li>Un carácter especial (@$!%*?&._-)</li>
-            </ul>
-          </div>
-
+          {/* Mensaje de error */}
           {error && (
-            <div className="auth-message error" style={{ animation: 'shake 0.3s' }}>
+            <div 
+              className="error-message global-error" 
+              role="alert"
+              aria-live="polite"
+            >
               {error}
             </div>
           )}
 
+          {/* Botón de envío */}
           <button 
             type="submit" 
             className="auth-button primary"
@@ -235,8 +290,10 @@ const ResetPassword = () => {
           >
             {isLoading ? (
               <>
-                <span className="spinner"></span>
-                Cambiando...
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="loading-spinner">
+                  <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                </svg>
+                <span>Cambiando contraseña...</span>
               </>
             ) : (
               'Cambiar Contraseña'

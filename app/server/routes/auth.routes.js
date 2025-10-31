@@ -580,4 +580,25 @@ router.post('/reset-password/:token', async (req, res) => {
   }
 });
 
+/**
+ * DELETE /api/auth/profile
+ * Eliminar cuenta del usuario (soft delete)
+ */
+router.delete('/profile', authMiddleware, async (req, res) => {
+  try {
+    const result = await AuthService.deleteAccount(req.user.userId);
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Error en el servidor'
+    });
+  }
+});
+
 export default router;

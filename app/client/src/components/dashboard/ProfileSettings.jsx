@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdWarning } from 'react-icons/md';
 import { userService, authService } from '../../services/api';
@@ -37,14 +37,33 @@ const ProfileSettings = () => {
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  // Cargar perfil del usuario al montar el componente
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const response = await userService.getProfile();
+      if (response.success && response.data) {
+        setUsernameData(prev => ({
+          ...prev,
+          currentUsername: response.data.username || ''
+        }));
+      }
+    } catch (error) {
+      console.error('Error cargando perfil:', error);
+    }
+  };
+
   // Validaciones para cambio de username
   const validateUsername = () => {
     const newErrors = {};
     
     if (!usernameData.newUsername.trim()) {
       newErrors.newUsername = 'El nuevo nombre de usuario es requerido';
-    } else if (usernameData.newUsername.length < 3) {
-      newErrors.newUsername = 'Debe tener al menos 3 caracteres';
+    } else if (usernameData.newUsername.length < 5) {
+      newErrors.newUsername = 'Debe tener al menos 5 caracteres';
     } else if (!/^[a-zA-Z0-9_]+$/.test(usernameData.newUsername)) {
       newErrors.newUsername = 'Solo letras, números y guiones bajos';
     } else if (usernameData.newUsername === usernameData.currentUsername) {
@@ -64,10 +83,16 @@ const ProfileSettings = () => {
     
     if (!passwordData.newPassword) {
       newErrors.newPassword = 'La nueva contraseña es requerida';
-    } else if (passwordData.newPassword.length < 6) {
-      newErrors.newPassword = 'Debe tener al menos 6 caracteres';
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(passwordData.newPassword)) {
-      newErrors.newPassword = 'Debe contener mayúscula, minúscula y número';
+    } else if (passwordData.newPassword.length < 8) {
+      newErrors.newPassword = 'Debe tener al menos 8 caracteres';
+    } else if (!/(?=.*[a-z])/.test(passwordData.newPassword)) {
+      newErrors.newPassword = 'Debe contener al menos una letra minúscula';
+    } else if (!/(?=.*[A-Z])/.test(passwordData.newPassword)) {
+      newErrors.newPassword = 'Debe contener al menos una letra mayúscula';
+    } else if (!/(?=.*\d)/.test(passwordData.newPassword)) {
+      newErrors.newPassword = 'Debe contener al menos un número';
+    } else if (!/(?=.*[@$!%*?&#])/.test(passwordData.newPassword)) {
+      newErrors.newPassword = 'Debe contener al menos un carácter especial (@$!%*?&#)';
     }
     
     if (!passwordData.confirmPassword) {
@@ -143,7 +168,7 @@ const ProfileSettings = () => {
 
     try {
       await userService.updateUsername({
-        newUsername: usernameData.newUsername.trim()
+        username: usernameData.newUsername.trim()
       });
       
       alert('Nombre de usuario actualizado exitosamente');
@@ -153,7 +178,14 @@ const ProfileSettings = () => {
         newUsername: '' 
       }));
     } catch (error) {
-      setErrors({ username: error.message || 'Error al actualizar el usuario' });
+      // Manejar errores específicos
+      if (error.error && error.error.includes('ya existe')) {
+        setErrors({ newUsername: 'Este nombre de usuario ya está en uso' });
+      } else if (error.error) {
+        setErrors({ newUsername: error.error });
+      } else {
+        setErrors({ newUsername: error.message || 'Error al actualizar el usuario' });
+      }
     } finally {
       setLoading(prev => ({ ...prev, username: false }));
     }
@@ -174,8 +206,7 @@ const ProfileSettings = () => {
 
     try {
       await userService.updatePassword({
-        currentPassword: passwordData.currentPassword,
-        newPassword: passwordData.newPassword
+        password: passwordData.newPassword
       });
       
       alert('Contraseña actualizada exitosamente');
@@ -314,7 +345,7 @@ const ProfileSettings = () => {
                 autoComplete="username"
               />
               <div id="username-help" className="form-help">
-                Mínimo 3 caracteres. Solo letras, números y guiones bajos.
+                Mínimo 5 caracteres. Solo letras, números y guiones bajos.
               </div>
               {errors.newUsername && (
                 <div id="username-error" className="error-message" role="alert">
@@ -436,7 +467,7 @@ const ProfileSettings = () => {
                 </button>
               </div>
               <div className="form-help">
-                Mínimo 6 caracteres con mayúscula, minúscula y número.
+                Mínimo 8 caracteres con mayúscula, minúscula, número y carácter especial (@$!%*?&#).
               </div>
               {errors.newPassword && (
                 <div className="error-message" role="alert">

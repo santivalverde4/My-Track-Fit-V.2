@@ -31,13 +31,33 @@ export const UserModel = {
    * Buscar usuario por email
    */
   async findByEmail(email) {
-    const { data, error } = await supabase
+    console.log('🔍 Buscando usuario con email:', email);
+    
+    // Primero intentar buscar usuario activo
+    const { data: activeUser, error: activeError } = await supabase
       .from('users')
       .select('*')
-      .eq('correo', email)
+      .ilike('correo', email)
+      .eq('activo', true)
+      .limit(1)
       .single();
     
-    return { data, error };
+    if (activeUser && !activeError) {
+      console.log('📊 Usuario activo encontrado');
+      return { data: activeUser, error: null };
+    }
+    
+    // Si no hay usuario activo, buscar cualquier usuario con ese email
+    const { data: users, error } = await supabase
+      .from('users')
+      .select('*')
+      .ilike('correo', email)
+      .limit(1);
+    
+    const user = users && users.length > 0 ? users[0] : null;
+    console.log('📊 Resultado búsqueda:', { data: user ? 'encontrado' : 'no encontrado', activo: user?.activo });
+    
+    return { data: user, error: user ? null : error };
   },
 
   /**

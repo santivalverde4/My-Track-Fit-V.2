@@ -190,7 +190,7 @@ export const userService = {
   // Obtener perfil del usuario
   getProfile: async () => {
     try {
-      const response = await api.get('/api/user/profile');
+      const response = await api.get('/api/auth/profile');
       return response;
     } catch (error) {
       throw error;
@@ -200,7 +200,7 @@ export const userService = {
   // Actualizar perfil
   updateProfile: async (profileData) => {
     try {
-      const response = await api.put('/api/user/profile', profileData);
+      const response = await api.put('/api/auth/profile', profileData);
       return response;
     } catch (error) {
       throw error;
@@ -210,7 +210,7 @@ export const userService = {
   // Actualizar nombre de usuario
   updateUsername: async (usernameData) => {
     try {
-      const response = await api.put('/api/user/username', usernameData);
+      const response = await api.put('/api/auth/profile', usernameData);
       return response;
     } catch (error) {
       throw error;
@@ -220,7 +220,7 @@ export const userService = {
   // Cambiar contraseña
   updatePassword: async (passwordData) => {
     try {
-      const response = await api.put('/api/user/password', passwordData);
+      const response = await api.put('/api/auth/profile', passwordData);
       return response;
     } catch (error) {
       throw error;
@@ -230,7 +230,7 @@ export const userService = {
   // Eliminar cuenta
   deleteAccount: async (confirmationData) => {
     try {
-      const response = await api.delete('/api/user/account', {
+      const response = await api.delete('/api/auth/profile', {
         data: confirmationData
       });
       return response;

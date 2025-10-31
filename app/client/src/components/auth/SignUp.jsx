@@ -41,8 +41,8 @@ const SignUp = () => {
     // Validación del nombre de usuario
     if (!formData.username.trim()) {
       newErrors.username = 'El nombre de usuario es requerido';
-    } else if (formData.username.length < 3) {
-      newErrors.username = 'El nombre de usuario debe tener al menos 3 caracteres';
+    } else if (formData.username.length < 5) {
+      newErrors.username = 'El nombre de usuario debe tener al menos 5 caracteres';
     } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
       newErrors.username = 'Solo se permiten letras, números y guiones bajos';
     }
@@ -57,10 +57,16 @@ const SignUp = () => {
     // Validación de la contraseña
     if (!formData.password) {
       newErrors.password = 'La contraseña es requerida';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = 'Debe contener al menos una mayúscula, una minúscula y un número';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'La contraseña debe tener al menos 8 caracteres';
+    } else if (!/(?=.*[a-z])/.test(formData.password)) {
+      newErrors.password = 'Debe contener al menos una letra minúscula';
+    } else if (!/(?=.*[A-Z])/.test(formData.password)) {
+      newErrors.password = 'Debe contener al menos una letra mayúscula';
+    } else if (!/(?=.*\d)/.test(formData.password)) {
+      newErrors.password = 'Debe contener al menos un número';
+    } else if (!/(?=.*[@$!%*?&#])/.test(formData.password)) {
+      newErrors.password = 'Debe contener al menos un carácter especial (@$!%*?&#)';
     }
 
     // Validación de confirmación de contraseña
@@ -187,7 +193,7 @@ const SignUp = () => {
               autoComplete="username"
             />
             <div id="username-help" className="form-help">
-              Mínimo 3 caracteres. Solo letras, números y guiones bajos.
+              Mínimo 5 caracteres. Solo letras, números y guiones bajos.
             </div>
             {errors.username && (
               <div 
@@ -280,7 +286,7 @@ const SignUp = () => {
               </button>
             </div>
             <div id="password-help" className="form-help">
-              Mínimo 6 caracteres con mayúscula, minúscula y número.
+              Mínimo 8 caracteres con mayúscula, minúscula, número y carácter especial (@$!%*?&#).
             </div>
             {errors.password && (
               <div 
