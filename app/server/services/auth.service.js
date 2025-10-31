@@ -266,9 +266,53 @@ export const AuthService = {
    */
   async updateProfile(userId, updates) {
     try {
-      // Si se actualiza la contraseña, hashearla
+      // Si se actualiza la contraseña, validar la contraseña actual primero
       if (updates.password) {
+        // Verificar que se proporcionó la contraseña actual
+        if (!updates.currentPassword) {
+          return { 
+            success: false, 
+            error: 'Debes proporcionar tu contraseña actual para cambiarla' 
+          };
+        }
+
+        // Obtener usuario actual
+        const { data: user, error: userError } = await UserModel.findById(userId);
+        
+        if (userError || !user) {
+          return { 
+            success: false, 
+            error: 'Usuario no encontrado' 
+          };
+        }
+
+        // Verificar que la contraseña actual sea correcta
+        const isPasswordValid = await bcrypt.compare(updates.currentPassword, user.password);
+        
+        if (!isPasswordValid) {
+          return { 
+            success: false, 
+            error: 'La contraseña actual es incorrecta' 
+          };
+        }
+
+        // Hashear la nueva contraseña
         updates.password = await bcrypt.hash(updates.password, 10);
+        
+        // Eliminar currentPassword de las actualizaciones (no debe guardarse)
+        delete updates.currentPassword;
+      }
+
+      // Si se actualiza el username, verificar que no exista (solo para usuarios activos)
+      if (updates.username) {
+        const { data: existingUser } = await UserModel.findByUsername(updates.username);
+        
+        if (existingUser && existingUser.id !== userId && existingUser.activo === true) {
+          return { 
+            success: false, 
+            error: 'El nombre de usuario ya existe' 
+          };
+        }
       }
 
       const { data, error } = await UserModel.update(userId, updates);

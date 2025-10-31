@@ -22,8 +22,7 @@ const ProfileSettings = () => {
   
   // Estados para borrar cuenta
   const [deleteData, setDeleteData] = useState({
-    confirmPassword: '',
-    confirmText: ''
+    confirmPassword: ''
   });
   
   // Estados de UI
@@ -116,10 +115,6 @@ const ProfileSettings = () => {
       newErrors.confirmPassword = 'Ingresa tu contraseña para confirmar';
     }
     
-    if (deleteData.confirmText !== 'BORRAR MI CUENTA') {
-      newErrors.confirmText = 'Debes escribir exactamente "BORRAR MI CUENTA"';
-    }
-    
     return newErrors;
   };
 
@@ -206,6 +201,7 @@ const ProfileSettings = () => {
 
     try {
       await userService.updatePassword({
+        currentPassword: passwordData.currentPassword,
         password: passwordData.newPassword
       });
       
@@ -216,7 +212,12 @@ const ProfileSettings = () => {
         confirmPassword: ''
       });
     } catch (error) {
-      setErrors({ password: error.message || 'Error al actualizar la contraseña' });
+      // Manejar errores específicos del backend
+      if (error.error) {
+        setErrors({ password: error.error });
+      } else {
+        setErrors({ password: error.message || 'Error al actualizar la contraseña' });
+      }
     } finally {
       setLoading(prev => ({ ...prev, password: false }));
     }
@@ -621,37 +622,13 @@ const ProfileSettings = () => {
                 )}
               </div>
 
-              <div className="form-group">
-                <label htmlFor="confirmText" className="form-label">
-                  Escribe "BORRAR MI CUENTA" para confirmar *
-                </label>
-                <input
-                  type="text"
-                  id="confirmText"
-                  name="confirmText"
-                  value={deleteData.confirmText}
-                  onChange={handleDeleteChange}
-                  className={`form-input ${errors.confirmText ? 'error' : ''}`}
-                  placeholder="BORRAR MI CUENTA"
-                  aria-required="true"
-                />
-                <div className="form-help">
-                  Debes escribir exactamente: BORRAR MI CUENTA
-                </div>
-                {errors.confirmText && (
-                  <div className="error-message" role="alert">
-                    {errors.confirmText}
-                  </div>
-                )}
-              </div>
-
               <div className="form-actions">
                 <button
                   type="button"
                   className="btn btn-secondary"
                   onClick={() => {
                     setShowDeleteConfirm(false);
-                    setDeleteData({ confirmPassword: '', confirmText: '' });
+                    setDeleteData({ confirmPassword: '' });
                     setErrors({});
                   }}
                 >
