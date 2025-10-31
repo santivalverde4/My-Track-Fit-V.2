@@ -720,6 +720,16 @@ export const workoutService = {
     }
   },
 
+  // Actualizar entrenamiento
+  updateWorkout: async (workoutId, workoutData) => {
+    try {
+      const response = await api.put(`/api/routines/workouts/${workoutId}`, workoutData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   // Eliminar entrenamiento
   deleteWorkout: async (routineId, workoutId) => {
     try {

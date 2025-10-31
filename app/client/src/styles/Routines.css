@@ -249,6 +249,7 @@
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1rem;
+  padding-right: 75px; /* Espacio para los botones */
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -257,6 +258,7 @@
   justify-content: flex-start;
   min-height: 80px;
   position: relative;
+  overflow: hidden;
 }
 
 .routine-card:hover {
@@ -271,14 +273,22 @@
   color: var(--text-primary);
   margin: 0;
   text-align: left;
+  flex: 1;
 }
 
-.btn-delete-routine {
+.routine-actions {
   position: absolute;
   top: 50%;
-  right: 0.75rem;
+  right: 1rem;
   transform: translateY(-50%);
-  background: var(--error-color, #e53e3e);
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn-edit-routine,
+.btn-delete-routine {
+  background: var(--primary-color, #4299e1);
   color: white;
   border: none;
   border-radius: 5px;
@@ -293,18 +303,33 @@
   opacity: 1;
 }
 
+.btn-edit-routine {
+  background: var(--primary-color, #4299e1);
+}
+
+.btn-delete-routine {
+  background: var(--error-color, #e53e3e);
+}
+
+.btn-edit-routine svg,
 .btn-delete-routine svg {
   width: 14px;
   height: 14px;
 }
 
-.btn-delete-routine:hover {
-  background: var(--error-dark, #c53030);
-  transform: translateY(-50%) scale(1.1);
+.btn-edit-routine:hover {
+  background: var(--primary-dark, #2b6cb0);
+  transform: scale(1.1);
 }
 
+.btn-delete-routine:hover {
+  background: var(--error-dark, #c53030);
+  transform: scale(1.1);
+}
+
+.btn-edit-routine:active,
 .btn-delete-routine:active {
-  transform: translateY(-50%) scale(0.95);
+  transform: scale(0.95);
 }
 
 .metadata-item {

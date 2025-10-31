@@ -7,6 +7,7 @@ const Workouts = ({ routineId, routineName, onBack }) => {
   // Estados principales
   const [workouts, setWorkouts] = useState([]);
   const [showAddWorkoutModal, setShowAddWorkoutModal] = useState(false);
+  const [showEditWorkoutModal, setShowEditWorkoutModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   
@@ -18,6 +19,9 @@ const Workouts = ({ routineId, routineName, onBack }) => {
   const [newWorkout, setNewWorkout] = useState({
     nombre: ''
   });
+
+  // Estado para editar entrenamiento
+  const [editingWorkout, setEditingWorkout] = useState(null);
 
   // Cargar entrenamientos al montar el componente
   useEffect(() => {
@@ -85,6 +89,62 @@ const Workouts = ({ routineId, routineName, onBack }) => {
     }
     
     return newErrors;
+  };
+
+  // Validación para editar entrenamiento
+  const validateEditWorkout = () => {
+    const newErrors = {};
+    
+    if (!editingWorkout.nombre.trim()) {
+      newErrors.nombre = 'El nombre es requerido';
+    } else if (editingWorkout.nombre.trim().length < 3) {
+      newErrors.nombre = 'Debe tener al menos 3 caracteres';
+    }
+    
+    return newErrors;
+  };
+
+  // Manejar edición de entrenamiento
+  const handleEditWorkout = (workout, e) => {
+    e.stopPropagation();
+    setEditingWorkout({
+      id: workout.id,
+      nombre: workout.nombre
+    });
+    setShowEditWorkoutModal(true);
+  };
+
+  const handleUpdateWorkout = async (e) => {
+    e.preventDefault();
+    
+    const validationErrors = validateEditWorkout();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setLoading(true);
+    setErrors({});
+
+    try {
+      const workoutData = {
+        nombre: editingWorkout.nombre.trim()
+      };
+
+      await workoutService.updateWorkout(editingWorkout.id, workoutData);
+      
+      alert('Entrenamiento actualizado exitosamente');
+      setEditingWorkout(null);
+      setShowEditWorkoutModal(false);
+      
+      // Recargar entrenamientos
+      await loadWorkouts();
+      
+    } catch (error) {
+      setErrors({ general: error.message || 'Error al actualizar el entrenamiento' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Manejar eliminación de entrenamiento
@@ -202,19 +262,32 @@ const Workouts = ({ routineId, routineName, onBack }) => {
               onClick={() => handleWorkoutClick(workout)}
             >
               <h3 className="workout-name">{workout.nombre}</h3>
-              <button
-                className="btn-delete-workout"
-                onClick={(e) => handleDeleteWorkout(workout.id, workout.nombre, e)}
-                aria-label={`Eliminar entrenamiento ${workout.nombre}`}
-                title="Eliminar entrenamiento"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="3 6 5 6 21 6"/>
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                  <line x1="10" y1="11" x2="10" y2="17"/>
-                  <line x1="14" y1="11" x2="14" y2="17"/>
-                </svg>
-              </button>
+              <div className="workout-actions">
+                <button
+                  className="btn-edit-workout"
+                  onClick={(e) => handleEditWorkout(workout, e)}
+                  aria-label={`Editar entrenamiento ${workout.nombre}`}
+                  title="Editar entrenamiento"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+                <button
+                  className="btn-delete-workout"
+                  onClick={(e) => handleDeleteWorkout(workout.id, workout.nombre, e)}
+                  aria-label={`Eliminar entrenamiento ${workout.nombre}`}
+                  title="Eliminar entrenamiento"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    <line x1="10" y1="11" x2="10" y2="17"/>
+                    <line x1="14" y1="11" x2="14" y2="17"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           ))
         )}
@@ -285,6 +358,79 @@ const Workouts = ({ routineId, routineName, onBack }) => {
                   disabled={loading}
                 >
                   {loading ? 'Creando...' : 'Crear Entrenamiento'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Editar Entrenamiento */}
+      {showEditWorkoutModal && editingWorkout && (
+        <div className="modal-overlay" onClick={() => setShowEditWorkoutModal(false)}>
+          <div 
+            className="modal-content" 
+            onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title-editar-workout"
+          >
+            <div className="modal-header">
+              <h3 id="modal-title-editar-workout">Editar Entrenamiento</h3>
+              <button
+                className="modal-close"
+                onClick={() => setShowEditWorkoutModal(false)}
+                aria-label="Cerrar modal"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateWorkout} className="modal-form">
+              {errors.general && (
+                <div className="error-message global-error" role="alert">
+                  {errors.general}
+                </div>
+              )}
+
+              <div className="form-group">
+                <label htmlFor="editWorkoutName" className="form-label">
+                  Nombre del Entrenamiento *
+                </label>
+                <input
+                  type="text"
+                  id="editWorkoutName"
+                  className={`form-input ${errors.nombre ? 'error' : ''}`}
+                  value={editingWorkout.nombre}
+                  onChange={(e) => setEditingWorkout({...editingWorkout, nombre: e.target.value})}
+                  placeholder="Ej: Día 1 - Pecho y Tríceps"
+                  aria-describedby={errors.nombre ? 'nombre-error' : undefined}
+                  autoFocus
+                />
+                {errors.nombre && (
+                  <span id="nombre-error" className="error-message" role="alert">
+                    {errors.nombre}
+                  </span>
+                )}
+              </div>
+
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowEditWorkoutModal(false)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading}
+                >
+                  {loading ? 'Actualizando...' : 'Actualizar Entrenamiento'}
                 </button>
               </div>
             </form>

@@ -7,6 +7,7 @@ const Routines = () => {
   // Estados principales
   const [routines, setRoutines] = useState([]);
   const [showAddRoutineModal, setShowAddRoutineModal] = useState(false);
+  const [showEditRoutineModal, setShowEditRoutineModal] = useState(false);
   const [showExerciseLibraryModal, setShowExerciseLibraryModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -21,6 +22,9 @@ const Routines = () => {
     nombre: '',
     descripcion: ''
   });
+
+  // Estados para editar rutina
+  const [editingRoutine, setEditingRoutine] = useState(null);
 
   // Estados para nuevo ejercicio en biblioteca
   const [newExercise, setNewExercise] = useState({
@@ -128,6 +132,51 @@ const Routines = () => {
     }
   };
 
+  // Manejar edición de rutina
+  const handleEditRoutine = (routine, e) => {
+    e.stopPropagation();
+    setEditingRoutine({
+      id: routine.id,
+      nombre: routine.nombre,
+      descripcion: routine.descripcion || ''
+    });
+    setShowEditRoutineModal(true);
+  };
+
+  const handleUpdateRoutine = async (e) => {
+    e.preventDefault();
+    
+    const validationErrors = validateEditRoutine();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setLoading(true);
+    setErrors({});
+
+    try {
+      const routineData = {
+        nombre: editingRoutine.nombre.trim(),
+        descripcion: editingRoutine.descripcion.trim() || `Rutina de entrenamiento: ${editingRoutine.nombre}`
+      };
+
+      await routineService.updateRoutine(editingRoutine.id, routineData);
+      
+      alert('Rutina actualizada exitosamente');
+      setEditingRoutine(null);
+      setShowEditRoutineModal(false);
+      
+      // Recargar rutinas
+      await loadRoutines();
+      
+    } catch (error) {
+      setErrors({ general: error.message || 'Error al actualizar la rutina' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Validaciones para nueva rutina (simplificado)
   const validateRoutine = () => {
     const newErrors = {};
@@ -135,6 +184,19 @@ const Routines = () => {
     if (!newRoutine.nombre.trim()) {
       newErrors.nombre = 'El nombre es requerido';
     } else if (newRoutine.nombre.trim().length < 3) {
+      newErrors.nombre = 'Debe tener al menos 3 caracteres';
+    }
+    
+    return newErrors;
+  };
+
+  // Validaciones para editar rutina
+  const validateEditRoutine = () => {
+    const newErrors = {};
+    
+    if (!editingRoutine.nombre.trim()) {
+      newErrors.nombre = 'El nombre es requerido';
+    } else if (editingRoutine.nombre.trim().length < 3) {
       newErrors.nombre = 'Debe tener al menos 3 caracteres';
     }
     
@@ -303,19 +365,32 @@ const Routines = () => {
               aria-label={`Rutina ${routine.nombre}`}
             >
               <h3 className="routine-name">{routine.nombre}</h3>
-              <button
-                className="btn-delete-routine"
-                onClick={(e) => handleDeleteRoutine(routine.id, routine.nombre, e)}
-                aria-label={`Eliminar rutina ${routine.nombre}`}
-                title="Eliminar rutina"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="3 6 5 6 21 6"/>
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                  <line x1="10" y1="11" x2="10" y2="17"/>
-                  <line x1="14" y1="11" x2="14" y2="17"/>
-                </svg>
-              </button>
+              <div className="routine-actions">
+                <button
+                  className="btn-edit-routine"
+                  onClick={(e) => handleEditRoutine(routine, e)}
+                  aria-label={`Editar rutina ${routine.nombre}`}
+                  title="Editar rutina"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+                <button
+                  className="btn-delete-routine"
+                  onClick={(e) => handleDeleteRoutine(routine.id, routine.nombre, e)}
+                  aria-label={`Eliminar rutina ${routine.nombre}`}
+                  title="Eliminar rutina"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    <line x1="10" y1="11" x2="10" y2="17"/>
+                    <line x1="14" y1="11" x2="14" y2="17"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           ))
         )}
@@ -399,6 +474,91 @@ const Routines = () => {
                   disabled={loading}
                 >
                   {loading ? 'Creando...' : 'Crear Rutina'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Editar Rutina */}
+      {showEditRoutineModal && editingRoutine && (
+        <div className="modal-overlay" onClick={() => setShowEditRoutineModal(false)}>
+          <div 
+            className="modal-content" 
+            onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title-editar-rutina"
+          >
+            <div className="modal-header">
+              <h3 id="modal-title-editar-rutina">Editar Rutina</h3>
+              <button
+                className="modal-close"
+                onClick={() => setShowEditRoutineModal(false)}
+                aria-label="Cerrar modal"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateRoutine} className="modal-form">
+              {errors.general && (
+                <div className="error-message global-error" role="alert">
+                  {errors.general}
+                </div>
+              )}
+
+              <div className="form-group">
+                <label htmlFor="editRoutineName" className="form-label">
+                  Nombre de la Rutina *
+                </label>
+                <input
+                  type="text"
+                  id="editRoutineName"
+                  value={editingRoutine.nombre}
+                  onChange={(e) => setEditingRoutine({...editingRoutine, nombre: e.target.value})}
+                  className={`form-input ${errors.nombre ? 'error' : ''}`}
+                  placeholder="Ej: Rutina de Fuerza, Cardio Matutino..."
+                  aria-required="true"
+                  autoFocus
+                />
+                {errors.nombre && (
+                  <div className="error-message" role="alert">{errors.nombre}</div>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="editRoutineDescription" className="form-label">
+                  Descripción
+                </label>
+                <textarea
+                  id="editRoutineDescription"
+                  value={editingRoutine.descripcion}
+                  onChange={(e) => setEditingRoutine({...editingRoutine, descripcion: e.target.value})}
+                  className="form-input"
+                  placeholder="Describe tu rutina..."
+                  rows="3"
+                />
+              </div>
+
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowEditRoutineModal(false)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading}
+                >
+                  {loading ? 'Actualizando...' : 'Actualizar Rutina'}
                 </button>
               </div>
             </form>
