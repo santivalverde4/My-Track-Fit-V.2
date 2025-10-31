@@ -2,11 +2,19 @@
    Routines Component Styles
    ======================================== */
 
+* {
+  box-sizing: border-box;
+}
+
 .routines-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   min-height: calc(100vh - var(--bottom-nav-height));
+  padding-bottom: 120px; /* Espacio para bottom navigation */
+  overflow-x: hidden; /* Prevenir desbordamiento horizontal */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ========================================
@@ -16,6 +24,8 @@
 .routines-header {
   margin-bottom: 2rem;
   text-align: center;
+  width: 100%;
+  overflow: hidden;
 }
 
 .header-title {
@@ -24,12 +34,15 @@
   justify-content: center;
   gap: 1rem;
   margin-bottom: 0.5rem;
+  flex-wrap: wrap; /* Permitir wrap en pantallas pequeñas */
+  width: 100%;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-shrink: 0; /* No permitir que se compriman */
 }
 
 .btn-secondary {
@@ -75,40 +88,31 @@
   font-weight: 700;
   color: var(--text-primary, #1a202c);
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .add-routine-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
   background: var(--primary-color, #3182ce);
   color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
 }
 
 .add-routine-btn:hover {
   background: var(--primary-hover, #2c5aa0);
-  transform: translateY(-2px) scale(1.05);
   box-shadow: 0 6px 16px rgba(49, 130, 206, 0.4);
-}
-
-.add-routine-btn:active {
-  transform: translateY(0) scale(0.98);
 }
 
 .header-description {
   font-size: 1.1rem;
   color: var(--text-secondary, #718096);
   margin: 0;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 100%;
+  padding: 0 1rem;
+  line-height: 1.5;
+  text-align: center;
 }
 
 /* ========================================
@@ -235,9 +239,11 @@
 
 .routines-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
+  width: 100%;
+  overflow: hidden;
 }
 
 /* ========================================
@@ -259,6 +265,8 @@
   min-height: 80px;
   position: relative;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .routine-card:hover {
@@ -274,6 +282,10 @@
   margin: 0;
   text-align: left;
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 80px); /* Reservar espacio para botones */
 }
 
 .routine-actions {
@@ -282,54 +294,33 @@
   right: 1rem;
   transform: translateY(-50%);
   display: flex;
+  flex-direction: row; /* Siempre horizontal */
   gap: 0.5rem;
   align-items: center;
 }
 
-.btn-edit-routine,
-.btn-delete-routine {
-  background: var(--primary-color, #4299e1);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 0.3rem;
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 1;
-}
-
 .btn-edit-routine {
   background: var(--primary-color, #4299e1);
+  color: white;
 }
 
 .btn-delete-routine {
   background: var(--error-color, #e53e3e);
+  color: white;
 }
 
 .btn-edit-routine svg,
 .btn-delete-routine svg {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 .btn-edit-routine:hover {
   background: var(--primary-dark, #2b6cb0);
-  transform: scale(1.1);
 }
 
 .btn-delete-routine:hover {
   background: var(--error-dark, #c53030);
-  transform: scale(1.1);
-}
-
-.btn-edit-routine:active,
-.btn-delete-routine:active {
-  transform: scale(0.95);
 }
 
 .metadata-item {
@@ -696,17 +687,26 @@
 @media (max-width: 768px) {
   .routines-container {
     padding: 1rem;
+    padding-bottom: 100px;
+    max-width: 100vw;
   }
 
   .header-title {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
+    flex-wrap: nowrap;
   }
 
   .header-title h2 {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .header-actions {
+    flex-shrink: 0;
   }
 
   .action-buttons {
@@ -724,6 +724,16 @@
     gap: 1.5rem;
   }
 
+  .routine-card {
+    padding-right: 70px; /* Ajustar espacio para botones en mobile */
+    width: 100%;
+  }
+
+  .routine-name {
+    font-size: 1rem;
+    max-width: calc(100% - 75px);
+  }
+
   .routine-metadata {
     flex-direction: column;
     gap: 0.75rem;
@@ -735,8 +745,22 @@
     align-items: center;
   }
 
+  /* Mantener botones lado a lado en mobile */
   .routine-actions {
-    flex-direction: column;
+    flex-direction: row;
+    gap: 0.4rem;
+  }
+
+  .btn-edit-routine,
+  .btn-delete-routine {
+    width: 32px;
+    height: 32px;
+  }
+
+  .btn-edit-routine svg,
+  .btn-delete-routine svg {
+    width: 16px;
+    height: 16px;
   }
 
   .action-btn {
@@ -760,14 +784,16 @@
 @media (max-width: 480px) {
   .routines-container {
     padding: 0.75rem;
+    padding-bottom: 90px;
+    max-width: 100vw;
   }
 
   .header-title {
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   .header-title h2 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   .add-routine-btn {
@@ -781,24 +807,45 @@
   }
 
   .add-exercise-btn {
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    gap: 0.75rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.9rem;
+    min-width: auto;
     min-height: 48px;
-    min-width: 240px;
   }
 
-  .add-routine-btn {
-    width: 40px;
-    height: 40px;
+  .routines-list {
+    gap: 1.25rem;
   }
 
   .routine-card {
-    padding: 1rem;
+    min-height: 70px;
+    padding: 0.875rem;
+    padding-right: 65px;
+    width: 100%;
   }
 
   .routine-name {
-    font-size: 1.25rem;
+    font-size: 0.95rem;
+    max-width: calc(100% - 70px);
+  }
+
+  /* Botones más pequeños pero aún lado a lado */
+  .btn-edit-routine,
+  .btn-delete-routine {
+    width: 28px;
+    height: 28px;
+    padding: 0.25rem;
+  }
+
+  .btn-edit-routine svg,
+  .btn-delete-routine svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .routine-actions {
+    right: 0.75rem;
+    gap: 0.35rem;
   }
 
   .modal-overlay {

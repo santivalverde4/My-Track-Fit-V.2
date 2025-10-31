@@ -38,7 +38,10 @@ const UserStatistics = ({ onBack }) => {
       const injuriesResponse = await injuryService.getInjuries();
       const injuries = injuriesResponse.data || [];
       
-      // Filtrar solo lesiones dentro del rango de días
+      // Total ABSOLUTO de lesiones (sin filtrar por fecha)
+      const totalAbsoluteInjuries = injuries.length;
+      
+      // Filtrar solo lesiones dentro del rango de días PARA EL GRÁFICO
       const filteredInjuries = injuries.filter(injury => {
         const injuryDate = new Date(injury.dateOccurred || injury.date);
         return injuryDate >= cutoffDate && injuryDate <= today;
@@ -143,7 +146,8 @@ const UserStatistics = ({ onBack }) => {
       }
       */
 
-      const totalInjuries = injuriesChartData.reduce((sum, item) => sum + item.cantidad, 0);
+      // Usar el total ABSOLUTO de lesiones (no el filtrado por rango de tiempo)
+      const totalInjuries = totalAbsoluteInjuries;
       const avgCalories = nutritionData.length > 0
         ? Math.round(nutritionData.reduce((sum, item) => sum + item.calorias, 0) / nutritionData.length)
         : 0;

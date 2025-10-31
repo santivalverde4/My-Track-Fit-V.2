@@ -1,5 +1,9 @@
 /* Exercises.css - Estilos para la sección de ejercicios */
 
+* {
+  box-sizing: border-box;
+}
+
 /* Variables específicas */
 :root {
   --exercise-primary: #7c3aed;
@@ -16,7 +20,11 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  padding-bottom: 120px;
   min-height: calc(100vh - var(--bottom-nav-height));
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ========================================
@@ -26,6 +34,8 @@
 .exercises-header {
   text-align: center;
   margin-bottom: 3rem;
+  width: 100%;
+  overflow: hidden;
 }
 
 .header-title {
@@ -33,6 +43,9 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 1rem;
 }
 
 .header-title h2 {
@@ -42,12 +55,17 @@
   margin: 0;
   text-align: left;
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .header-buttons {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
 .back-btn {
@@ -72,23 +90,13 @@
 }
 
 .add-exercise-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 64px;
-  height: 64px;
   background: var(--exercise-primary);
   color: white;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
 .add-exercise-btn:hover {
   background: var(--exercise-hover);
-  transform: translateY(-2px) scale(1.05);
   box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
 }
 
@@ -96,9 +104,10 @@
   font-size: 1.1rem;
   color: var(--text-secondary);
   margin: 0;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 100%;
+  padding: 0 1rem;
+  line-height: 1.5;
+  text-align: center;
 }
 
 /* ========================================
@@ -428,14 +437,19 @@
 @media (max-width: 768px) {
   .exercises-container {
     padding: 1rem;
+    padding-bottom: 100px;
+    max-width: 100vw;
   }
 
   .header-title h2 {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    flex-shrink: 1;
+    min-width: 0;
   }
 
   .header-buttons {
     gap: 0.75rem;
+    flex-shrink: 0;
   }
 
   .back-btn,
@@ -447,16 +461,19 @@
   .exercises-list {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 1rem;
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
   .exercises-container {
     padding: 0.75rem;
+    padding-bottom: 90px;
+    max-width: 100vw;
   }
 
   .header-title h2 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   .header-buttons {
@@ -472,11 +489,13 @@
   .exercises-list {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 0.75rem;
+    width: 100%;
   }
 
   .exercise-card {
     padding: 0.75rem;
     min-height: 60px;
+    width: 100%;
   }
 
   .exercise-name {
