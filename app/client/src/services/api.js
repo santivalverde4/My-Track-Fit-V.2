@@ -421,7 +421,7 @@ export const nutritionService = {
     }
   },
 
-  // Obtener comidas por fecha
+  // Obtener comidas por fecha (método anterior - deprecated)
   getMealsByDate: async (date) => {
     try {
       const response = await api.get(`/api/nutrition/date/${date}`);
@@ -431,10 +431,20 @@ export const nutritionService = {
     }
   },
 
+  // Obtener logs de nutrición por fecha (usa query parameter)
+  getNutritionLogsByDate: async (date) => {
+    try {
+      const response = await api.get(`/api/nutrition/logs?fecha=${date}`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   // Agregar comida
   addMeal: async (mealData) => {
     try {
-      const response = await api.post('/api/nutrition/meals', mealData);
+      const response = await api.post('/api/nutrition/logs', mealData);
       return response;
     } catch (error) {
       throw error;
@@ -444,7 +454,7 @@ export const nutritionService = {
   // Actualizar comida
   updateMeal: async (mealId, mealData) => {
     try {
-      const response = await api.put(`/api/nutrition/meals/${mealId}`, mealData);
+      const response = await api.put(`/api/nutrition/logs/${mealId}`, mealData);
       return response;
     } catch (error) {
       throw error;
@@ -454,7 +464,7 @@ export const nutritionService = {
   // Eliminar comida
   deleteMeal: async (mealId) => {
     try {
-      const response = await api.delete(`/api/nutrition/meals/${mealId}`);
+      const response = await api.delete(`/api/nutrition/logs/${mealId}`);
       return response;
     } catch (error) {
       throw error;
@@ -537,7 +547,7 @@ export const statisticsService = {
   // Obtener actividad semanal
   getWeeklyActivity: async () => {
     try {
-      const response = await api.get('/api/statistics/activity/weekly');
+      const response = await api.get('/api/statistics/weekly-activity');
       return response;
     } catch (error) {
       throw error;

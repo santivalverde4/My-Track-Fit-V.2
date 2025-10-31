@@ -6,7 +6,7 @@ export const MetricsModel = {
    */
   async getUserMetricsByDate(userId, fecha) {
     const { data, error } = await supabase
-      .from('MetricasDiarias')
+      .from('metricasdiarias')
       .select('*')
       .eq('usuario_id', userId)
       .eq('fecha', fecha)
@@ -20,7 +20,7 @@ export const MetricsModel = {
    */
   async getUserMetricsByDateRange(userId, fechaInicio, fechaFin) {
     const { data, error } = await supabase
-      .from('MetricasDiarias')
+      .from('metricasdiarias')
       .select('*')
       .eq('usuario_id', userId)
       .gte('fecha', fechaInicio)
@@ -35,7 +35,7 @@ export const MetricsModel = {
    */
   async create(metricsData) {
     const { data, error } = await supabase
-      .from('MetricasDiarias')
+      .from('metricasdiarias')
       .insert([metricsData])
       .select()
       .single();
@@ -48,7 +48,7 @@ export const MetricsModel = {
    */
   async update(id, metricsData) {
     const { data, error } = await supabase
-      .from('MetricasDiarias')
+      .from('metricasdiarias')
       .update(metricsData)
       .eq('id', id)
       .select()
@@ -62,7 +62,7 @@ export const MetricsModel = {
    */
   async upsertByDate(userId, fecha, metricsData) {
     const { data, error } = await supabase
-      .from('MetricasDiarias')
+      .from('metricasdiarias')
       .upsert({
         usuario_id: userId,
         fecha,
@@ -81,7 +81,7 @@ export const MetricsModel = {
    */
   async delete(id) {
     const { data, error } = await supabase
-      .from('MetricasDiarias')
+      .from('metricasdiarias')
       .delete()
       .eq('id', id);
     
@@ -93,7 +93,7 @@ export const MetricsModel = {
    */
   async getLastNMetrics(userId, limit = 30) {
     const { data, error } = await supabase
-      .from('MetricasDiarias')
+      .from('metricasdiarias')
       .select('*')
       .eq('usuario_id', userId)
       .order('fecha', { ascending: false })
@@ -107,7 +107,7 @@ export const MetricsModel = {
    */
   async getUserWorkouts(userId, fechaInicio, fechaFin) {
     const { data, error } = await supabase
-      .from('Entrenamientos')
+      .from('entrenamientos')
       .select('id, fecha, duracion, notas')
       .eq('usuario_id', userId)
       .gte('fecha', fechaInicio)
@@ -128,7 +128,7 @@ export const MetricsModel = {
 
       // 1. Obtener entrenamientos del usuario en el rango de fechas
       const { data: entrenamientos, error: errorEnt } = await supabase
-        .from('Entrenamientos')
+        .from('entrenamientos')
         .select('id')
         .eq('usuario_id', userId)
         .gte('fecha', fechaInicioStr);
@@ -142,8 +142,8 @@ export const MetricsModel = {
 
       // 2. Obtener instancias de ejercicios con los datos del ejercicio
       const { data: instancias, error: errorInst } = await supabase
-        .from('Instancias_Ejercicios')
-        .select('ejercicio_id, entrenamiento_id, Ejercicios(nombre)')
+        .from('exercise_instances')
+        .select('exercise_id, entrenamiento_id, exercises(name)')
         .in('entrenamiento_id', entrenamientoIds);
 
       if (errorInst) return { data: null, error: errorInst };
@@ -155,7 +155,7 @@ export const MetricsModel = {
       const ejerciciosMap = new Map();
       
       instancias.forEach(inst => {
-        const ejercicioNombre = inst.Ejercicios?.nombre;
+        const ejercicioNombre = inst.exercises?.name;
         if (!ejercicioNombre) return;
 
         if (!ejerciciosMap.has(ejercicioNombre)) {
@@ -201,7 +201,7 @@ export const MetricsModel = {
 
       // 1. Obtener entrenamientos del usuario
       const { data: entrenamientos, error: errorEnt } = await supabase
-        .from('Entrenamientos')
+        .from('entrenamientos')
         .select('id')
         .eq('usuario_id', userId)
         .gte('fecha', fechaInicioStr);
@@ -215,8 +215,8 @@ export const MetricsModel = {
 
       // 2. Obtener instancias con grupo muscular
       const { data: instancias, error: errorInst } = await supabase
-        .from('Instancias_Ejercicios')
-        .select('Ejercicios(grupo_muscular)')
+        .from('exercise_instances')
+        .select('exercises(categoria)')
         .in('entrenamiento_id', entrenamientoIds);
 
       if (errorInst) return { data: null, error: errorInst };
@@ -228,7 +228,7 @@ export const MetricsModel = {
       const gruposMap = new Map();
       
       instancias.forEach(inst => {
-        const grupo = inst.Ejercicios?.grupo_muscular;
+        const grupo = inst.exercises?.categoria;
         if (!grupo) return;
 
         gruposMap.set(grupo, (gruposMap.get(grupo) || 0) + 1);
@@ -256,8 +256,8 @@ export const MetricsModel = {
 
       // 1. Obtener nutrición temporal del usuario con alimentos
       const { data: nutricion, error } = await supabase
-        .from('NutricionTemporal')
-        .select('fecha, cantidad, AlimentosBee(proteinas, carbohidratos, grasas)')
+        .from('nutriciontemporal')
+        .select('fecha, cantidad_gramos, alimentosbase(proteinas_por_100g, carbohidratos_por_100g, grasas_por_100g)')
         .eq('usuario_id', userId)
         .gte('fecha', fechaInicioStr)
         .order('fecha', { ascending: false });
@@ -288,12 +288,12 @@ export const MetricsModel = {
         }
 
         const semana = semanasMap.get(semanaKey);
-        const alimento = registro.AlimentosBee;
+        const alimento = registro.alimentosbase;
         if (alimento) {
-          const factor = registro.cantidad / 100;
-          semana.proteinas += (alimento.proteinas || 0) * factor;
-          semana.carbohidratos += (alimento.carbohidratos || 0) * factor;
-          semana.grasas += (alimento.grasas || 0) * factor;
+          const factor = registro.cantidad_gramos / 100;
+          semana.proteinas += (alimento.proteinas_por_100g || 0) * factor;
+          semana.carbohidratos += (alimento.carbohidratos_por_100g || 0) * factor;
+          semana.grasas += (alimento.grasas_por_100g || 0) * factor;
         }
       });
 
@@ -324,14 +324,14 @@ export const MetricsModel = {
 
       // 1. Obtener calorías consumidas
       const { data: nutricion, error: errorNut } = await supabase
-        .from('NutricionTemporal')
-        .select('fecha, cantidad, AlimentosBee(calorias)')
+        .from('nutriciontemporal')
+        .select('fecha, cantidad_gramos, alimentosbase(calorias_por_100g)')
         .eq('usuario_id', userId)
         .gte('fecha', fechaInicioStr);
 
       // 2. Obtener calorías quemadas
       const { data: metricas, error: errorMet } = await supabase
-        .from('MetricasDiarias')
+        .from('metricasdiarias')
         .select('fecha, calorias_quemadas')
         .eq('usuario_id', userId)
         .gte('fecha', fechaInicioStr);
@@ -360,9 +360,9 @@ export const MetricsModel = {
           }
 
           const semana = semanasMap.get(semanaKey);
-          const alimento = registro.AlimentosBee;
-          if (alimento && alimento.calorias) {
-            semana.consumidas += (alimento.calorias * registro.cantidad / 100);
+          const alimento = registro.alimentosbase;
+          if (alimento && alimento.calorias_por_100g) {
+            semana.consumidas += (alimento.calorias_por_100g * registro.cantidad_gramos / 100);
           }
         });
       }

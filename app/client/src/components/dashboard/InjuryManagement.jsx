@@ -49,7 +49,7 @@ const InjuryManagement = ({ onBack }) => {
     setLoading(true);
     try {
       const response = await injuryService.getInjuries();
-      setInjuries(response.injuries || []);
+      setInjuries(response.data || []);
     } catch (error) {
       console.error('Error al cargar lesiones:', error);
       setInjuries([]);
@@ -88,7 +88,7 @@ const InjuryManagement = ({ onBack }) => {
       const response = await injuryService.createInjury(formData);
       
       // Agregar la nueva lesión a la lista
-      setInjuries(prev => [response.injury, ...prev]);
+      setInjuries(prev => [response.data, ...prev]);
       
       // Resetear formulario
       setFormData({
@@ -336,7 +336,7 @@ const InjuryManagement = ({ onBack }) => {
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="btn btn-secondary"
+                className="btn btn-danger"
                 disabled={loading}
               >
                 <i className="bi bi-x-circle"></i>

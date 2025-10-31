@@ -6,7 +6,7 @@ export const FoodModel = {
    */
   async getAll() {
     const { data, error } = await supabase
-      .from('AlimentosBase')
+      .from('alimentosbase')
       .select('*')
       .order('nombre');
     
@@ -18,7 +18,7 @@ export const FoodModel = {
    */
   async getByCategory(categoria) {
     const { data, error } = await supabase
-      .from('AlimentosBase')
+      .from('alimentosbase')
       .select('*')
       .eq('categoria', categoria)
       .order('nombre');
@@ -31,7 +31,7 @@ export const FoodModel = {
    */
   async searchByName(searchTerm) {
     const { data, error } = await supabase
-      .from('AlimentosBase')
+      .from('alimentosbase')
       .select('*')
       .ilike('nombre', `%${searchTerm}%`)
       .order('nombre');
@@ -44,7 +44,7 @@ export const FoodModel = {
    */
   async create(foodData) {
     const { data, error } = await supabase
-      .from('AlimentosBase')
+      .from('alimentosbase')
       .insert([foodData])
       .select()
       .single();
@@ -57,7 +57,7 @@ export const FoodModel = {
    */
   async update(id, foodData) {
     const { data, error } = await supabase
-      .from('AlimentosBase')
+      .from('alimentosbase')
       .update(foodData)
       .eq('id', id)
       .select()
@@ -71,7 +71,7 @@ export const FoodModel = {
    */
   async delete(id) {
     const { data, error } = await supabase
-      .from('AlimentosBase')
+      .from('alimentosbase')
       .delete()
       .eq('id', id);
     
@@ -85,7 +85,7 @@ export const NutritionLogModel = {
    */
   async getUserLogsByDate(userId, fecha) {
     const { data, error } = await supabase
-      .from('NutricionTemporal')
+      .from('nutriciontemporal')
       .select('*')
       .eq('usuario_id', userId)
       .eq('fecha', fecha)
@@ -99,7 +99,7 @@ export const NutritionLogModel = {
    */
   async getUserLogsByDateRange(userId, fechaInicio, fechaFin) {
     const { data, error } = await supabase
-      .from('NutricionTemporal')
+      .from('nutriciontemporal')
       .select('*')
       .eq('usuario_id', userId)
       .gte('fecha', fechaInicio)
@@ -114,7 +114,7 @@ export const NutritionLogModel = {
    */
   async create(nutritionData) {
     const { data, error } = await supabase
-      .from('NutricionTemporal')
+      .from('nutriciontemporal')
       .insert([nutritionData])
       .select()
       .single();
@@ -127,7 +127,7 @@ export const NutritionLogModel = {
    */
   async update(id, nutritionData) {
     const { data, error } = await supabase
-      .from('NutricionTemporal')
+      .from('nutriciontemporal')
       .update(nutritionData)
       .eq('id', id)
       .select()
@@ -141,7 +141,7 @@ export const NutritionLogModel = {
    */
   async delete(id) {
     const { data, error } = await supabase
-      .from('NutricionTemporal')
+      .from('nutriciontemporal')
       .delete()
       .eq('id', id);
     
@@ -153,7 +153,7 @@ export const NutritionLogModel = {
    */
   async getDailySummary(userId, fecha) {
     const { data, error } = await supabase
-      .from('NutricionTemporal')
+      .from('nutriciontemporal')
       .select('calorias, proteinas, carbohidratos, grasas')
       .eq('usuario_id', userId)
       .eq('fecha', fecha);
@@ -178,7 +178,7 @@ export const NutritionGoalsModel = {
    */
   async getUserGoals(userId) {
     const { data, error } = await supabase
-      .from('ObjetivosNutricionales')
+      .from('objetivosnutricionales')
       .select('*')
       .eq('usuario_id', userId)
       .single();
@@ -191,7 +191,7 @@ export const NutritionGoalsModel = {
    */
   async create(goalsData) {
     const { data, error } = await supabase
-      .from('ObjetivosNutricionales')
+      .from('objetivosnutricionales')
       .insert([goalsData])
       .select()
       .single();
@@ -209,7 +209,7 @@ export const NutritionGoalsModel = {
     };
 
     const { data, error } = await supabase
-      .from('ObjetivosNutricionales')
+      .from('objetivosnutricionales')
       .update(updatedData)
       .eq('usuario_id', userId)
       .select()
@@ -223,7 +223,7 @@ export const NutritionGoalsModel = {
    */
   async delete(userId) {
     const { data, error } = await supabase
-      .from('ObjetivosNutricionales')
+      .from('objetivosnutricionales')
       .delete()
       .eq('usuario_id', userId);
     
