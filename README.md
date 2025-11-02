@@ -22,16 +22,24 @@ Aplicación completa de fitness con frontend React (Vite) y backend Node.js/Expr
 
 **Autenticación y Usuarios**
 - Sistema de registro e inicio de sesión con JWT
+- Confirmación de cuenta por email
+- Recuperación de contraseña por email
 - Gestión de perfil de usuario
-- Cambio de contraseña con validación
+- Cambio de contraseña con validación de contraseña actual
+- Eliminación de cuenta con confirmación por contraseña
 - Autenticación persistente con tokens
+- Soft delete (usuarios inactivos permiten reutilizar email/username)
 
 **Sistema de Entrenamientos**
 - Gestión completa de rutinas personalizadas
-- Creación y edición de entrenamientos por día
+- Creación, edición y eliminación de rutinas
+- Creación, edición y eliminación de entrenamientos por rutina
 - Catálogo de ejercicios con categorías
+- Adición, edición y eliminación de ejercicios en entrenamientos
 - Configuración de series, repeticiones, peso y descanso
+- Notas personalizadas por serie
 - Activación/desactivación de rutinas
+- Interfaz responsive con navegación jerárquica (Rutinas → Entrenamientos → Ejercicios)
 
 **Nutrición**
 - Registro diario de comidas (desayuno, almuerzo, cena, merienda)
@@ -53,19 +61,28 @@ Aplicación completa de fitness con frontend React (Vite) y backend Node.js/Expr
 - Resúmenes estadísticos con promedios
 - Archivos JSONB para datos adicionales
 - Visualización de progreso histórico
+- Gráficos interactivos con Recharts (lesiones, nutrición)
+- Filtrado por rango de tiempo (7, 14, 30 días)
+- Interfaz responsive y adaptativa
 
 **Smart Trainer**
 - Interfaz de chat con IA (preparado para integración)
-- Recomendaciones personalizadas
-- Análisis de progreso
+- Renderizado de respuestas en Markdown
+- Persistencia de conversación durante la sesión con localStorage
+- Función de limpiar conversación
+- Diseño de chat profesional y responsive
+- Timeout extendido (120s) para respuestas de IA
+- Recomendaciones personalizadas (en desarrollo)
+- Análisis de progreso (en desarrollo)
 
 ### En Desarrollo
 
-- Integración con APIs de IA reales (OpenAI, Claude)
-- Notificaciones y recordatorios
-- Gráficos y visualizaciones avanzadas
-- Exportación de datos
-- Modo oscuro completo
+- Integración completa con APIs de IA (OpenAI, Claude, Gemini)
+- Sistema completo de notificaciones y recordatorios
+- Exportación de datos en múltiples formatos
+- PWA (Progressive Web App) para instalación móvil
+- Modo offline con sincronización
+- Compartir rutinas entre usuarios
 
 ## Stack Tecnológico
 
@@ -73,7 +90,10 @@ Aplicación completa de fitness con frontend React (Vite) y backend Node.js/Expr
 - **React 18** - Librería de UI
 - **Vite** - Build tool y dev server
 - **React Router DOM** - Enrutamiento del lado del cliente
-- **CSS3** - Estilos personalizados
+- **React Icons** - Librería de íconos (fa, ri, io5)
+- **React Markdown** - Renderizado de Markdown para respuestas de IA
+- **Recharts** - Librería de gráficos para visualización de estadísticas
+- **CSS3** - Estilos personalizados con variables CSS
 
 ### Backend
 - **Node.js** - Runtime de JavaScript
@@ -82,6 +102,7 @@ Aplicación completa de fitness con frontend React (Vite) y backend Node.js/Expr
 - **@supabase/supabase-js** - Cliente oficial de Supabase
 - **JWT (jsonwebtoken)** - Autenticación con tokens
 - **bcryptjs** - Encriptación de contraseñas
+- **nodemailer** - Envío de emails (recuperación de contraseña)
 - **CORS** - Manejo de Cross-Origin Resource Sharing
 - **dotenv** - Variables de entorno
 
@@ -231,6 +252,11 @@ NODE_ENV=development
 
 # CORS Configuration
 CLIENT_URL=http://localhost:5173
+
+# Email Configuration (Nodemailer - Gmail)
+EMAIL_USER=tu_email@gmail.com
+EMAIL_PASS=tu_contraseña_de_aplicacion_gmail
+EMAIL_FROM=My Track Fit <tu_email@gmail.com>
 ```
 
 #### Generar JWT_SECRET
@@ -301,8 +327,11 @@ http://localhost:5000/api
 ```http
 POST   /auth/register          # Registrar nuevo usuario
 POST   /auth/login             # Iniciar sesión
+POST   /auth/forgot-password   # Solicitar recuperación de contraseña
+POST   /auth/reset-password    # Restablecer contraseña con token
 GET    /auth/profile           # Obtener perfil (requiere auth)
 PUT    /auth/profile           # Actualizar perfil (requiere auth)
+DELETE /auth/account           # Eliminar cuenta (requiere auth)
 GET    /auth/verify            # Verificar token (requiere auth)
 ```
 
@@ -511,7 +540,7 @@ Básicamente, Supabase = PostgreSQL con hosting gratuito.
 
 **users** - Usuarios del sistema
 ```sql
-id, username, password, confirmed
+id, username, password, correo, confirmed, activo
 ```
 
 **exercises** - Catálogo de ejercicios
@@ -610,6 +639,11 @@ npm run lint        # ESLint
 - **Variables de entorno**: Credenciales fuera del código
 - **Validación de datos**: En services antes de guardar en DB
 - **Headers seguros**: CORS y headers HTTP apropiados
+- **Recuperación de contraseña**: Sistema de tokens por email
+- **Soft delete**: Eliminación lógica de usuarios (activo = false)
+- **Validación de contraseña actual**: Al cambiar contraseña en perfil
+- **Confirmación por email**: Enlaces de confirmación para nuevos usuarios
+- **Tokens de un solo uso**: Para reset de contraseña
 
 ### Recomendaciones Adicionales
 
@@ -738,5 +772,16 @@ Para reportar bugs o solicitar features, crea un issue en GitHub.
 
 ---
 
-Versión: 2.0.0
-Última actualización: Octubre 2025
+**Versión: 2.1.0**
+
+**Última actualización: Noviembre 2025**
+
+**Nuevas características en v2.1.0:**
+- Sistema completo de recuperación de contraseña por email
+- Edición de rutinas, entrenamientos y ejercicios
+- Gráficos interactivos en estadísticas con Recharts
+- Smart Trainer con renderizado Markdown y persistencia de conversación
+- Soft delete de usuarios
+- Validación mejorada de contraseña actual
+- Íconos unificados con React Icons
+- Mejoras de responsive en todas las pantallas
