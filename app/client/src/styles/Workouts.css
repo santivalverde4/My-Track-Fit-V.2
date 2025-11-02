@@ -8,8 +8,8 @@
 :root {
   --workout-primary: #2563eb;
   --workout-hover: #1d4ed8;
-  --workout-secondary: #10b981;
-  --workout-secondary-hover: #059669;
+  --workout-secondary: #2563eb;
+  --workout-secondary-hover: #1d4ed8;
 }
 
 /* ========================================
@@ -55,10 +55,10 @@
   margin: 0;
   text-align: left;
   flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   min-width: 0;
+  line-height: 1.2;
 }
 
 .header-buttons {
@@ -80,13 +80,13 @@
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .back-btn:hover {
   background: var(--workout-secondary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
 }
 
 .add-workout-btn {
@@ -439,6 +439,8 @@
     font-size: 1.75rem;
     flex-shrink: 1;
     min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .header-buttons {
@@ -477,6 +479,8 @@
 
   .header-title h2 {
     font-size: 1.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .header-buttons {

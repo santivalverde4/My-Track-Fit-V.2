@@ -1,19 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RiRobot2Line } from 'react-icons/ri';
 import { IoArrowUpCircle } from 'react-icons/io5';
+import { FaRegTrashAlt } from "react-icons/fa";
+import ReactMarkdown from 'react-markdown';
 import { smarttrainerService } from '../../services/api';
 import '../../styles/SmartTrainer.css';
+
+const CHAT_STORAGE_KEY = 'smarttrainer_conversation';
 
 const SmartTrainer = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // Cargar conversación guardada al montar el componente
+  useEffect(() => {
+    const savedConversation = localStorage.getItem(CHAT_STORAGE_KEY);
+    if (savedConversation) {
+      try {
+        const parsedMessages = JSON.parse(savedConversation);
+        setMessages(parsedMessages);
+      } catch (error) {
+        console.error('Error cargando conversación guardada:', error);
+        localStorage.removeItem(CHAT_STORAGE_KEY);
+      }
+    }
+  }, []);
+
+  // Guardar conversación cada vez que cambian los mensajes
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
+    }
+  }, [messages]);
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (newMessage.trim() && !isLoading) {
       const userMessage = {
-        id: messages.length + 1,
+        id: Date.now(), // Usar timestamp para IDs únicos
         type: 'user',
         text: newMessage,
         timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
@@ -28,7 +53,7 @@ const SmartTrainer = () => {
         const response = await smarttrainerService.chat(currentMessage, messages);
         
         const trainerResponse = {
-          id: messages.length + 2,
+          id: Date.now() + 1,
           type: 'trainer',
           text: response.message || 'Lo siento, no pude procesar tu mensaje.',
           timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
@@ -37,7 +62,7 @@ const SmartTrainer = () => {
       } catch (error) {
         console.error('Error al obtener respuesta del trainer:', error);
         const errorMessage = {
-          id: messages.length + 2,
+          id: Date.now() + 1,
           type: 'trainer',
           text: 'Lo siento, ocurrió un error al procesar tu mensaje. Por favor, intenta de nuevo.',
           timestamp: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
@@ -46,6 +71,14 @@ const SmartTrainer = () => {
       } finally {
         setIsLoading(false);
       }
+    }
+  };
+
+  // Función para limpiar la conversación
+  const handleClearConversation = () => {
+    if (window.confirm('¿Estás seguro de que deseas limpiar toda la conversación?')) {
+      setMessages([]);
+      localStorage.removeItem(CHAT_STORAGE_KEY);
     }
   };
 
@@ -62,6 +95,16 @@ const SmartTrainer = () => {
             <span className="status">En línea</span>
           </div>
         </div>
+        {messages.length > 0 && (
+          <button 
+            className="clear-chat-btn"
+            onClick={handleClearConversation}
+            title="Limpiar conversación"
+            aria-label="Limpiar conversación"
+          >
+            <FaRegTrashAlt />
+          </button>
+        )}
       </div>
 
       {/* Área de mensajes */}
@@ -79,7 +122,13 @@ const SmartTrainer = () => {
             aria-label={`${message.type === 'user' ? 'Tú' : 'Smart Trainer'} a las ${message.timestamp}`}
           >
             <div className="message-content">
-              <p>{message.text}</p>
+              {message.type === 'trainer' ? (
+                <div className="markdown-content">
+                  <ReactMarkdown>{message.text}</ReactMarkdown>
+                </div>
+              ) : (
+                <p>{message.text}</p>
+              )}
               <span className="message-time">{message.timestamp}</span>
             </div>
           </div>

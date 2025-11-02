@@ -32,6 +32,9 @@
   border-bottom: 1px solid var(--border-color, #e2e8f0);
   width: 100%;
   overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .trainer-info {
@@ -68,6 +71,35 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
+}
+
+.clear-chat-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.clear-chat-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.clear-chat-btn:active {
+  transform: scale(0.95);
+}
+
+.clear-chat-btn svg {
+  stroke: white;
 }
 
 .status::before {
@@ -142,6 +174,115 @@
 
 .message.trainer .message-time {
   text-align: left;
+}
+
+/* ========================================
+   Markdown Content Styles
+   ======================================== */
+
+.markdown-content {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-primary, #1a202c);
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--primary-color, #3182ce);
+}
+
+.markdown-content h1 {
+  font-size: 1.5rem;
+}
+
+.markdown-content h2 {
+  font-size: 1.3rem;
+}
+
+.markdown-content h3 {
+  font-size: 1.1rem;
+}
+
+.markdown-content h4 {
+  font-size: 1rem;
+}
+
+.markdown-content p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.markdown-content li {
+  margin: 0.3rem 0;
+  line-height: 1.5;
+}
+
+.markdown-content strong {
+  font-weight: 600;
+  color: var(--text-primary, #1a202c);
+}
+
+.markdown-content em {
+  font-style: italic;
+}
+
+.markdown-content code {
+  background: var(--code-bg, #f1f5f9);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: var(--code-color, #e53e3e);
+}
+
+.markdown-content pre {
+  background: var(--code-bg, #f1f5f9);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 0.5rem 0;
+}
+
+.markdown-content pre code {
+  background: transparent;
+  padding: 0;
+  color: var(--text-primary, #1a202c);
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid var(--primary-color, #3182ce);
+  padding-left: 1rem;
+  margin: 0.5rem 0;
+  color: var(--text-secondary, #4a5568);
+  font-style: italic;
+}
+
+.markdown-content a {
+  color: var(--primary-color, #3182ce);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.markdown-content a:hover {
+  border-bottom-color: var(--primary-color, #3182ce);
+}
+
+.markdown-content hr {
+  border: none;
+  border-top: 1px solid var(--border-color, #e2e8f0);
+  margin: 1rem 0;
 }
 
 /* ========================================

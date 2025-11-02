@@ -55,10 +55,10 @@
   margin: 0;
   text-align: left;
   flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   min-width: 0;
+  line-height: 1.2;
 }
 
 .header-buttons {
@@ -445,6 +445,8 @@
     font-size: 1.75rem;
     flex-shrink: 1;
     min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .header-buttons {
@@ -474,6 +476,8 @@
 
   .header-title h2 {
     font-size: 1.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .header-buttons {

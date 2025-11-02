@@ -824,6 +824,8 @@ export const smarttrainerService = {
       const response = await api.post('/api/smarttrainer/chat', {
         message,
         conversationHistory
+      }, {
+        timeout: 120000 // 2 minutos para respuestas de IA
       });
       return response;
     } catch (error) {
@@ -833,7 +835,9 @@ export const smarttrainerService = {
 
   generateWorkout: async (userProfile) => {
     try {
-      const response = await api.post('/api/smarttrainer/generate-workout', userProfile);
+      const response = await api.post('/api/smarttrainer/generate-workout', userProfile, {
+        timeout: 120000 // 2 minutos para respuestas de IA
+      });
       return response;
     } catch (error) {
       throw error;
@@ -842,7 +846,9 @@ export const smarttrainerService = {
 
   generateNutrition: async (userProfile) => {
     try {
-      const response = await api.post('/api/smarttrainer/generate-nutrition', userProfile);
+      const response = await api.post('/api/smarttrainer/generate-nutrition', userProfile, {
+        timeout: 120000 // 2 minutos para respuestas de IA
+      });
       return response;
     } catch (error) {
       throw error;
@@ -851,7 +857,9 @@ export const smarttrainerService = {
 
   analyzeExercise: async (exerciseName) => {
     try {
-      const response = await api.post('/api/smarttrainer/analyze-exercise', { exerciseName });
+      const response = await api.post('/api/smarttrainer/analyze-exercise', { exerciseName }, {
+        timeout: 120000 // 2 minutos para respuestas de IA
+      });
       return response;
     } catch (error) {
       throw error;
@@ -863,6 +871,8 @@ export const smarttrainerService = {
       const response = await api.post('/api/smarttrainer/injury-advice', {
         injuryType,
         description
+      }, {
+        timeout: 120000 // 2 minutos para respuestas de IA
       });
       return response;
     } catch (error) {

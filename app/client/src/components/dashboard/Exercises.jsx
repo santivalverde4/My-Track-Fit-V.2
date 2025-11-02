@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { exerciseService } from '../../services/api';
+import { FaRegTrashAlt } from "react-icons/fa";
 import '../../styles/Exercises.css';
 
 const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
@@ -357,10 +358,7 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
                   aria-label="Eliminar ejercicio"
                   title="Eliminar ejercicio"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="3 6 5 6 21 6"/>
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                  </svg>
+                  <FaRegTrashAlt />
                 </button>
               </div>
             );

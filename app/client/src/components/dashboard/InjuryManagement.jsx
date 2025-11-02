@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { injuryService } from '../../services/api';
+import { FaRegTrashAlt } from "react-icons/fa";
 import '../../styles/GlobalStyles.css';
 import '../../styles/WellnessComponents.css';
 
@@ -196,7 +197,6 @@ const InjuryManagement = ({ onBack }) => {
             <i className="bi bi-arrow-left"></i>
           </button>
           <h2>
-            <i className="bi bi-bandaid-fill"></i>
             Gestión de Lesiones
           </h2>
           <button
@@ -395,7 +395,7 @@ const InjuryManagement = ({ onBack }) => {
                   className="btn btn-danger btn-icon btn-sm"
                   aria-label="Eliminar lesión"
                 >
-                  <i className="bi bi-trash"></i>
+                  <FaRegTrashAlt />
                 </button>
               </div>
 

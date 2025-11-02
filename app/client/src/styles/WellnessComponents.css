@@ -168,6 +168,20 @@
   margin-bottom: 1rem;
 }
 
+.injury-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.injury-title-section h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f7fafc;
+  margin: 0;
+}
+
 .injury-title h4 {
   font-size: 1.1rem;
   font-weight: 600;
@@ -223,9 +237,12 @@
 
 .severity-badge {
   font-weight: 600;
-  padding: 0.25rem 0.5rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 4px;
   background: rgba(16, 185, 129, 0.1);
+  font-size: 0.75rem;
+  display: inline-block;
+  width: fit-content;
 }
 
 .injury-description {

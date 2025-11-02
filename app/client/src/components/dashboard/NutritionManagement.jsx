@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { nutritionService } from '../../services/api';
+import { FaRegTrashAlt } from "react-icons/fa";
 import '../../styles/GlobalStyles.css';
 import '../../styles/WellnessComponents.css';
 
@@ -271,7 +272,6 @@ const NutritionManagement = ({ onBack }) => {
             <i className="bi bi-arrow-left"></i>
           </button>
           <h2>
-            <i className="bi bi-egg-fried"></i>
             Nutrición
           </h2>
           <button
@@ -633,7 +633,7 @@ const NutritionManagement = ({ onBack }) => {
                   className="btn btn-danger btn-icon btn-sm"
                   aria-label="Eliminar comida"
                 >
-                  <i className="bi bi-trash"></i>
+                  <FaRegTrashAlt />
                 </button>
               </div>
 

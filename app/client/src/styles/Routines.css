@@ -46,7 +46,7 @@
 }
 
 .btn-secondary {
-  background: var(--secondary-color, #718096);
+  background: #2563eb;
   color: white;
   display: flex;
   align-items: center;
@@ -88,10 +88,10 @@
   font-weight: 700;
   color: var(--text-primary, #1a202c);
   margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   max-width: 100%;
+  line-height: 1.2;
 }
 
 .add-routine-btn {
@@ -703,6 +703,8 @@
     font-size: 1.75rem;
     flex-shrink: 1;
     min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .header-actions {
@@ -794,6 +796,8 @@
 
   .header-title h2 {
     font-size: 1.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .add-routine-btn {
