@@ -18,6 +18,14 @@ const NutritionManagement = ({ onBack }) => {
     fat: 65,
     water: 8
   });
+
+  const [tempGoals, setTempGoals] = useState({
+    calories: 2000,
+    protein: 150,
+    carbs: 250,
+    fat: 65,
+    water: 8
+  });
   
   const [dailyTotals, setDailyTotals] = useState({
     calories: 0,
@@ -66,8 +74,17 @@ const NutritionManagement = ({ onBack }) => {
   const loadNutritionGoals = async () => {
     try {
       const response = await nutritionService.getNutritionGoals();
-      if (response.goals) {
-        setNutritionGoals(response.goals);
+      console.log('Objetivos cargados:', response);
+      if (response.data) {
+        const goals = {
+          calories: response.data.calorias_objetivo || 2000,
+          protein: response.data.proteinas_objetivo || 150,
+          carbs: response.data.carbohidratos_objetivo || 250,
+          fat: response.data.grasas_objetivo || 65,
+          water: response.data.agua_objetivo || 8
+        };
+        setNutritionGoals(goals);
+        setTempGoals(goals); // También inicializar los temporales
       }
     } catch (error) {
       console.error('Error al cargar objetivos:', error);
@@ -133,64 +150,19 @@ const NutritionManagement = ({ onBack }) => {
   const handleAddMeal = async (e) => {
     e.preventDefault();
     
-    setLoading(true);
-    try {
-      const mealData = {
-        type: mealForm.type,
-        name: mealForm.name,
-        calories: parseFloat(mealForm.calories) || 0,
-        protein: parseFloat(mealForm.protein) || 0,
-        carbs: parseFloat(mealForm.carbs) || 0,
-        fat: parseFloat(mealForm.fat) || 0,
-        portion: mealForm.portion,
-        notes: mealForm.notes,
-        fecha: new Date().toISOString().split('T')[0]
-      };
-
-      const response = await nutritionService.addMeal(mealData);
-      
-      // Agregar la nueva comida a la lista
-      setTodayMeals(prev => [...prev, response.data]);
-      
-      // Resetear formulario
-      setMealForm({
-        type: 'breakfast',
-        name: '',
-        calories: '',
-        protein: '',
-        carbs: '',
-        fat: '',
-        portion: '',
-        notes: ''
-      });
-      
-      setShowAddMeal(false);
-      console.log('Comida registrada exitosamente');
-    } catch (error) {
-      console.error('Error al agregar comida:', error);
-      // Fallback: agregar localmente si falla la API
-      const newMeal = {
-        id: Date.now(),
-        type: mealForm.type,
-        name: mealForm.name,
-        calories: parseFloat(mealForm.calories) || 0,
-        protein: parseFloat(mealForm.protein) || 0,
-        carbs: parseFloat(mealForm.carbs) || 0,
-        fat: parseFloat(mealForm.fat) || 0,
-        portion: mealForm.portion,
-        notes: mealForm.notes,
-        time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
-      };
-      
-      setTodayMeals(prev => [...prev, newMeal]);
-      setMealForm({
-        type: 'breakfast', name: '', calories: '', protein: '',
-        carbs: '', fat: '', portion: '', notes: ''
-      });
-      setShowAddMeal(false);
-    } finally {
-      setLoading(false);
-    }
+    // No hacer nada con la BD, solo resetear el formulario
+    setMealForm({
+      type: 'breakfast',
+      name: '',
+      calories: '',
+      protein: '',
+      carbs: '',
+      fat: '',
+      portion: '',
+      notes: ''
+    });
+    
+    setShowAddMeal(false);
   };
 
   const deleteMeal = async (mealId) => {
@@ -238,6 +210,11 @@ const NutritionManagement = ({ onBack }) => {
   };
 
   const handleAddMealClick = () => {
+    // Cambiar a la tab "Hoy" si no está activa
+    if (activeTab !== 'today') {
+      setActiveTab('today');
+    }
+    
     setShowAddMeal(true);
     // Esperar un momento para que el DOM se actualice y luego hacer scroll
     setTimeout(() => {
@@ -713,62 +690,65 @@ const NutritionManagement = ({ onBack }) => {
             </button>
           </div>
         ) : (
-          todayMeals.map(meal => (
-            <div key={meal.id} className="meal-card">
-              <div className="meal-header">
-                <div className="meal-type-badge">
-                  <i className={getMealIcon(meal.type)}></i>
-                  <span>{mealTypes.find(t => t.value === meal.type)?.label}</span>
+          <>
+            {/* Comidas guardadas */}
+            {todayMeals.map(meal => (
+              <div key={meal.id} className="meal-card">
+                <div className="meal-header">
+                  <div className="meal-type-badge">
+                    <i className={getMealIcon(meal.type)}></i>
+                    <span>{mealTypes.find(t => t.value === meal.type)?.label}</span>
+                  </div>
+                  <span className="meal-time">
+                    <i className="bi bi-clock"></i>
+                    {meal.time}
+                  </span>
+                  <button
+                    onClick={() => deleteMeal(meal.id)}
+                    className="btn btn-danger btn-icon btn-sm"
+                    aria-label="Eliminar comida"
+                  >
+                    <FaRegTrashAlt />
+                  </button>
                 </div>
-                <span className="meal-time">
-                  <i className="bi bi-clock"></i>
-                  {meal.time}
-                </span>
-                <button
-                  onClick={() => deleteMeal(meal.id)}
-                  className="btn btn-danger btn-icon btn-sm"
-                  aria-label="Eliminar comida"
-                >
-                  <FaRegTrashAlt />
-                </button>
+
+                <h4 className="meal-name">{meal.name}</h4>
+                
+                {meal.portion && (
+                  <p className="meal-portion">
+                    <i className="bi bi-cup"></i>
+                    {meal.portion}
+                  </p>
+                )}
+
+                <div className="meal-macros">
+                  <div className="macro-item">
+                    <i className="bi bi-fire"></i>
+                    <span>{meal.calories} kcal</span>
+                  </div>
+                  <div className="macro-item">
+                    <i className="bi bi-egg"></i>
+                    <span>{meal.protein}g P</span>
+                  </div>
+                  <div className="macro-item">
+                    <i className="bi bi-bowl-food"></i>
+                    <span>{meal.carbs}g C</span>
+                  </div>
+                  <div className="macro-item">
+                    <i className="bi bi-droplet"></i>
+                    <span>{meal.fat}g G</span>
+                  </div>
+                </div>
+
+                {meal.notes && (
+                  <p className="meal-notes">
+                    <i className="bi bi-sticky"></i>
+                    {meal.notes}
+                  </p>
+                )}
               </div>
-
-              <h4 className="meal-name">{meal.name}</h4>
-              
-              {meal.portion && (
-                <p className="meal-portion">
-                  <i className="bi bi-cup"></i>
-                  {meal.portion}
-                </p>
-              )}
-
-              <div className="meal-macros">
-                <div className="macro-item">
-                  <i className="bi bi-fire"></i>
-                  <span>{meal.calories} kcal</span>
-                </div>
-                <div className="macro-item">
-                  <i className="bi bi-egg"></i>
-                  <span>{meal.protein}g P</span>
-                </div>
-                <div className="macro-item">
-                  <i className="bi bi-bowl-food"></i>
-                  <span>{meal.carbs}g C</span>
-                </div>
-                <div className="macro-item">
-                  <i className="bi bi-droplet"></i>
-                  <span>{meal.fat}g G</span>
-                </div>
-              </div>
-
-              {meal.notes && (
-                <p className="meal-notes">
-                  <i className="bi bi-sticky"></i>
-                  {meal.notes}
-                </p>
-              )}
-            </div>
-          ))
+            ))}
+          </>
         )}
       </div>
       </div>
@@ -788,35 +768,113 @@ const NutritionManagement = ({ onBack }) => {
           </h3>
           <p className="info-text">
             <i className="bi bi-info-circle"></i>
-            Aquí podrás configurar tus objetivos nutricionales diarios en una futura actualización.
+            Configura tus objetivos nutricionales diarios
           </p>
-          <div className="goals-grid">
-            <div className="goal-card">
-              <i className="bi bi-fire"></i>
-              <h4>Calorías</h4>
-              <p className="goal-value">{nutritionGoals.calories} kcal</p>
+          
+          <form className="goals-form" onSubmit={async (e) => {
+            e.preventDefault();
+            try {
+              // Convertir los nombres de las propiedades al formato de la BD
+              const goalsData = {
+                calorias_objetivo: tempGoals.calories,
+                proteinas_objetivo: tempGoals.protein,
+                carbohidratos_objetivo: tempGoals.carbs,
+                grasas_objetivo: tempGoals.fat,
+                agua_objetivo: tempGoals.water
+              };
+              
+              await nutritionService.updateNutritionGoals(goalsData);
+              
+              // Solo ahora actualizar las metas reales (las que se usan en "Resumen de Hoy")
+              setNutritionGoals(tempGoals);
+              
+              alert('✅ Objetivos actualizados exitosamente');
+            } catch (error) {
+              console.error('Error al actualizar objetivos:', error);
+              alert('❌ Error al guardar objetivos. Inténtalo de nuevo.');
+            }
+          }}>
+            <div className="goals-grid">
+              <div className="goal-card">
+                <i className="bi bi-fire"></i>
+                <h4>Calorías</h4>
+                <div className="goal-input">
+                  <input
+                    type="number"
+                    value={tempGoals.calories}
+                    onChange={(e) => setTempGoals({...tempGoals, calories: parseInt(e.target.value) || 0})}
+                    min="0"
+                    step="50"
+                  />
+                  <span>kcal</span>
+                </div>
+              </div>
+              <div className="goal-card">
+                <i className="bi bi-egg"></i>
+                <h4>Proteínas</h4>
+                <div className="goal-input">
+                  <input
+                    type="number"
+                    value={tempGoals.protein}
+                    onChange={(e) => setTempGoals({...tempGoals, protein: parseInt(e.target.value) || 0})}
+                    min="0"
+                    step="5"
+                  />
+                  <span>g</span>
+                </div>
+              </div>
+              <div className="goal-card">
+                <i className="bi bi-bowl-food"></i>
+                <h4>Carbohidratos</h4>
+                <div className="goal-input">
+                  <input
+                    type="number"
+                    value={tempGoals.carbs}
+                    onChange={(e) => setTempGoals({...tempGoals, carbs: parseInt(e.target.value) || 0})}
+                    min="0"
+                    step="5"
+                  />
+                  <span>g</span>
+                </div>
+              </div>
+              <div className="goal-card">
+                <i className="bi bi-droplet"></i>
+                <h4>Grasas</h4>
+                <div className="goal-input">
+                  <input
+                    type="number"
+                    value={tempGoals.fat}
+                    onChange={(e) => setTempGoals({...tempGoals, fat: parseInt(e.target.value) || 0})}
+                    min="0"
+                    step="5"
+                  />
+                  <span>g</span>
+                </div>
+              </div>
+              <div className="goal-card">
+                <i className="bi bi-cup"></i>
+                <h4>Agua</h4>
+                <div className="goal-input">
+                  <input
+                    type="number"
+                    value={tempGoals.water}
+                    onChange={(e) => setTempGoals({...tempGoals, water: parseInt(e.target.value) || 0})}
+                    min="0"
+                    max="20"
+                    step="1"
+                  />
+                  <span>vasos</span>
+                </div>
+              </div>
             </div>
-            <div className="goal-card">
-              <i className="bi bi-egg"></i>
-              <h4>Proteínas</h4>
-              <p className="goal-value">{nutritionGoals.protein}g</p>
+            
+            <div className="btn-group justify-center" style={{ marginTop: '2rem' }}>
+              <button type="submit" className="btn btn-success">
+                <i className="bi bi-check-circle"></i>
+                Guardar Objetivos
+              </button>
             </div>
-            <div className="goal-card">
-              <i className="bi bi-bowl-food"></i>
-              <h4>Carbohidratos</h4>
-              <p className="goal-value">{nutritionGoals.carbs}g</p>
-            </div>
-            <div className="goal-card">
-              <i className="bi bi-droplet"></i>
-              <h4>Grasas</h4>
-              <p className="goal-value">{nutritionGoals.fat}g</p>
-            </div>
-            <div className="goal-card">
-              <i className="bi bi-cup"></i>
-              <h4>Agua</h4>
-              <p className="goal-value">{nutritionGoals.water} vasos</p>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
       {/* End of Tab Panel: Objetivos */}
