@@ -1,15 +1,10 @@
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 
-// Configurar el transporter de nodemailer con Gmail
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'mytrackfit@gmail.com',
-      pass: 'vgcf omys twmk qwun'
-    }
-  });
-};
+// Configurar SendGrid con la API Key desde variables de entorno
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
+
+// URL base del backend (para producción en Render)
+const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
 
 export const EmailService = {
   /**
@@ -17,8 +12,7 @@ export const EmailService = {
    */
   async sendConfirmationEmail(email, username, token) {
     try {
-      const transporter = createTransporter();
-      const confirmUrl = `http://localhost:5000/api/auth/confirm/${token}`;
+      const confirmUrl = `${BASE_URL}/api/auth/confirm/${token}`;
 
       const mailOptions = {
         from: '"My Track Fit" <mytrackfit@gmail.com>',
@@ -253,18 +247,27 @@ export const EmailService = {
         `
       };
 
-      const info = await transporter.sendMail(mailOptions);
+      // Enviar email con SendGrid
+      const msg = {
+        to: email,
+        from: 'mytrackfit@gmail.com', // Cambia esto por tu email verificado en SendGrid
+        subject: mailOptions.subject,
+        html: mailOptions.html
+      };
+
+      await sgMail.send(msg);
       
-      console.log(' Email enviado exitosamente a:', email);
-      console.log(' Message ID:', info.messageId);
+      console.log('✅ Email enviado exitosamente a:', email);
       
       return {
         success: true,
-        messageId: info.messageId,
         message: 'Email de confirmación enviado exitosamente'
       };
     } catch (error) {
-      console.error(' Error al enviar email:', error.message);
+      console.error('❌ Error al enviar email:', error.message);
+      if (error.response) {
+        console.error('Error response:', error.response.body);
+      }
       return {
         success: false,
         error: error.message || 'Error al enviar el email'
@@ -285,8 +288,7 @@ export const EmailService = {
    */
   async sendPasswordResetEmail(email, username, token) {
     try {
-      const transporter = createTransporter();
-      const resetUrl = `http://localhost:5173/reset-password/${token}`;
+      const resetUrl = `${BASE_URL.replace('5000', '5173')}/reset-password/${token}`;
 
       const mailOptions = {
         from: '"My Track Fit" <mytrackfit@gmail.com>',
@@ -520,18 +522,27 @@ export const EmailService = {
         `
       };
 
-      const info = await transporter.sendMail(mailOptions);
+      // Enviar email con SendGrid
+      const msg = {
+        to: email,
+        from: 'mytrackfit@gmail.com', // Cambia esto por tu email verificado en SendGrid
+        subject: mailOptions.subject,
+        html: mailOptions.html
+      };
+
+      await sgMail.send(msg);
       
-      console.log(' Email de recuperación enviado a:', email);
-      console.log(' Message ID:', info.messageId);
+      console.log('✅ Email de recuperación enviado a:', email);
       
       return {
         success: true,
-        messageId: info.messageId,
         message: 'Email de recuperación enviado exitosamente'
       };
     } catch (error) {
-      console.error(' Error al enviar email de recuperación:', error.message);
+      console.error('❌ Error al enviar email de recuperación:', error.message);
+      if (error.response) {
+        console.error('Error response:', error.response.body);
+      }
       return {
         success: false,
         error: error.message || 'Error al enviar el email'
