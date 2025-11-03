@@ -1,10 +1,11 @@
-﻿import { useState, useEffect } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { injuryService, statisticsService, nutritionService } from '../../services/api';
 import '../../styles/GlobalStyles.css';
 import '../../styles/WellnessComponents.css';
 
 const UserStatistics = ({ onBack }) => {
+  const containerRef = useRef(null);
   const [timeRange, setTimeRange] = useState('7');
   const [loading, setLoading] = useState(false);
   const [chartData, setChartData] = useState({ 
@@ -17,6 +18,28 @@ const UserStatistics = ({ onBack }) => {
     avgCalories: 0,
     totalWorkouts: 0
   });
+
+  // Scroll al inicio cuando se monta el componente
+  useEffect(() => {
+    // Intentar múltiples métodos de scroll
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    
+    if (containerRef.current) {
+      containerRef.current.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }
+    
+    // Buscar el contenedor scrolleable padre
+    const wellnessContainer = document.querySelector('.wellness-container');
+    if (wellnessContainer) {
+      wellnessContainer.scrollTop = 0;
+    }
+    
+    // Dashboard container
+    const dashboardContent = document.querySelector('.dashboard-content');
+    if (dashboardContent) {
+      dashboardContent.scrollTop = 0;
+    }
+  }, []);
 
   useEffect(() => { 
     loadStatistics(); 
@@ -164,76 +187,34 @@ const UserStatistics = ({ onBack }) => {
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh',
-      backgroundColor: 'var(--bg-secondary)',
-      paddingBottom: '100px',
-      maxWidth: '100vw',
-      overflowX: 'hidden'
-    }}>
-      {/* Header Responsive */}
-      <header style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        backgroundColor: 'var(--bg-secondary)',
-        borderBottom: '1px solid var(--border-color)',
-        padding: '12px 16px',
-        width: '100%'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          maxWidth: '1200px',
-          margin: '0 auto'
-        }}>
+    <div className="statistics-management">
+      {/* Header */}
+      <header className="component-header">
+        <div className="header-top">
           <button 
             onClick={onBack} 
-            className="btn btn-secondary btn-icon btn-sm"
+            className="btn btn-secondary btn-icon"
             aria-label="Volver"
           >
             <i className="bi bi-arrow-left"></i>
           </button>
-          
-          <h2 style={{
-            margin: 0,
-            fontSize: 'clamp(16px, 4vw, 20px)',
-            fontWeight: '600',
-            color: 'var(--text-primary)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            flex: 1,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}>
-            <span>Estadísticas</span>
+          <h2>
+            Estadísticas
           </h2>
-          
           <select 
             value={timeRange} 
             onChange={(e) => setTimeRange(e.target.value)}
+            className="time-range-select"
             aria-label="Seleccionar rango de tiempo para estadísticas"
-            style={{ 
-              flexShrink: 0,
-              minWidth: '90px',
-              padding: '6px 10px',
-              fontSize: '14px',
-              backgroundColor: 'var(--bg-primary)',
-              color: 'var(--text-primary)',
-              border: '1px solid var(--border-color)',
-              borderRadius: 'var(--border-radius)',
-              cursor: 'pointer'
-            }}
           >
             <option value="7">7 días</option>
             <option value="14">14 días</option>
             <option value="30">30 días</option>
           </select>
         </div>
+        <p className="header-subtitle">
+          Visualiza tu progreso y métricas de salud
+        </p>
       </header>
 
       {loading ? (
@@ -242,34 +223,11 @@ const UserStatistics = ({ onBack }) => {
           <p>Cargando estadísticas...</p>
         </div>
       ) : (
-        <div style={{ 
-          padding: '16px',
-          maxWidth: '1200px',
-          margin: '0 auto',
-          width: '100%',
-          boxSizing: 'border-box'
-        }}>
+        <div className="statistics-content">
           {/* Gráfico de Lesiones */}
-          <div style={{
-            backgroundColor: 'var(--bg-primary)',
-            borderRadius: 'var(--border-radius-lg)',
-            padding: 'clamp(12px, 3vw, 20px)',
-            marginBottom: '16px',
-            border: '1px solid var(--border-light)',
-            width: '100%',
-            boxSizing: 'border-box',
-            overflow: 'hidden'
-          }}>
-            <h3 style={{ 
-              color: 'var(--text-primary)', 
-              marginBottom: '12px',
-              fontSize: 'clamp(16px, 3.5vw, 18px)',
-              fontWeight: '600',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}>
-              <i className="bi bi-bandaid-fill" style={{ color: '#ef4444', fontSize: '20px' }} aria-hidden="true"></i> 
+          <div className="chart-card">
+            <h3 className="chart-title">
+              <i className="bi bi-bandaid-fill" style={{ color: '#ef4444' }} aria-hidden="true"></i> 
               <span>Lesiones Registradas</span>
             </h3>
             {chartData.injuries.length > 0 ? (
@@ -282,15 +240,15 @@ const UserStatistics = ({ onBack }) => {
                   ).join(', ')}
                 </div>
                 <div 
-                  style={{ width: '100%', height: 'clamp(200px, 40vw, 280px)' }}
+                  className="chart-container"
                   role="img"
                   aria-label={`Gráfico de barras de lesiones registradas en los últimos ${timeRange} días. Total de ${chartData.injuries.reduce((sum, item) => sum + item.cantidad, 0)} lesiones distribuidas en ${chartData.injuries.length} fechas.`}
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartData.injuries} margin={{ top: 10, right: 5, left: -25, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-                      <XAxis dataKey="fecha" stroke="var(--text-secondary)" style={{ fontSize: 'clamp(10px, 2vw, 12px)' }} />
-                      <YAxis stroke="var(--text-secondary)" allowDecimals={false} style={{ fontSize: 'clamp(10px, 2vw, 12px)' }} />
+                      <XAxis dataKey="fecha" stroke="var(--text-secondary)" style={{ fontSize: '12px' }} />
+                      <YAxis stroke="var(--text-secondary)" allowDecimals={false} style={{ fontSize: '12px' }} />
                       <Tooltip contentStyle={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', fontSize: '13px', color: 'var(--text-primary)' }} />
                       <Bar dataKey="cantidad" fill="#ef4444" radius={[8, 8, 0, 0]} />
                     </BarChart>
@@ -298,34 +256,17 @@ const UserStatistics = ({ onBack }) => {
                 </div>
               </>
             ) : (
-              <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)' }} role="status">
-                <i className="bi bi-clipboard-data" style={{ fontSize: '48px', marginBottom: '10px', display: 'block' }} aria-hidden="true"></i>
-                <p style={{ margin: 0, fontSize: '14px' }}>No hay lesiones registradas</p>
+              <div className="empty-chart-state" role="status">
+                <i className="bi bi-clipboard-data" aria-hidden="true"></i>
+                <p>No hay lesiones registradas</p>
               </div>
             )}
           </div>
 
           {/* Gráfico de Calorías */}
-          <div style={{
-            backgroundColor: 'var(--bg-primary)',
-            borderRadius: 'var(--border-radius-lg)',
-            padding: 'clamp(12px, 3vw, 20px)',
-            marginBottom: '16px',
-            border: '1px solid var(--border-light)',
-            width: '100%',
-            boxSizing: 'border-box',
-            overflow: 'hidden'
-          }}>
-            <h3 style={{ 
-              color: 'var(--text-primary)', 
-              marginBottom: '12px',
-              fontSize: 'clamp(16px, 3.5vw, 18px)',
-              fontWeight: '600',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}>
-              <i className="bi bi-egg-fried" style={{ color: '#10b981', fontSize: '20px' }} aria-hidden="true"></i> 
+          <div className="chart-card">
+            <h3 className="chart-title">
+              <i className="bi bi-egg-fried" style={{ color: '#10b981' }} aria-hidden="true"></i> 
               <span>Calorías Diarias</span>
             </h3>
             {chartData.nutrition.length > 0 ? (
@@ -338,15 +279,15 @@ const UserStatistics = ({ onBack }) => {
                   ).join(', ')}
                 </div>
                 <div 
-                  style={{ width: '100%', height: 'clamp(200px, 40vw, 280px)' }}
+                  className="chart-container"
                   role="img"
                   aria-label={`Gráfico de líneas mostrando el consumo de calorías durante los últimos ${timeRange} días. Promedio: ${Math.round(chartData.nutrition.reduce((sum, item) => sum + item.calorias, 0) / chartData.nutrition.length)} calorías por día.`}
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartData.nutrition} margin={{ top: 10, right: 5, left: -25, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-                      <XAxis dataKey="fecha" stroke="var(--text-secondary)" style={{ fontSize: 'clamp(10px, 2vw, 12px)' }} />
-                      <YAxis stroke="var(--text-secondary)" style={{ fontSize: 'clamp(10px, 2vw, 12px)' }} />
+                      <XAxis dataKey="fecha" stroke="var(--text-secondary)" style={{ fontSize: '12px' }} />
+                      <YAxis stroke="var(--text-secondary)" style={{ fontSize: '12px' }} />
                       <Tooltip contentStyle={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', fontSize: '13px', color: 'var(--text-primary)' }} />
                       <Line type="monotone" dataKey="calorias" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} activeDot={{ r: 6 }} />
                     </LineChart>
@@ -354,35 +295,18 @@ const UserStatistics = ({ onBack }) => {
                 </div>
               </>
             ) : (
-              <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)' }} role="status">
-                <i className="bi bi-clipboard-data" style={{ fontSize: '48px', marginBottom: '10px', display: 'block' }} aria-hidden="true"></i>
-                <p style={{ margin: 0, fontSize: '14px' }}>No hay datos de nutrición</p>
+              <div className="empty-chart-state" role="status">
+                <i className="bi bi-clipboard-data" aria-hidden="true"></i>
+                <p>No hay datos de nutrición</p>
               </div>
             )}
           </div>
 
           {/* Gráfico de Entrenamientos - Temporalmente oculto */}
           {false && (
-            <div style={{
-              backgroundColor: 'var(--bg-primary)',
-              borderRadius: 'var(--border-radius-lg)',
-              padding: 'clamp(12px, 3vw, 20px)',
-              marginBottom: '16px',
-              border: '1px solid var(--border-light)',
-              width: '100%',
-              boxSizing: 'border-box',
-              overflow: 'hidden'
-            }}>
-              <h3 style={{ 
-                color: 'var(--text-primary)', 
-                marginBottom: '12px',
-                fontSize: 'clamp(16px, 3.5vw, 18px)',
-                fontWeight: '600',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}>
-                <i className="bi bi-activity" style={{ color: '#3b82f6', fontSize: '20px' }} aria-hidden="true"></i> 
+            <div className="chart-card">
+              <h3 className="chart-title">
+                <i className="bi bi-activity" style={{ color: '#3b82f6' }} aria-hidden="true"></i> 
                 <span>Entrenamientos Semanales</span>
               </h3>
               {chartData.workouts.length > 0 ? (
@@ -395,15 +319,15 @@ const UserStatistics = ({ onBack }) => {
                     ).join(', ')}
                   </div>
                   <div 
-                    style={{ width: '100%', height: 'clamp(200px, 40vw, 280px)' }}
+                    className="chart-container"
                     role="img"
                     aria-label={`Gráfico de barras de entrenamientos semanales. Total: ${chartData.workouts.reduce((sum, item) => sum + item.entrenamientos, 0)} entrenamientos.`}
                   >
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={chartData.workouts} margin={{ top: 10, right: 5, left: -25, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-                        <XAxis dataKey="dia" stroke="var(--text-secondary)" style={{ fontSize: 'clamp(10px, 2vw, 12px)' }} />
-                        <YAxis stroke="var(--text-secondary)" allowDecimals={false} style={{ fontSize: 'clamp(10px, 2vw, 12px)' }} />
+                        <XAxis dataKey="dia" stroke="var(--text-secondary)" style={{ fontSize: '12px' }} />
+                        <YAxis stroke="var(--text-secondary)" allowDecimals={false} style={{ fontSize: '12px' }} />
                         <Tooltip contentStyle={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', fontSize: '13px', color: 'var(--text-primary)' }} />
                         <Bar dataKey="entrenamientos" fill="#3b82f6" radius={[8, 8, 0, 0]} />
                       </BarChart>
@@ -411,62 +335,46 @@ const UserStatistics = ({ onBack }) => {
                   </div>
                 </>
               ) : (
-                <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)' }} role="status">
-                  <i className="bi bi-clipboard-data" style={{ fontSize: '48px', marginBottom: '10px', display: 'block' }} aria-hidden="true"></i>
-                  <p style={{ margin: 0, fontSize: '14px' }}>No hay entrenamientos registrados</p>
+                <div className="empty-chart-state" role="status">
+                  <i className="bi bi-clipboard-data" aria-hidden="true"></i>
+                  <p>No hay entrenamientos registrados</p>
                 </div>
               )}
             </div>
           )}
 
           {/* Tarjetas de Resumen Responsive */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))',
-            gap: '12px'
-          }}>
-            <div style={{
-              backgroundColor: 'var(--bg-primary)',
-              borderRadius: 'var(--border-radius-lg)',
-              padding: 'clamp(12px, 3vw, 16px)',
-              textAlign: 'center',
-              border: '1px solid var(--border-light)'
-            }}>
-              <i className="bi bi-bandaid-fill" style={{ fontSize: 'clamp(24px, 6vw, 32px)', color: '#ef4444', marginBottom: '8px', display: 'block' }}></i>
-              <h4 style={{ color: 'var(--text-muted)', fontSize: 'clamp(11px, 2.5vw, 14px)', marginBottom: '4px', fontWeight: '500', margin: '0 0 4px 0' }}>Total Lesiones</h4>
-              <p style={{ color: 'var(--text-primary)', fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 'bold', margin: 0 }}>
-                {summary.totalInjuries}
-              </p>
+          <div className="summary-grid" role="region" aria-label="Resumen de estadísticas">
+            <div className="summary-card" role="article" aria-labelledby="total-injuries-label">
+              <i className="bi bi-bandaid-fill" style={{ color: '#ef4444' }} aria-hidden="true"></i>
+              <div className="summary-card-content">
+                <h4 id="total-injuries-label">Total Lesiones</h4>
+                <p className="summary-value" aria-label={`${summary.totalInjuries} lesiones en total`}>
+                  {summary.totalInjuries}
+                </p>
+              </div>
             </div>
 
-            <div style={{
-              backgroundColor: 'var(--bg-primary)',
-              borderRadius: 'var(--border-radius-lg)',
-              padding: 'clamp(12px, 3vw, 16px)',
-              textAlign: 'center',
-              border: '1px solid var(--border-light)'
-            }}>
-              <i className="bi bi-fire" style={{ fontSize: 'clamp(24px, 6vw, 32px)', color: '#10b981', marginBottom: '8px', display: 'block' }}></i>
-              <h4 style={{ color: 'var(--text-muted)', fontSize: 'clamp(11px, 2.5vw, 14px)', marginBottom: '4px', fontWeight: '500', margin: '0 0 4px 0' }}>Cal. Promedio</h4>
-              <p style={{ color: 'var(--text-primary)', fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 'bold', margin: 0 }}>
-                {summary.avgCalories}
-              </p>
+            <div className="summary-card" role="article" aria-labelledby="avg-calories-label">
+              <i className="bi bi-fire" style={{ color: '#10b981' }} aria-hidden="true"></i>
+              <div className="summary-card-content">
+                <h4 id="avg-calories-label">Cal. Promedio</h4>
+                <p className="summary-value" aria-label={`${summary.avgCalories} calorías promedio`}>
+                  {summary.avgCalories}
+                </p>
+              </div>
             </div>
 
             {/* Tarjeta de entrenamientos oculta temporalmente */}
             {false && (
-              <div style={{
-                backgroundColor: 'var(--bg-primary)',
-                borderRadius: 'var(--border-radius-lg)',
-                padding: 'clamp(12px, 3vw, 16px)',
-                textAlign: 'center',
-                border: '1px solid var(--border-light)'
-              }}>
-                <i className="bi bi-trophy-fill" style={{ fontSize: 'clamp(24px, 6vw, 32px)', color: '#3b82f6', marginBottom: '8px', display: 'block' }}></i>
-                <h4 style={{ color: 'var(--text-muted)', fontSize: 'clamp(11px, 2.5vw, 14px)', marginBottom: '4px', fontWeight: '500', margin: '0 0 4px 0' }}>Entrenamientos</h4>
-                <p style={{ color: 'var(--text-primary)', fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 'bold', margin: 0 }}>
-                  {summary.totalWorkouts}
-                </p>
+              <div className="summary-card" role="article" aria-labelledby="total-workouts-label">
+                <i className="bi bi-trophy-fill" style={{ color: '#3b82f6' }} aria-hidden="true"></i>
+                <div className="summary-card-content">
+                  <h4 id="total-workouts-label">Entrenamientos</h4>
+                  <p className="summary-value" aria-label={`${summary.totalWorkouts} entrenamientos completados`}>
+                    {summary.totalWorkouts}
+                  </p>
+                </div>
               </div>
             )}
           </div>
