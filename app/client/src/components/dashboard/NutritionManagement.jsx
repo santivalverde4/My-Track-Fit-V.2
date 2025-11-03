@@ -150,19 +150,45 @@ const NutritionManagement = ({ onBack }) => {
   const handleAddMeal = async (e) => {
     e.preventDefault();
     
-    // No hacer nada con la BD, solo resetear el formulario
-    setMealForm({
-      type: 'breakfast',
-      name: '',
-      calories: '',
-      protein: '',
-      carbs: '',
-      fat: '',
-      portion: '',
-      notes: ''
-    });
-    
-    setShowAddMeal(false);
+    setLoading(true);
+    try {
+      const mealData = {
+        type: mealForm.type,
+        name: mealForm.name,
+        calories: parseFloat(mealForm.calories) || 0,
+        protein: parseFloat(mealForm.protein) || 0,
+        carbs: parseFloat(mealForm.carbs) || 0,
+        fat: parseFloat(mealForm.fat) || 0,
+        portion: mealForm.portion,
+        notes: mealForm.notes,
+        fecha: new Date().toISOString().split('T')[0]
+      };
+
+      const response = await nutritionService.addMeal(mealData);
+      
+      // Agregar la nueva comida a la lista
+      setTodayMeals(prev => [...prev, response.data]);
+      
+      // Resetear formulario
+      setMealForm({
+        type: 'breakfast',
+        name: '',
+        calories: '',
+        protein: '',
+        carbs: '',
+        fat: '',
+        portion: '',
+        notes: ''
+      });
+      
+      setShowAddMeal(false);
+      console.log('Comida registrada exitosamente');
+    } catch (error) {
+      console.error('Error al agregar comida:', error);
+      alert('❌ Error al guardar la comida. Verifica los datos e inténtalo de nuevo.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const deleteMeal = async (mealId) => {
