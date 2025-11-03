@@ -87,7 +87,7 @@ const Wellness = () => {
   };
 
   return (
-    <div className="wellness-container">
+    <div className={`wellness-container ${activeWellnessSection === 'statistics' ? 'no-padding' : ''}`}>
       {renderContent()}
     </div>
   );
