@@ -1452,15 +1452,15 @@
    =========================================== */
 
 .statistics-management {
-  width: 100vw;
+  width: 96vw;
   min-height: 100vh;
   background: var(--bg-primary);
   padding: 1rem;
   margin: 0;
   position: relative;
   left: 50%;
-  right: 40%;
-  margin-left: -50vw;
+  right: 50%;
+  margin-left: -48vw;
   margin-right: 50vw;
 }
 
