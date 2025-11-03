@@ -1,0 +1,13 @@
+{
+  "name": "mytrackfit-backend",
+  "version": "1.0.0",
+  "description": "Backend API para MyTrackFit",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": ["fitness", "api", "nodejs"],
+  "author": "",
+  "license": "ISC"
+}

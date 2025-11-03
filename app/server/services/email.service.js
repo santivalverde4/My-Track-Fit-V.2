@@ -250,7 +250,7 @@ export const EmailService = {
       // Enviar email con SendGrid
       const msg = {
         to: email,
-        from: 'mytrackfit@gmail.com', // Cambia esto por tu email verificado en SendGrid
+        from: 'mytrackfit001@gmail.com', // Email verificado en SendGrid
         subject: mailOptions.subject,
         html: mailOptions.html
       };
@@ -525,7 +525,7 @@ export const EmailService = {
       // Enviar email con SendGrid
       const msg = {
         to: email,
-        from: 'mytrackfit@gmail.com', // Cambia esto por tu email verificado en SendGrid
+        from: 'mytrackfit001@gmail.com', // Email verificado en SendGrid
         subject: mailOptions.subject,
         html: mailOptions.html
       };
