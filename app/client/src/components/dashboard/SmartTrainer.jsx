@@ -152,7 +152,7 @@ const SmartTrainer = () => {
             disabled={!newMessage.trim() || isLoading}
             aria-label="Enviar mensaje"
           >
-            <IoArrowUpCircle size={28} />
+            <IoArrowUpCircle size={48} />
           </button>
         </div>
       </form>

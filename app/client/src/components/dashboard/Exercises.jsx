@@ -343,7 +343,19 @@ const Exercises = ({ routineId, workoutId, workoutName, onBack }) => {
                 key={exercise.id} 
                 className="exercise-card"
               >
-                <div onClick={() => handleExerciseClick(exercise)} style={{ flex: 1, cursor: 'pointer' }}>
+                <div 
+                  onClick={() => handleExerciseClick(exercise)} 
+                  style={{ flex: 1, cursor: 'pointer' }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleExerciseClick(exercise);
+                    }
+                  }}
+                  aria-label={`Ver y editar ejercicio ${exercise.exercises?.name || exercise.exercises?.nombre || exercise.exercise_name || exercise.nombre || exercise.name || 'sin nombre'}`}
+                >
                   <h3 className="exercise-name">
                     {exercise.exercises?.name || exercise.exercises?.nombre || exercise.exercise_name || exercise.nombre || exercise.name || 'Ejercicio sin nombre'}
                   </h3>

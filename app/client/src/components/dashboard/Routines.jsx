@@ -327,7 +327,6 @@ const Routines = () => {
       {/* Lista de rutinas */}
       <div 
         className="routines-list"
-        role={routines.length > 0 ? "list" : undefined}
         aria-label={routines.length > 0 ? `${routines.length} rutinas disponibles` : undefined}
       >
         {loading && routines.length === 0 ? (
@@ -352,7 +351,7 @@ const Routines = () => {
               key={routine.id} 
               className="routine-card"
               onClick={() => handleRoutineClick(routine)}
-              role="listitem"
+              role="button"
               tabIndex={0}
               onKeyPress={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -360,7 +359,7 @@ const Routines = () => {
                   handleRoutineClick(routine);
                 }
               }}
-              aria-label={`Rutina ${routine.nombre}`}
+              aria-label={`Abrir rutina ${routine.nombre}`}
             >
               <h3 className="routine-name">{routine.nombre}</h3>
               <div className="routine-actions">
@@ -567,9 +566,10 @@ const Routines = () => {
             onClick={e => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
+            aria-labelledby="modal-title-crear-ejercicio"
           >
             <div className="modal-header">
-              <h3>Crear Nuevo Ejercicio</h3>
+              <h3 id="modal-title-crear-ejercicio">Crear Nuevo Ejercicio</h3>
               <button
                 className="modal-close"
                 onClick={() => setShowExerciseLibraryModal(false)}

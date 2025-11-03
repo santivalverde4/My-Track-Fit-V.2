@@ -259,6 +259,24 @@ const NutritionManagement = ({ onBack }) => {
     return meal ? meal.icon : 'bi-egg-fried';
   };
 
+  const handleTabKeyDown = (e, tabValue) => {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const tabs = ['today', 'goals'];
+      const currentIndex = tabs.indexOf(activeTab);
+      const nextIndex = (currentIndex + 1) % tabs.length;
+      setActiveTab(tabs[nextIndex]);
+      document.getElementById(`tab-${tabs[nextIndex]}`)?.focus();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const tabs = ['today', 'goals'];
+      const currentIndex = tabs.indexOf(activeTab);
+      const nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      setActiveTab(tabs[nextIndex]);
+      document.getElementById(`tab-${tabs[nextIndex]}`)?.focus();
+    }
+  };
+
   return (
     <div className="nutrition-management">
       {/* Header */}
@@ -287,8 +305,45 @@ const NutritionManagement = ({ onBack }) => {
         </p>
       </header>
 
-      {/* Resumen nutricional del día */}
-      <div className="nutrition-summary">
+      {/* Tabs Navigation */}
+      <div className="tabs-container" role="tablist" aria-label="Secciones de nutrición">
+        <button
+          id="tab-today"
+          role="tab"
+          aria-selected={activeTab === 'today'}
+          aria-controls="panel-today"
+          tabIndex={activeTab === 'today' ? 0 : -1}
+          className={`tab-button ${activeTab === 'today' ? 'active' : ''}`}
+          onClick={() => setActiveTab('today')}
+          onKeyDown={(e) => handleTabKeyDown(e, 'today')}
+        >
+          <i className="bi bi-calendar-day"></i>
+          Hoy
+        </button>
+        <button
+          id="tab-goals"
+          role="tab"
+          aria-selected={activeTab === 'goals'}
+          aria-controls="panel-goals"
+          tabIndex={activeTab === 'goals' ? 0 : -1}
+          className={`tab-button ${activeTab === 'goals' ? 'active' : ''}`}
+          onClick={() => setActiveTab('goals')}
+          onKeyDown={(e) => handleTabKeyDown(e, 'goals')}
+        >
+          <i className="bi bi-bullseye"></i>
+          Objetivos
+        </button>
+      </div>
+
+      {/* Tab Panel: Hoy */}
+      <div
+        id="panel-today"
+        role="tabpanel"
+        aria-labelledby="tab-today"
+        hidden={activeTab !== 'today'}
+      >
+        {/* Resumen nutricional del día */}
+        <div className="nutrition-summary">
         <h3>
           <i className="bi bi-calendar-day"></i>
           Resumen de Hoy
@@ -297,14 +352,22 @@ const NutritionManagement = ({ onBack }) => {
         <div className="macro-grid">
           <div className="macro-card calories">
             <div className="macro-icon">
-              <i className="bi bi-fire"></i>
+              <i className="bi bi-fire" aria-hidden="true"></i>
             </div>
             <div className="macro-info">
               <span className="macro-label">Calorías</span>
-              <div className="macro-progress">
+              <div 
+                className="macro-progress"
+                role="progressbar"
+                aria-valuenow={dailyTotals.calories}
+                aria-valuemin={0}
+                aria-valuemax={nutritionGoals.calories}
+                aria-label={`Calorías consumidas: ${dailyTotals.calories} de ${nutritionGoals.calories} kcal, ${getProgressPercentage(dailyTotals.calories, nutritionGoals.calories)}% completado`}
+              >
                 <div 
                   className="macro-bar"
                   style={{ width: `${getProgressPercentage(dailyTotals.calories, nutritionGoals.calories)}%` }}
+                  aria-hidden="true"
                 />
               </div>
               <span className="macro-values">
@@ -315,14 +378,22 @@ const NutritionManagement = ({ onBack }) => {
 
           <div className="macro-card protein">
             <div className="macro-icon">
-              <i className="bi bi-egg"></i>
+              <i className="bi bi-egg" aria-hidden="true"></i>
             </div>
             <div className="macro-info">
               <span className="macro-label">Proteínas</span>
-              <div className="macro-progress">
+              <div 
+                className="macro-progress"
+                role="progressbar"
+                aria-valuenow={dailyTotals.protein}
+                aria-valuemin={0}
+                aria-valuemax={nutritionGoals.protein}
+                aria-label={`Proteínas consumidas: ${dailyTotals.protein} de ${nutritionGoals.protein} gramos, ${getProgressPercentage(dailyTotals.protein, nutritionGoals.protein)}% completado`}
+              >
                 <div 
                   className="macro-bar"
                   style={{ width: `${getProgressPercentage(dailyTotals.protein, nutritionGoals.protein)}%` }}
+                  aria-hidden="true"
                 />
               </div>
               <span className="macro-values">
@@ -333,14 +404,22 @@ const NutritionManagement = ({ onBack }) => {
 
           <div className="macro-card carbs">
             <div className="macro-icon">
-              <i className="bi bi-bowl-food"></i>
+              <i className="bi bi-bowl-food" aria-hidden="true"></i>
             </div>
             <div className="macro-info">
               <span className="macro-label">Carbohidratos</span>
-              <div className="macro-progress">
+              <div 
+                className="macro-progress"
+                role="progressbar"
+                aria-valuenow={dailyTotals.carbs}
+                aria-valuemin={0}
+                aria-valuemax={nutritionGoals.carbs}
+                aria-label={`Carbohidratos consumidos: ${dailyTotals.carbs} de ${nutritionGoals.carbs} gramos, ${getProgressPercentage(dailyTotals.carbs, nutritionGoals.carbs)}% completado`}
+              >
                 <div 
                   className="macro-bar"
                   style={{ width: `${getProgressPercentage(dailyTotals.carbs, nutritionGoals.carbs)}%` }}
+                  aria-hidden="true"
                 />
               </div>
               <span className="macro-values">
@@ -351,14 +430,22 @@ const NutritionManagement = ({ onBack }) => {
 
           <div className="macro-card fats">
             <div className="macro-icon">
-              <i className="bi bi-droplet"></i>
+              <i className="bi bi-droplet" aria-hidden="true"></i>
             </div>
             <div className="macro-info">
               <span className="macro-label">Grasas</span>
-              <div className="macro-progress">
+              <div 
+                className="macro-progress"
+                role="progressbar"
+                aria-valuenow={dailyTotals.fat}
+                aria-valuemin={0}
+                aria-valuemax={nutritionGoals.fat}
+                aria-label={`Grasas consumidas: ${dailyTotals.fat} de ${nutritionGoals.fat} gramos, ${getProgressPercentage(dailyTotals.fat, nutritionGoals.fat)}% completado`}
+              >
                 <div 
                   className="macro-bar"
                   style={{ width: `${getProgressPercentage(dailyTotals.fat, nutritionGoals.fat)}%` }}
+                  aria-hidden="true"
                 />
               </div>
               <span className="macro-values">
@@ -371,11 +458,20 @@ const NutritionManagement = ({ onBack }) => {
         {/* Contador de agua */}
         <div className="water-tracker">
           <div className="water-header">
-            <i className="bi bi-droplet-fill"></i>
+            <i className="bi bi-droplet-fill" aria-hidden="true"></i>
             <span>Hidratación</span>
-            <span className="water-count">{dailyTotals.water} / {nutritionGoals.water} vasos</span>
+            <span 
+              className="water-count"
+              role="progressbar"
+              aria-valuenow={dailyTotals.water}
+              aria-valuemin={0}
+              aria-valuemax={nutritionGoals.water}
+              aria-label={`Hidratación: ${dailyTotals.water} de ${nutritionGoals.water} vasos de agua, ${getProgressPercentage(dailyTotals.water, nutritionGoals.water)}% completado`}
+            >
+              {dailyTotals.water} / {nutritionGoals.water} vasos
+            </span>
           </div>
-          <div className="water-glasses">
+          <div className="water-glasses" aria-hidden="true">
             {[...Array(nutritionGoals.water)].map((_, i) => (
               <div
                 key={i}
@@ -675,6 +771,55 @@ const NutritionManagement = ({ onBack }) => {
           ))
         )}
       </div>
+      </div>
+      {/* End of Tab Panel: Hoy */}
+
+      {/* Tab Panel: Objetivos */}
+      <div
+        id="panel-goals"
+        role="tabpanel"
+        aria-labelledby="tab-goals"
+        hidden={activeTab !== 'goals'}
+      >
+        <div className="goals-content">
+          <h3>
+            <i className="bi bi-bullseye"></i>
+            Objetivos Nutricionales
+          </h3>
+          <p className="info-text">
+            <i className="bi bi-info-circle"></i>
+            Aquí podrás configurar tus objetivos nutricionales diarios en una futura actualización.
+          </p>
+          <div className="goals-grid">
+            <div className="goal-card">
+              <i className="bi bi-fire"></i>
+              <h4>Calorías</h4>
+              <p className="goal-value">{nutritionGoals.calories} kcal</p>
+            </div>
+            <div className="goal-card">
+              <i className="bi bi-egg"></i>
+              <h4>Proteínas</h4>
+              <p className="goal-value">{nutritionGoals.protein}g</p>
+            </div>
+            <div className="goal-card">
+              <i className="bi bi-bowl-food"></i>
+              <h4>Carbohidratos</h4>
+              <p className="goal-value">{nutritionGoals.carbs}g</p>
+            </div>
+            <div className="goal-card">
+              <i className="bi bi-droplet"></i>
+              <h4>Grasas</h4>
+              <p className="goal-value">{nutritionGoals.fat}g</p>
+            </div>
+            <div className="goal-card">
+              <i className="bi bi-cup"></i>
+              <h4>Agua</h4>
+              <p className="goal-value">{nutritionGoals.water} vasos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* End of Tab Panel: Objetivos */}
     </div>
   );
 };

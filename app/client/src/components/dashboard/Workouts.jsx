@@ -260,6 +260,15 @@ const Workouts = ({ routineId, routineName, onBack }) => {
               key={workout.id} 
               className="workout-card"
               onClick={() => handleWorkoutClick(workout)}
+              role="button"
+              tabIndex={0}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleWorkoutClick(workout);
+                }
+              }}
+              aria-label={`Abrir entrenamiento ${workout.nombre}`}
             >
               <h3 className="workout-name">{workout.nombre}</h3>
               <div className="workout-actions">

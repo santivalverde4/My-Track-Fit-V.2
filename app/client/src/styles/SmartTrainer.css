@@ -317,8 +317,8 @@
 }
 
 .send-button {
-  width: 45px;
-  height: 45px;
+  width: 56px;
+  height: 56px;
   background: var(--primary-color, #3182ce);
   color: white;
   border: none;
@@ -474,8 +474,8 @@
   }
   
   .send-button {
-    width: 40px;
-    height: 40px;
+    width: 52px;
+    height: 52px;
     font-size: 1rem;
   }
   

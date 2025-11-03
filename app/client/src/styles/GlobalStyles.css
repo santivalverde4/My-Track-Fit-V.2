@@ -698,3 +698,34 @@ textarea:focus-visible {
     min-width: 48px;
   }
 }
+
+/* ========================================
+   UTILIDADES DE ACCESIBILIDAD
+   ======================================== */
+
+/* Clase para contenido solo accesible a lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Versión enfocable de sr-only (útil para skip links) */
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
