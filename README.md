@@ -762,7 +762,7 @@ Este proyecto está bajo la Licencia ISC.
 
 **Santiago Valverde y Adrián Barquero**
 
-Universidad - Proyecto de Diseño
+Instituto Tecnológico de Costa Rica - Proyecto de Diseño
 
 Stack: PERN (PostgreSQL, Express, React, Node.js)
 
@@ -773,6 +773,8 @@ Para reportar bugs o solicitar features, crea un issue en GitHub.
 ---
 
 **Versión: 2.1.0**
+
+Basado en versión 1 por Santiago Valverde y Dilan Hernández
 
 **Última actualización: Noviembre 2025**
 
